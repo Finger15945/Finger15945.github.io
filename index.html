@@ -1,11 +1,112 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portofolio - Jari Muhammad</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Portofolio | Jari Muhammad</title>
+  <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-    <h1>Hello Jari</h1>
+<body class="bg-gray-50 text-gray-800 font-sans">
+
+  <!-- Navbar -->
+  <nav class="bg-white shadow sticky top-0 z-50">
+    <div class="max-w-5xl mx-auto px-4 py-3 flex justify-between items-center">
+      <h1 class="text-xl font-bold text-indigo-600">Jari Muhammad</h1>
+      <div class="space-x-6 text-sm">
+        <a href="#about" class="hover:text-indigo-600">Tentang</a>
+        <a href="#skills" class="hover:text-indigo-600">Keahlian</a>
+        <a href="#projects" class="hover:text-indigo-600">Proyek</a>
+        <a href="#contact" class="hover:text-indigo-600">Kontak</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="text-center py-20 bg-gradient-to-b from-indigo-100 to-white">
+    <img src="https://avatars.githubusercontent.com/u/9919?v=4" alt="Foto Profil" class="w-32 h-32 mx-auto rounded-full shadow-lg">
+    <h2 class="text-3xl font-bold mt-4">Hai, Saya <span class="text-indigo-600">Jari Muhammad</span> 👋</h2>
+    <p class="mt-2 text-gray-600 max-w-md mx-auto">Saya seorang <strong>IT & Frontend Developer</strong> yang berfokus pada pembuatan aplikasi web dan sistem berbasis Google Workspace Automation.</p>
+    <button onclick="scrollToSection('projects')" class="mt-6 bg-indigo-600 text-white px-6 py-2 rounded-lg hover:bg-indigo-700 transition">Lihat Proyek</button>
+  </section>
+
+  <!-- Tentang -->
+  <section id="about" class="max-w-4xl mx-auto px-4 py-16">
+    <h3 class="text-2xl font-semibold text-indigo-600 mb-4">Tentang Saya</h3>
+    <p class="text-gray-700 leading-relaxed">
+      Saya adalah lulusan <strong>S1 Sistem Informasi</strong> dengan latar belakang teknik komputer dan jaringan. 
+      Berpengalaman dalam pengembangan sistem berbasis web menggunakan HTML, CSS, Bootstrap, dan Laravel Blade, 
+      serta integrasi API dan automasi menggunakan Apps Script dan Node.js.
+    </p>
+  </section>
+
+  <!-- Keahlian -->
+  <section id="skills" class="bg-gray-100 py-16">
+    <div class="max-w-4xl mx-auto px-4">
+      <h3 class="text-2xl font-semibold text-indigo-600 mb-6 text-center">Keahlian Utama</h3>
+      <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6 text-center">
+        <div class="bg-white shadow rounded-lg p-4 hover:shadow-lg transition">HTML</div>
+        <div class="bg-white shadow rounded-lg p-4 hover:shadow-lg transition">CSS</div>
+        <div class="bg-white shadow rounded-lg p-4 hover:shadow-lg transition">Bootstrap</div>
+        <div class="bg-white shadow rounded-lg p-4 hover:shadow-lg transition">Tailwind</div>
+        <div class="bg-white shadow rounded-lg p-4 hover:shadow-lg transition">Laravel Blade</div>
+        <div class="bg-white shadow rounded-lg p-4 hover:shadow-lg transition">Google Apps Script</div>
+        <div class="bg-white shadow rounded-lg p-4 hover:shadow-lg transition">Node.js</div>
+        <div class="bg-white shadow rounded-lg p-4 hover:shadow-lg transition">WhatsApp Web.js</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Proyek -->
+  <section id="projects" class="max-w-5xl mx-auto px-4 py-16">
+    <h3 class="text-2xl font-semibold text-indigo-600 mb-8 text-center">Proyek Terbaru</h3>
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
+      <div class="bg-white shadow rounded-lg overflow-hidden hover:shadow-lg transition">
+        <img src="https://placehold.co/400x250?text=Chatbot+WhatsApp" class="w-full" alt="Chatbot WhatsApp">
+        <div class="p-4">
+          <h4 class="font-semibold text-lg">Chatbot WhatsApp Properti</h4>
+          <p class="text-sm text-gray-600 mt-1">Sistem otomatis untuk menjawab pertanyaan calon pembeli dan mengirim lokasi proyek perumahan via WhatsApp.</p>
+        </div>
+      </div>
+      <div class="bg-white shadow rounded-lg overflow-hidden hover:shadow-lg transition">
+        <img src="https://placehold.co/400x250?text=Sinkronisasi+Sheets" class="w-full" alt="Sinkronisasi Google Sheets">
+        <div class="p-4">
+          <h4 class="font-semibold text-lg">Sinkronisasi Google Sheets</h4>
+          <p class="text-sm text-gray-600 mt-1">Sistem tugas 20 pengguna dengan sinkronisasi dua arah antara file master, worker, dan approval.</p>
+        </div>
+      </div>
+      <div class="bg-white shadow rounded-lg overflow-hidden hover:shadow-lg transition">
+        <img src="https://placehold.co/400x250?text=Notifikasi+Form" class="w-full" alt="Notifikasi Form">
+        <div class="p-4">
+          <h4 class="font-semibold text-lg">Notifikasi Form ke WhatsApp</h4>
+          <p class="text-sm text-gray-600 mt-1">Otomatisasi pengiriman data dari Google Form ke grup WhatsApp proyek & purchasing.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Kontak -->
+  <section id="contact" class="bg-indigo-600 text-white py-16 text-center">
+    <h3 class="text-2xl font-semibold mb-4">Hubungi Saya</h3>
+    <p class="mb-6 text-indigo-100">Tertarik bekerja sama atau ingin tahu lebih lanjut?</p>
+    <button 
+      onclick="window.open('https://wa.me/6281234567890', '_blank')" 
+      class="bg-white text-indigo-600 px-6 py-2 rounded-lg font-semibold hover:bg-gray-100 transition">
+      Chat via WhatsApp
+    </button>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-gray-900 text-gray-300 text-center py-6 text-sm">
+    © <span id="year"></span> Jari Muhammad. Dibuat dengan ❤️ & TailwindCSS.
+  </footer>
+
+  <!-- Inline Script -->
+  <script>
+    document.getElementById("year").innerText = new Date().getFullYear();
+    function scrollToSection(id) {
+      document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
+    }
+  </script>
+
 </body>
 </html>
