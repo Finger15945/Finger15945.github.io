@@ -100,7 +100,40 @@
         transform: none;
       }
     }
-    /* --- AKHIR TAMBAHAN --- */
+    
+    /* --- TAMBAHAN: CSS Chatbot --- */
+    #chat-window {
+      scroll-behavior: smooth;
+    }
+    .chat-bubble {
+      opacity: 0;
+      transform: translateY(10px);
+      animation: popIn 0.3s cubic-bezier(.2,.9,.2,1) forwards;
+    }
+    .chat-bubble-bot {
+      @apply bg-white/5 p-3 rounded-lg max-w-[80%] text-brand-text;
+      align-self: flex-start;
+    }
+    .chat-bubble-user {
+      @apply bg-brand-accent p-3 rounded-lg max-w-[80%] text-brand-bg font-medium;
+      align-self: flex-end;
+    }
+    .chat-option-btn {
+      @apply text-sm px-4 py-2 rounded-full border border-brand-accent/30 text-brand-accent transition-all duration-200;
+      @apply hover:bg-brand-accent hover:text-brand-bg hover:scale-105;
+      opacity: 0;
+      transform: scale(0.95);
+      animation: popIn 0.3s cubic-bezier(.2,.9,.2,1) forwards;
+    }
+    .chat-link {
+      @apply text-brand-accent font-medium underline hover:text-brand-secondary;
+    }
+
+    @keyframes popIn {
+      from { opacity: 0; transform: translateY(10px) scale(0.95); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    /* --- AKHIR CSS CHATBOT --- */
   </style>
 </head>
 <body class="font-sans antialiased selection:bg-brand-accent selection:text-brand-bg">
@@ -319,14 +352,26 @@
 
   <!-- CONTACT -->
   <section id="contact" class="bg-gradient-to-b from-black/30 to-transparent py-16">
-    <div class="max-w-4xl mx-auto px-5 text-center">
-      <h2 class="text-2xl font-bold text-brand-accent mb-4">Let's build something</h2>
-      <p class="text-brand-subtext mb-6">Tertarik berkolaborasi? Klik WA untuk chat cepat.</p>
-      <a href="https://wa.me/6287776058465" target="_blank" rel="noopener" class="inline-flex items-center gap-3 px-6 py-3 rounded-full bg-brand-accent text-brand-bg font-semibold hover:scale-105 transition shadow-lg">
-        💬 Chat via WhatsApp
-      </a>
+  <div class="max-w-2xl mx-auto px-5">
+    
+    <div class="text-center mb-8 reveal">
+      <h2 class="text-2xl font-bold text-brand-accent mb-3">Let's Connect</h2>
+      <p class="text-brand-subtext">Saya membuat asisten mini untuk membantu Anda. Silakan mulai percakapan.</p>
     </div>
-  </section>
+
+    <div class="glass rounded-xl shadow-2xl border border-white/10 overflow-hidden reveal">
+      
+      <div id="chat-window" class="p-6 h-80 overflow-y-auto space-y-4">
+        </div>
+      
+      <div class="border-t border-white/10 p-4">
+        <div id="chat-options" class="flex flex-wrap gap-3 justify-center">
+          </div>
+      </div>
+
+    </div>
+    </div>
+</section>
 
   <!-- FOOTER -->
   <footer class="py-8 text-center text-sm text-brand-subtext">
@@ -547,6 +592,129 @@
     }
     // --- AKHIR BLOK KODE MODAL ---
 
+    // ... (setelah akhir fungsi initModalLogic) ...
+
+    // --- LOGIKA CHATBOT ---
+    function initChatbot() {
+      const chatWindow = document.getElementById('chat-window');
+      const chatOptions = document.getElementById('chat-options');
+      if (!chatWindow) return; // Keluar jika chatbot tidak ada
+
+      // "Otak" Bot: Alur percakapan (decision tree)
+      const chatFlow = {
+        'start': {
+          message: "Halo! Saya asisten mini Jari. 👋 Apa yang ingin Anda ketahui?",
+          options: [
+            { text: "Tanya soal skill", next: "skills" },
+            { text: "Lihat proyek", next: "projects" },
+            { text: "Kontak langsung", next: "contact" }
+          ]
+        },
+        'skills': {
+          message: "Jari fokus pada 3 area: 1. Frontend (Tailwind, JS), 2. ML (scikit-learn), 3. Automasi (Botpress).",
+          options: [
+            { text: "Keren!", next: "more_help" }
+          ]
+        },
+        'projects': {
+          message: "Anda bisa melihat proyek-proyeknya di bagian atas halaman ini. Yang favorit saya adalah 'Chatbot WhatsApp'!",
+          options: [
+            { text: "OK, Paham", next: "more_help" }
+          ]
+        },
+        'contact': {
+          message: "Pilihan terbaik! Anda bisa langsung chat Jari via WhatsApp untuk respons cepat. Link-nya di bawah ini:",
+          link: { text: "💬 Chat Jari di WhatsApp", href: "https://wa.me/6287776058465" },
+          options: [
+            { text: "Terima kasih!", next: "more_help" }
+          ]
+        },
+        'more_help': {
+          message: "Ada lagi yang bisa saya bantu?",
+          options: [
+            { text: "Tanya skill", next: "skills" },
+            { text: "Lihat proyek", next: "projects" },
+            { text: "Kontak", next: "contact" },
+            { text: "Sudah cukup", next: "end" }
+          ]
+        },
+        'end': {
+          message: "Siap! Terima kasih sudah mampir. Semoga harimu menyenangkan! ✨",
+          options: []
+        }
+      };
+
+      let currentStep = 'start';
+
+      // Fungsi untuk menambahkan pesan ke UI
+      function addMessage(text, sender = 'bot') {
+        const bubble = document.createElement('div');
+        bubble.className = `chat-bubble ${sender === 'bot' ? 'chat-bubble-bot' : 'chat-bubble-user'}`;
+        // Amankan & render link jika ada (untuk pesan 'contact')
+        bubble.innerHTML = text.replace(/(https?:\/\/[^\s]+)/g, '<a href="$1" target="_blank" rel="noopener" class="chat-link">$1</a>');
+        chatWindow.appendChild(bubble);
+        // Auto-scroll ke pesan terbaru
+        chatWindow.scrollTop = chatWindow.scrollHeight;
+      }
+
+      // Fungsi untuk menampilkan opsi tombol
+      function showOptions(options) {
+        chatOptions.innerHTML = ''; // Kosongkan opsi lama
+        
+        options.forEach((opt, index) => {
+          const btn = document.createElement('button');
+          btn.className = 'chat-option-btn';
+          btn.textContent = opt.text;
+          btn.style.animationDelay = `${index * 100}ms`; // Animasi stagger
+          
+          btn.addEventListener('click', () => {
+            // 1. Tampilkan jawaban user
+            addMessage(opt.text, 'user');
+            // 2. Tampilkan jawaban bot berikutnya
+            goToStep(opt.next);
+          });
+          
+          chatOptions.appendChild(btn);
+        });
+      }
+      
+      // Fungsi untuk menampilkan link (jika ada)
+      function showLink(link) {
+         if (!link) return;
+         const linkEl = document.createElement('a');
+         linkEl.href = link.href;
+         linkEl.target = "_blank";
+         linkEl.rel = "noopener";
+         linkEl.className = "chat-option-btn";
+         linkEl.textContent = link.text;
+         linkEl.style.animationDelay = '100ms';
+         chatOptions.appendChild(linkEl);
+      }
+
+      // Fungsi untuk pindah alur
+      function goToStep(stepName) {
+        const step = chatFlow[stepName];
+        if (!step) return;
+
+        currentStep = stepName;
+
+        // Tampilkan pesan bot
+        setTimeout(() => {
+          addMessage(step.message, 'bot');
+          // Tampilkan opsi & link setelah pesan bot muncul
+          setTimeout(() => {
+            showOptions(step.options);
+            showLink(step.link); // Tampilkan link jika ada
+          }, 400); // delay kecil untuk UX
+        }, 800); // Bot "berpikir"
+      }
+
+      // Mulai chatbot
+      setTimeout(() => {
+        goToStep('start');
+      }, 1000); // Mulai setelah 1 detik
+    }
+    // --- AKHIR LOGIKA CHATBOT ---
 
     // Init on load
     window.addEventListener('load', () => {
@@ -555,7 +723,8 @@
       initRevealObserver();
       initTilt();
       initHeroParallax();
-      initModalLogic(); // <-- TAMBAHKAN PEMANGGILAN INI
+      initModalLogic();
+      initChatbot(); // <-- TAMBAHKAN BARIS INI
     });
   </script>
 
