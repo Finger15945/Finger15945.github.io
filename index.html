@@ -101,9 +101,13 @@
       }
     }
     
-    /* --- TAMBAHAN: CSS Chatbot --- */
+    /* --- TAMBAHAN: CSS Chatbot (REVISI) --- */
     #chat-window {
       scroll-behavior: smooth;
+      /* BARU: Memaksa bubble chat jadi kolom */
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem; /* 12px, menggantikan space-y-4 */
     }
     .chat-bubble {
       opacity: 0;
@@ -111,16 +115,22 @@
       animation: popIn 0.3s cubic-bezier(.2,.9,.2,1) forwards;
     }
     .chat-bubble-bot {
-      @apply bg-white/5 p-3 rounded-lg max-w-[80%] text-brand-text;
+      /* REVISI: Dibuat lebih bulat (rounded-xl) */
+      @apply bg-white/5 p-3 rounded-xl max-w-[80%] text-brand-text;
       align-self: flex-start;
+      margin-right: auto; /* BARU: Mendorong ke kiri */
     }
     .chat-bubble-user {
-      @apply bg-brand-accent p-3 rounded-lg max-w-[80%] text-brand-bg font-medium;
+      /* REVISI: Dibuat lebih bulat (rounded-xl) */
+      @apply bg-brand-accent p-3 rounded-xl max-w-[80%] text-brand-bg font-medium;
       align-self: flex-end;
+      margin-left: auto; /* BARU: Mendorong ke kanan */
     }
     .chat-option-btn {
-      @apply text-sm px-4 py-2 rounded-full border border-brand-accent/30 text-brand-accent transition-all duration-200;
-      @apply hover:bg-brand-accent hover:text-brand-bg hover:scale-105;
+      /* REVISI: Dibuat lebih solid seperti tombol/chip */
+      @apply text-sm px-4 py-2 rounded-full bg-brand-accent/20 text-brand-accent transition-all duration-200;
+      @apply hover:bg-brand-accent hover:text-brand-bg hover:scale-105 focus:scale-105;
+      border: 1px solid rgba(125, 211, 192, 0.3); /* border tipis transparan */
       opacity: 0;
       transform: scale(0.95);
       animation: popIn 0.3s cubic-bezier(.2,.9,.2,1) forwards;
@@ -361,7 +371,7 @@
 
     <div class="glass rounded-xl shadow-2xl border border-white/10 overflow-hidden reveal">
       
-      <div id="chat-window" class="p-6 h-80 overflow-y-auto space-y-4">
+      <div id="chat-window" class="p-6 h-80 overflow-y-auto">
         </div>
       
       <div class="border-t border-white/10 p-4">
