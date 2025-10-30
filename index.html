@@ -1,226 +1,477 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Portofolio | Jari Muhammad</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Jari Muhammad — Portfolio</title>
+
+  <!-- Tailwind CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Tailwind config (theme colors) -->
   <script>
     tailwind.config = {
       theme: {
         extend: {
           colors: {
             brand: {
-              light: '#60A5FA',
-              DEFAULT: '#1E3A8A',
-              dark: '#0F172A'
+              bg: '#071028',      /* deep navy */
+              accent: '#7C3AED',  /* purple */
+              neon: '#00E5FF',    /* cyan neon */
+              soft: '#93C5FD'     /* light blue */
             }
           },
           keyframes: {
-            float: { '0%,100%': { transform: 'translateY(0px)' },
-                     '50%': { transform: 'translateY(-10px)' } },
-            glow:  { '0%,100%': { opacity: '1' },
-                     '50%': { opacity: '.4' } },
-            bgShift: {
-              '0%,100%': { backgroundPosition: '0% 50%' },
-              '50%': { backgroundPosition: '100% 50%' }
+            floaty: {
+              '0%': { transform: 'translateY(0px)' },
+              '50%': { transform: 'translateY(-8px)' },
+              '100%': { transform: 'translateY(0px)' }
             },
-            fadeInUp: {
-              '0%': { opacity: '0', transform: 'translateY(30px)' },
-              '100%': { opacity: '1', transform: 'translateY(0)' }
+            bgShift: {
+              '0%': { backgroundPosition: '0% 50%' },
+              '50%': { backgroundPosition: '100% 50%' },
+              '100%': { backgroundPosition: '0% 50%' }
+            },
+            typing: {
+              '0%': { width: '0ch' },
+              '100%': { width: '100%' }
+            },
+            blink: {
+              '50%': { borderColor: 'transparent' }
             }
           },
           animation: {
-            float: 'float 4s ease-in-out infinite',
-            glow: 'glow 2s ease-in-out infinite',
-            bgShift: 'bgShift 10s ease infinite',
-            fadeInUp: 'fadeInUp 1s ease forwards'
+            floaty: 'floaty 6s ease-in-out infinite',
+            bgShift: 'bgShift 12s linear infinite',
+            typing: 'typing 2.4s steps(28,end) 1',
+            blink: 'blink 1s step-end infinite'
           }
         }
       }
     }
   </script>
+
   <style>
-    html { scroll-behavior: smooth; }
-    .reveal { opacity: 0; transform: translateY(40px); transition: all .8s ease; }
-    .reveal.active { opacity: 1; transform: translateY(0); }
+    /* Global page background gradient animation */
+    .animated-bg {
+      background: linear-gradient(270deg, #071028, #0b1f3b, #10284a);
+      background-size: 600% 600%;
+      animation: bgShift 12s linear infinite;
+    }
+
+    /* thin glass card */
+    .glass {
+      background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
+      border: 1px solid rgba(255,255,255,0.04);
+      backdrop-filter: blur(6px);
+    }
+
+    /* small typing container */
+    .typewriter {
+      white-space: nowrap;
+      overflow: hidden;
+      border-right: .14em solid rgba(255,255,255,0.7);
+      display: inline-block;
+      vertical-align: bottom;
+    }
+
+    /* scroll reveal initial state */
+    .reveal {
+      opacity: 0;
+      transform: translateY(18px) scale(0.995);
+      transition: opacity .7s cubic-bezier(.2,.9,.2,1), transform .7s cubic-bezier(.2,.9,.2,1);
+      will-change: opacity, transform;
+    }
+    .reveal.show {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+
+    /* 3D tilt container helpers */
+    .tilt {
+      transform-style: preserve-3d;
+      transition: transform 350ms cubic-bezier(.2,.9,.2,1), box-shadow 350ms;
+      will-change: transform;
+      perspective: 1000px;
+    }
+
+    /* accessibility focus */
+    a:focus, button:focus {
+      outline: 3px solid rgba(124,58,237,0.25);
+      outline-offset: 2px;
+    }
+
+    /* small screens adjust */
+    @media (max-width:640px) {
+      .typewriter { font-size: 0.95rem; }
+    }
+
   </style>
 </head>
 
-<body class="bg-brand-dark text-gray-200 font-sans relative overflow-x-hidden">
+<body class="animated-bg text-slate-100 font-inter antialiased selection:bg-brand-accent selection:text-black">
 
-  <!-- Navbar -->
-  <nav class="fixed top-0 w-full bg-brand-dark/80 backdrop-blur-md z-50 border-b border-gray-700">
-    <div class="max-w-6xl mx-auto px-6 py-3 flex justify-between items-center">
-      <h1 class="text-xl font-bold text-brand-light tracking-wide">Jari Muhammad</h1>
-      <div class="hidden md:flex space-x-8 text-sm font-medium">
-        <a href="#about" class="hover:text-brand-light">Tentang</a>
-        <a href="#skills" class="hover:text-brand-light">Keahlian</a>
-        <a href="#stack" class="hover:text-brand-light">Tech Stack</a>
-        <a href="#projects" class="hover:text-brand-light">Proyek</a>
-        <a href="#contact" class="hover:text-brand-light">Kontak</a>
+  <!-- NAV -->
+  <nav class="fixed inset-x-0 top-0 z-50">
+    <div class="max-w-6xl mx-auto px-5 py-4 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-brand.accent to-brand.neon flex items-center justify-center shadow-lg">
+          <span class="font-bold text-sm text-black">JM</span>
+        </div>
+        <div>
+          <a href="#" class="text-lg font-semibold tracking-wide text-white">Jari Muhammad</a>
+          <div class="text-xs text-slate-300 -mt-0.5">Frontend • ML • Chatbot</div>
+        </div>
       </div>
-      <button id="menu-btn" class="md:hidden text-brand-light" onclick="toggleMenu()">☰</button>
+
+      <div class="hidden md:flex items-center gap-6 text-sm text-slate-200">
+        <a href="#about" class="hover:text-brand.neon transition">About</a>
+        <a href="#skills" class="hover:text-brand.neon transition">Skills</a>
+        <a href="#projects" class="hover:text-brand.neon transition">Projects</a>
+        <a href="#contact" class="hover:text-brand.neon transition">Contact</a>
+        <a href="https://github.com/finger15945" target="_blank" rel="noopener" class="px-3 py-1 rounded-md glass hover:scale-105">GitHub</a>
+      </div>
+
+      <div class="md:hidden">
+        <button id="mobileToggle" aria-expanded="false" class="p-2 glass rounded-md">☰</button>
+      </div>
     </div>
-    <div id="mobile-menu" class="hidden md:hidden bg-brand-dark/95 border-t border-gray-700 text-center">
-      <a href="#about" class="block py-2 hover:bg-brand-light/20">Tentang</a>
-      <a href="#skills" class="block py-2 hover:bg-brand-light/20">Keahlian</a>
-      <a href="#stack" class="block py-2 hover:bg-brand-light/20">Tech Stack</a>
-      <a href="#projects" class="block py-2 hover:bg-brand-light/20">Proyek</a>
-      <a href="#contact" class="block py-2 hover:bg-brand-light/20">Kontak</a>
+
+    <!-- mobile menu -->
+    <div id="mobileMenu" class="hidden md:hidden px-5 pb-4">
+      <div class="flex flex-col gap-2 text-slate-200">
+        <a href="#about" class="py-2 px-3 rounded-md hover:bg-white/5">About</a>
+        <a href="#skills" class="py-2 px-3 rounded-md hover:bg-white/5">Skills</a>
+        <a href="#projects" class="py-2 px-3 rounded-md hover:bg-white/5">Projects</a>
+        <a href="#contact" class="py-2 px-3 rounded-md hover:bg-white/5">Contact</a>
+      </div>
     </div>
   </nav>
 
-  <!-- Hero -->
-  <section class="pt-40 pb-24 text-center relative bg-gradient-to-br from-brand-dark via-brand.DEFAULT to-brand-light bg-[length:400%_400%] animate-bgShift">
-    <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] opacity-10"></div>
-    <img src="./IMG_7880.JPG" alt="Foto Jari Muhammad"
-      class="relative w-36 h-36 mx-auto rounded-full object-cover shadow-2xl ring-4 ring-brand-light/60 animate-float" />
-    <h2 class="relative text-4xl sm:text-5xl font-extrabold mt-8 text-white drop-shadow-lg">
-      Hai, Saya <span class="text-brand-light animate-glow">Jari Muhammad</span> 👋
-    </h2>
-    <p id="typed" class="mt-4 text-lg text-gray-300 max-w-xl mx-auto"></p>
-    <div class="relative flex justify-center gap-4 mt-8">
-      <a href="https://github.com/finger15945" target="_blank" class="bg-brand-light text-brand-dark font-semibold px-6 py-2 rounded-lg hover:scale-105 transition-transform">GitHub</a>
-      <a href="https://linkedin.com/in/jari-muhammad" target="_blank" class="border border-brand-light text-brand-light px-6 py-2 rounded-lg hover:bg-brand-light hover:text-brand-dark transition">LinkedIn</a>
-    </div>
-  </section>
-
-  <!-- Tentang -->
-  <section id="about" class="max-w-4xl mx-auto px-6 py-24 text-center reveal">
-    <h3 class="text-3xl font-bold text-brand-light mb-6">Tentang Saya</h3>
-    <p class="text-gray-300 leading-relaxed">
-      Saya adalah lulusan <strong>S1 Sistem Informasi</strong> yang berfokus pada solusi digital berbasis data. 
-      Saya menikmati proses <span class="text-brand-light font-semibold">analisis, pengembangan sistem,</span> 
-      dan <span class="text-brand-light font-semibold">perancangan pengalaman pengguna</span> yang efektif dan manusiawi.
-    </p>
-  </section>
-
-  <!-- Keahlian -->
-  <section id="skills" class="bg-brand-dark py-24 border-t border-gray-700 reveal">
-    <h3 class="text-3xl font-bold text-brand-light mb-10 text-center">Keahlian Utama</h3>
-    <div class="max-w-5xl mx-auto grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6 px-6">
-      <div class="bg-brand.DEFAULT/30 border border-brand-light rounded-lg p-4 hover:-translate-y-2 transition">HTML</div>
-      <div class="bg-brand.DEFAULT/30 border border-brand-light rounded-lg p-4 hover:-translate-y-2 transition">CSS</div>
-      <div class="bg-brand.DEFAULT/30 border border-brand-light rounded-lg p-4 hover:-translate-y-2 transition">JavaScript</div>
-      <div class="bg-brand.DEFAULT/30 border border-brand-light rounded-lg p-4 hover:-translate-y-2 transition">TailwindCSS</div>
-      <div class="bg-brand.DEFAULT/30 border border-brand-light rounded-lg p-4 hover:-translate-y-2 transition">Machine Learning</div>
-      <div class="bg-brand.DEFAULT/30 border border-brand-light rounded-lg p-4 hover:-translate-y-2 transition">Deep Learning</div>
-      <div class="bg-brand.DEFAULT/30 border border-brand-light rounded-lg p-4 hover:-translate-y-2 transition">Data Viz</div>
-      <div class="bg-brand.DEFAULT/30 border border-brand-light rounded-lg p-4 hover:-translate-y-2 transition">Chatbot</div>
-    </div>
-  </section>
-
-  <!-- Tech Stack -->
-  <section id="stack" class="bg-brand-dark py-20 border-t border-gray-700 reveal">
-    <h3 class="text-3xl font-bold text-center text-brand-light mb-10">Tech Stack</h3>
-    <div class="flex flex-wrap justify-center gap-10 grayscale hover:grayscale-0 transition">
-      <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" class="w-12 h-12" />
-      <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg" class="w-12 h-12" />
-      <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/tailwindcss/tailwindcss-plain.svg" class="w-12 h-12" />
-      <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg" class="w-12 h-12" />
-      <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vscode/vscode-original.svg" class="w-12 h-12" />
-      <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/linux/linux-original.svg" class="w-12 h-12" />
-    </div>
-  </section>
-
-  <!-- Proyek -->
-  <section id="projects" class="max-w-6xl mx-auto px-6 py-24 reveal">
-    <h3 class="text-3xl font-bold text-brand-light mb-10 text-center">Proyek Terbaru</h3>
-    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-10">
-      <div class="group bg-brand.DEFAULT/20 border border-brand-light rounded-xl overflow-hidden relative hover:shadow-2xl transition-transform hover:-translate-y-2">
-        <img src="https://placehold.co/400x250/1E3A8A/FFFFFF?text=Chatbot+WhatsApp" class="w-full" />
-        <div class="p-4">
-          <h4 class="font-semibold text-lg text-brand-light">Chatbot WhatsApp</h4>
-          <p class="text-sm text-gray-300 mt-2">Sistem otomatis menjawab pertanyaan dan mengirim notifikasi menggunakan API WhatsApp.</p>
-        </div>
-        <div class="absolute inset-0 bg-brand-light/10 opacity-0 group-hover:opacity-100 flex items-center justify-center transition">
-          <a href="#" class="bg-brand-light text-brand-dark px-4 py-2 rounded-lg font-semibold">Lihat Detail</a>
-        </div>
+  <!-- HERO -->
+  <header class="pt-28 pb-14">
+    <div class="max-w-5xl mx-auto px-5 text-center">
+      <!-- floating small badges -->
+      <div class="flex justify-center gap-3 mb-6">
+        <span class="text-xs px-3 py-1 rounded-full glass animate-floaty">Open to freelance</span>
+        <span class="text-xs px-3 py-1 rounded-full glass animate-floaty">Chatbot • Automation</span>
       </div>
 
-      <div class="group bg-brand.DEFAULT/20 border border-brand-light rounded-xl overflow-hidden relative hover:shadow-2xl transition-transform hover:-translate-y-2">
-        <img src="https://placehold.co/400x250/1E3A8A/FFFFFF?text=Chatbot+Budi" class="w-full" />
-        <div class="p-4">
-          <h4 class="font-semibold text-lg text-brand-light">Chatbot Budi</h4>
-          <p class="text-sm text-gray-300 mt-2">Chatbot edukatif untuk memperkenalkan budaya Indonesia.</p>
+      <!-- hero card -->
+      <div class="relative mx-auto max-w-3xl glass rounded-2xl px-8 py-10 overflow-hidden" aria-hidden="false">
+        <!-- decorative neon rings -->
+        <div class="absolute -left-24 -top-20 w-80 h-80 rounded-full bg-gradient-to-br from-brand.accent/20 to-brand.neon/10 blur-3xl pointer-events-none"></div>
+
+        <!-- content -->
+        <div class="flex flex-col md:flex-row items-center gap-8 md:gap-10">
+          <!-- photo (parallax on mousemove) -->
+          <div class="w-36 h-36 rounded-full overflow-hidden ring-2 ring-white/10 shadow-lg mx-auto md:ml-0" id="heroPhotoWrap">
+            <img id="heroPhoto" src="./IMG_7880.JPG" alt="Foto Jari Muhammad" class="w-full h-full object-cover">
+          </div>
+
+          <div class="flex-1 text-left">
+            <h1 class="text-3xl md:text-4xl font-extrabold leading-tight">
+              Hi — I'm <span class="text-brand.accent">Jari Muhammad</span>
+            </h1>
+
+            <!-- typing effect -->
+            <div class="mt-3 text-slate-200">
+              <span class="typewriter text-lg md:text-xl" id="typeText" style="max-width:26ch; display:inline-block;"></span>
+            </div>
+
+            <p class="mt-4 text-slate-300 max-w-xl">
+              I design and build interactive web experiences — from frontend UIs to ML-powered automations and chatbots. 
+              I care about clarity, motion, and making tools people enjoy using.
+            </p>
+
+            <div class="mt-6 flex gap-3">
+              <a href="#projects" class="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-brand.accent text-black font-semibold hover:scale-105 transition shadow">See Projects →</a>
+              <a href="resume.pdf" class="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-white/10 text-slate-200 hover:bg-white/5 transition">Download CV</a>
+            </div>
+          </div>
         </div>
-        <div class="absolute inset-0 bg-brand-light/10 opacity-0 group-hover:opacity-100 flex items-center justify-center transition">
-          <a href="#" class="bg-brand-light text-brand-dark px-4 py-2 rounded-lg font-semibold">Lihat Detail</a>
-        </div>
+
+        <!-- subtle bottom gradient -->
+        <div class="absolute left-0 right-0 bottom-0 h-12 bg-gradient-to-t from-black/30 to-transparent pointer-events-none"></div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ABOUT -->
+  <section id="about" class="max-w-5xl mx-auto px-5 py-16 reveal" aria-labelledby="about-title">
+    <h2 id="about-title" class="text-2xl font-bold text-brand.neon mb-4">About</h2>
+    <div class="grid md:grid-cols-3 gap-6 items-center">
+      <div class="md:col-span-2 text-slate-300">
+        <p class="mb-4">Saya lulusan S1 Sistem Informasi. Fokus saya adalah membangun produk digital yang berguna dan dapat diskalakan — dari prototyping UI, implementasi frontend, hingga integrasi machine learning ringan dan automasi.</p>
+        <p class="mb-1">Pendekatan saya: <strong class="text-brand.accent">Design-first</strong> -> build -> measure.</p>
+
+        <ul class="mt-4 grid grid-cols-2 gap-2 text-sm text-slate-300">
+          <li>• UX Research dasar</li>
+          <li>• Prototyping (Figma -> HTML)</li>
+          <li>• Frontend: HTML, CSS, JS, Tailwind</li>
+          <li>• ML: Python, scikit-learn</li>
+        </ul>
       </div>
 
-      <div class="group bg-brand.DEFAULT/20 border border-brand-light rounded-xl overflow-hidden relative hover:shadow-2xl transition-transform hover:-translate-y-2">
-        <img src="https://placehold.co/400x250/1E3A8A/FFFFFF?text=Analisis+Sentimen" class="w-full" />
-        <div class="p-4">
-          <h4 class="font-semibold text-lg text-brand-light">Analisis Sentimen</h4>
-          <p class="text-sm text-gray-300 mt-2">Analisis komentar YouTube dengan Machine Learning untuk memahami opini pengguna.</p>
-        </div>
-        <div class="absolute inset-0 bg-brand-light/10 opacity-0 group-hover:opacity-100 flex items-center justify-center transition">
-          <a href="#" class="bg-brand-light text-brand-dark px-4 py-2 rounded-lg font-semibold">Lihat Detail</a>
+      <div class="flex justify-center md:block">
+        <div class="glass p-4 rounded-xl w-full max-w-xs text-center reveal">
+          <h3 class="font-semibold text-brand.accent">I make things people use</h3>
+          <p class="text-sm mt-2 text-slate-300">Usable interfaces, aligned with data-driven decisions.</p>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Kontak -->
-  <section id="contact" class="bg-brand.DEFAULT text-white py-24 text-center reveal">
-    <h3 class="text-3xl font-bold mb-4">Hubungi Saya</h3>
-    <p class="mb-8 text-indigo-100">Tertarik bekerja sama atau berdiskusi seputar proyek digital?</p>
-    <button onclick="window.open('https://wa.me/6287776058465', '_blank')"
-      class="bg-white text-brand-dark font-semibold px-8 py-3 rounded-lg hover:bg-brand-light transition animate-pulse">
-      💬 Chat via WhatsApp
-    </button>
+  <!-- SKILLS -->
+  <section id="skills" class="border-t border-white/6 py-16">
+    <div class="max-w-6xl mx-auto px-5">
+      <h2 class="text-2xl font-bold text-brand.neon mb-8 text-center">Skills & Tools</h2>
+
+      <div class="grid sm:grid-cols-2 md:grid-cols-4 gap-6">
+        <!-- skill card example repeated -->
+        <div class="glass rounded-xl p-5 tilt reveal" data-tilt>
+          <h4 class="font-semibold text-white">Frontend</h4>
+          <p class="text-sm text-slate-300 mt-2">HTML, CSS, JavaScript, Tailwind, Bootstrap</p>
+        </div>
+
+        <div class="glass rounded-xl p-5 tilt reveal" data-tilt>
+          <h4 class="font-semibold text-white">Machine Learning</h4>
+          <p class="text-sm text-slate-300 mt-2">scikit-learn, pandas, preprocessing, model eval</p>
+        </div>
+
+        <div class="glass rounded-xl p-5 tilt reveal" data-tilt>
+          <h4 class="font-semibold text-white">Automation</h4>
+          <p class="text-sm text-slate-300 mt-2">Botpress / WhatsApp API, Google Sheets Integration</p>
+        </div>
+
+        <div class="glass rounded-xl p-5 tilt reveal" data-tilt>
+          <h4 class="font-semibold text-white">Design & Prototyping</h4>
+          <p class="text-sm text-slate-300 mt-2">Figma, accessibility-aware UI, microinteractions</p>
+        </div>
+      </div>
+    </div>
   </section>
 
-  <!-- Footer -->
-  <footer class="bg-brand-dark text-gray-400 text-center py-6 text-sm border-t border-gray-700">
-    © <span id="year"></span> Jari Muhammad | Made with 💙 TailwindCSS
+  <!-- PROJECTS -->
+  <section id="projects" class="py-16">
+    <div class="max-w-6xl mx-auto px-5">
+      <h2 class="text-2xl font-bold text-brand.neon mb-8 text-center">Selected Projects</h2>
+
+      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
+        <!-- project card -->
+        <article class="glass rounded-2xl overflow-hidden tilt reveal" data-tilt>
+          <div class="relative h-44 overflow-hidden">
+            <img src="https://placehold.co/800x450/071028/7C3AED?text=Chatbot+WhatsApp" alt="Chatbot WhatsApp" class="w-full h-full object-cover">
+            <div class="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
+          </div>
+
+          <div class="p-5">
+            <h3 class="text-lg font-semibold text-white">Chatbot WhatsApp</h3>
+            <p class="text-sm text-slate-300 mt-2">Integrasi API untuk automasi pesan & notifikasi, dashboard sederhana untuk monitoring.</p>
+
+            <div class="mt-4 flex gap-3">
+              <a href="#" class="px-3 py-2 rounded-md bg-brand.neon text-black text-sm font-medium hover:scale-105 transition">Case study</a>
+              <a href="#" class="px-3 py-2 rounded-md border border-white/10 text-sm hover:bg-white/5 transition">Live demo</a>
+            </div>
+          </div>
+        </article>
+
+        <article class="glass rounded-2xl overflow-hidden tilt reveal" data-tilt>
+          <div class="relative h-44 overflow-hidden">
+            <img src="https://placehold.co/800x450/071028/00E5FF?text=Sentiment+Analysis" alt="Sentiment Analysis" class="w-full h-full object-cover">
+            <div class="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
+          </div>
+          <div class="p-5">
+            <h3 class="text-lg font-semibold text-white">Analisis Sentimen</h3>
+            <p class="text-sm text-slate-300 mt-2">Pipeline preprocessing → feature extraction (TF-IDF) → SVM untuk klasifikasi komentar.</p>
+            <div class="mt-4 flex gap-3">
+              <a href="#" class="px-3 py-2 rounded-md bg-brand.accent text-black text-sm font-medium hover:scale-105 transition">Case study</a>
+              <a href="#" class="px-3 py-2 rounded-md border border-white/10 text-sm hover:bg-white/5 transition">Code</a>
+            </div>
+          </div>
+        </article>
+
+        <article class="glass rounded-2xl overflow-hidden tilt reveal" data-tilt>
+          <div class="relative h-44 overflow-hidden">
+            <img src="https://placehold.co/800x450/071028/7C3AED?text=Automation+Flow" alt="Automation Flow" class="w-full h-full object-cover">
+            <div class="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
+          </div>
+          <div class="p-5">
+            <h3 class="text-lg font-semibold text-white">Automation Flow</h3>
+            <p class="text-sm text-slate-300 mt-2">Integrasi Google Sheets + webhook untuk alur notifikasi dan lead management.</p>
+            <div class="mt-4 flex gap-3">
+              <a href="#" class="px-3 py-2 rounded-md bg-brand.neon text-black text-sm font-medium hover:scale-105 transition">Case study</a>
+              <a href="#" class="px-3 py-2 rounded-md border border-white/10 text-sm hover:bg-white/5 transition">Details</a>
+            </div>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact" class="bg-gradient-to-b from-black/30 to-transparent py-16">
+    <div class="max-w-4xl mx-auto px-5 text-center">
+      <h2 class="text-2xl font-bold text-brand.neon mb-4">Let's build something</h2>
+      <p class="text-slate-300 mb-6">Tertarik berkolaborasi? Klik WA untuk chat cepat.</p>
+      <a href="https://wa.me/6287776058465" target="_blank" rel="noopener" class="inline-flex items-center gap-3 px-6 py-3 rounded-full bg-brand.neon text-black font-semibold hover:scale-105 transition shadow-lg">
+        💬 Chat via WhatsApp
+      </a>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="py-8 text-center text-sm text-slate-400">
+    © <span id="ftYear"></span> Jari Muhammad — Crafted UI & motion experiments
   </footer>
 
+  <!-- SCRIPTS: typing, reveal, tilt, menu, parallax -->
   <script>
-    // tahun
-    document.getElementById("year").innerText = new Date().getFullYear();
+    // year
+    document.getElementById('ftYear').innerText = new Date().getFullYear();
 
-    // parallax ringan di foto
-    document.addEventListener('mousemove', e => {
-      const hero = document.querySelector('section');
-      hero.style.backgroundPositionX = 50 + (e.clientX / window.innerWidth - 0.5) * 20 + '%';
-      hero.style.backgroundPositionY = 50 + (e.clientY / window.innerHeight - 0.5) * 20 + '%';
-    });
-
-    // reveal on scroll
-    const reveals = document.querySelectorAll('.reveal');
-    window.addEventListener('scroll', () => {
-      const trigger = window.innerHeight * 0.85;
-      reveals.forEach(r => {
-        const top = r.getBoundingClientRect().top;
-        if (top < trigger) r.classList.add('active');
+    // mobile menu toggle
+    const mobileToggle = document.getElementById('mobileToggle');
+    const mobileMenu = document.getElementById('mobileMenu');
+    if (mobileToggle) {
+      mobileToggle.addEventListener('click', () => {
+        const shown = mobileMenu.classList.toggle('hidden');
+        mobileToggle.setAttribute('aria-expanded', (!shown).toString());
       });
+    }
+
+    // typing effect phrases
+    const phrases = ["Frontend Developer", "Machine Learning Enthusiast", "Chatbot / Automation Builder", "UX-minded Engineer"];
+    const typeTextEl = document.getElementById('typeText');
+
+    async function runTypewriter(el, phrases) {
+      // small typed effect without external lib
+      for (const p of phrases) {
+        await typeString(el, p);
+        await wait(900);
+        await deleteString(el);
+        await wait(300);
+      }
+      // loop
+      runTypewriter(el, phrases);
+    }
+
+    function typeString(el, str) {
+      return new Promise(resolve => {
+        el.textContent = '';
+        let i = 0;
+        const speed = 45;
+        const cursor = el;
+        const t = setInterval(() => {
+          el.textContent += str[i++];
+          if (i >= str.length) {
+            clearInterval(t);
+            resolve();
+          }
+        }, speed);
+      });
+    }
+
+    function deleteString(el) {
+      return new Promise(resolve => {
+        let str = el.textContent;
+        let i = str.length;
+        const speed = 30;
+        const t = setInterval(() => {
+          str = str.slice(0, -1);
+          el.textContent = str;
+          if (str.length === 0) {
+            clearInterval(t);
+            resolve();
+          }
+        }, speed);
+      });
+    }
+
+    function wait(ms) {
+      return new Promise(res => setTimeout(res, ms));
+    }
+
+    // start typing after small delay
+    window.addEventListener('load', () => {
+      const el = document.getElementById('typeText');
+      // ensure element exists
+      if (el) {
+        // start the loop
+        runTypewriter(el, phrases);
+      }
+
+      // init reveal
+      initRevealObserver();
+      // init tilt
+      initTilt();
     });
 
-    // typing effect
-    const words = ["Front-End Developer", "Machine Learning Enthusiast", "Automation Builder"];
-    let i = 0, j = 0, current = "", isDeleting = false;
-    const typed = document.getElementById("typed");
-    function type() {
-      if (i < words.length) {
-        current = words[i];
-        if (!isDeleting && j <= current.length) {
-          typed.innerHTML = current.substring(0, j++);
-        } else if (isDeleting && j >= 0) {
-          typed.innerHTML = current.substring(0, j--);
-        }
-        if (j === current.length) { isDeleting = true; setTimeout(type, 1000); }
-        else if (isDeleting && j === 0) { isDeleting = false; i = (i + 1) % words.length; }
-        setTimeout(type, isDeleting ? 60 : 120);
-      }
+    // IntersectionObserver for .reveal elements
+    function initRevealObserver() {
+      const reveals = document.querySelectorAll('.reveal');
+      const observer = new IntersectionObserver((items) => {
+        items.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('show');
+            // optional: unobserve to keep performance
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.18 });
+      reveals.forEach(r => observer.observe(r));
     }
-    type();
 
-    function toggleMenu() {
-      document.getElementById("mobile-menu").classList.toggle("hidden");
+    // tilt effect (basic) for elements with [data-tilt]
+    function initTilt() {
+      const tilts = document.querySelectorAll('[data-tilt]');
+      tilts.forEach(el => {
+        el.classList.add('tilt');
+        el.addEventListener('mousemove', (e) => {
+          const rect = el.getBoundingClientRect();
+          const x = (e.clientX - rect.left) / rect.width;
+          const y = (e.clientY - rect.top) / rect.height;
+          const rx = (y - 0.5) * 10; // rotation X
+          const ry = (x - 0.5) * -10; // rotation Y
+          el.style.transform = `rotateX(${rx}deg) rotateY(${ry}deg) translateZ(6px)`;
+          el.style.boxShadow = `${(ry*1.5)}px ${(rx*1.5)}px 30px rgba(0,0,0,0.45)`;
+        });
+        el.addEventListener('mouseleave', () => {
+          el.style.transform = 'rotateX(0deg) rotateY(0deg) translateZ(0)';
+          el.style.boxShadow = '';
+        });
+      });
+
+      // small floating animation on some badges (already in tailwind animation)
+      document.querySelectorAll('.animate-floaty').forEach(node => {
+        node.style.animation = 'floaty 6s ease-in-out infinite';
+      });
     }
+
+    // small parallax on hero photo (mousemove + scroll)
+    (function initHeroParallax() {
+      const wrap = document.getElementById('heroPhotoWrap');
+      const img = document.getElementById('heroPhoto');
+      if (!wrap || !img) return;
+
+      wrap.addEventListener('mousemove', (e) => {
+        const rect = wrap.getBoundingClientRect();
+        const px = (e.clientX - rect.left) / rect.width - 0.5;
+        const py = (e.clientY - rect.top) / rect.height - 0.5;
+        img.style.transform = `translate(${px * 8}px, ${py * 6}px) scale(1.03)`;
+      });
+      wrap.addEventListener('mouseleave', () => {
+        img.style.transform = 'translate(0,0) scale(1)';
+      });
+
+      // small scroll parallax
+      window.addEventListener('scroll', () => {
+        const top = wrap.getBoundingClientRect().top;
+        const offset = Math.min(Math.max(-top / 100, -8), 8);
+        wrap.style.transform = `translateY(${offset}px)`;
+      }, { passive: true });
+    })();
+
   </script>
 </body>
 </html>
