@@ -100,6 +100,59 @@
         transform: none;
       }
     }
+
+    /* Ganti .tilt (jika Anda menghapus kelas itu) atau gunakan selector yang sama */
+/* Kita akan menargetkan kartu proyek dan kartu skill */
+#skills .glass, #projects .glass {
+  position: relative; /* Diperlukan untuk memposisikan sorotan */
+  overflow: hidden; /* Diperlukan untuk 'menjebak' sorotan di dalam kartu */
+  
+  /* Hapus CSS tilt yang lama jika masih ada */
+  transform-style: unset; 
+  perspective: unset;
+  transition: transform 0.2s, box-shadow 0.2s; /* Transisi normal */
+}
+
+#skills .glass:hover, #projects .glass:hover {
+  /* Beri sedikit 'lift' saat hover (menggantikan tilt) */
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+}
+
+/* Ini adalah 'spotlight'-nya */
+#skills .glass::before, 
+#projects .glass::before {
+  content: '';
+  position: absolute;
+  
+  /* Posisi akan dikontrol oleh JS via CSS Variables */
+  left: var(--mouse-x, 0px);
+  top: var(--mouse-y, 0px);
+  
+  width: 300px; /* Ukuran sorotan */
+  height: 300px;
+  
+  /* Titik tengah sorotan harus di kursor */
+  transform: translate(-50%, -50%);
+  
+  /* Gunakan warna brand-accent Anda! */
+  background: radial-gradient(circle, rgba(125, 211, 192, 0.15), transparent 60%);
+  
+  /* Efek blur yang lembut */
+  filter: blur(20px);
+  
+  opacity: var(--mouse-hover, 0); /* Kontrol visibilitas */
+  transition: opacity 0.3s ease;
+  pointer-events: none; /* Penting! Agar tidak mengganggu klik */
+  z-index: 1;
+}
+
+/* Pastikan konten kartu tetap di atas sorotan */
+#skills .glass > *, 
+#projects .glass > * {
+  position: relative;
+  z-index: 2;
+}
     
    /* --- TAMBAHAN: CSS Chatbot (Perbaikan Definitif) --- */
     #chat-window {
@@ -437,28 +490,6 @@
       reveals.forEach(r => observer.observe(r));
     }
 
-    // Tilt effect
-    function initTilt() {
-      const tilts = document.querySelectorAll('[data-tilt], .tilt');
-      tilts.forEach(el => {
-        el.classList.add('tilt');
-        el.addEventListener('mousemove', (e) => {
-          const rect = el.getBoundingClientRect();
-          const x = (e.clientX - rect.left) / rect.width;
-          const y = (e.clientY - rect.top) / rect.height;
-          const rx = (y - 0.5) * 10;
-          const ry = (x - 0.5) * -10;
-          el.style.transform = `rotateX(${rx}deg) rotateY(${ry}deg) translateZ(6px)`;
-          el.style.boxShadow = `${(ry*1.5)}px ${(rx*1.5)}px 30px rgba(0,0,0,0.45)`;
-        });
-        el.addEventListener('mouseleave', () => {
-          el.style.transform = 'rotateX(0deg) rotateY(0deg) translateZ(0)';
-          el.style.boxShadow = '';
-        });
-      });
-      document.querySelectorAll('.animate-floaty').forEach(node => node.style.animation = 'floaty 6s ease-in-out infinite');
-    }
-
     // Hero parallax
     function initHeroParallax() {
       const wrap = document.getElementById('heroPhotoWrap');
@@ -729,16 +760,46 @@
     }
     // --- AKHIR LOGIKA CHATBOT ---
 
-    // Init on load
-    window.addEventListener('load', () => {
-      const el = document.getElementById('typeText');
-      if (el) runTypewriter(el, phrases);
-      initRevealObserver();
-      initTilt();
-      initHeroParallax();
-      initModalLogic();
-      initChatbot(); // <-- TAMBAHKAN BARIS INI
+    // Gantikan initTilt() dengan ini
+function initSpotlightEffect() {
+  const cards = document.querySelectorAll('#skills .glass, #projects .glass');
+
+  cards.forEach(el => {
+    el.addEventListener('mousemove', (e) => {
+      const rect = el.getBoundingClientRect();
+      
+      // Hitung posisi mouse RELATIF terhadap elemen
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      
+      // Update CSS Variables secara real-time
+      el.style.setProperty('--mouse-x', `${x}px`);
+      el.style.setProperty('--mouse-y', `${y}px`);
     });
+
+    // Tampilkan sorotan saat mouse masuk
+    el.addEventListener('mouseenter', () => {
+      el.style.setProperty('--mouse-hover', '1');
+    });
+
+    // Sembunyikan sorotan saat mouse keluar
+    el.addEventListener('mouseleave', () => {
+      el.style.setProperty('--mouse-hover', '0');
+    });
+  });
+}
+
+// Jangan lupa panggil fungsi baru Anda
+window.addEventListener('load', () => {
+  const el = document.getElementById('typeText');
+  if (el) runTypewriter(el, phrases);
+  initRevealObserver();
+  // initTilt(); // <-- HAPUS INI
+  initSpotlightEffect(); // <-- TAMBAHKAN INI
+  initHeroParallax();
+  initModalLogic();
+  initChatbot();
+});
   </script>
 
   <div id="modal-container" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 transition-opacity duration-300" style="display: none; opacity: 0;">
