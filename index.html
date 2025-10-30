@@ -994,8 +994,17 @@ function initSpotlightEffect() {
 
       const preloader = document.getElementById('preloader');
       if (preloader) {
-        preloader.classList.add('hidden'); // Mulai fade-out
-        setTimeout(() => preloader.remove(), 500); // Hapus dari DOM setelah fade
+        
+        // --- INI BAGIAN PENTINGNYA ---
+        // 1. Tambahkan listener yang 'mendengar' akhir dari transisi CSS
+        preloader.addEventListener('transitionend', () => {
+          // 3. Hapus elemen HANYA SETELAH transisi selesai
+          preloader.remove();
+        }, { once: true }); // {once: true} = listener ini akan auto-hapus
+        
+        // 2. Tambahkan kelas 'hidden' untuk MEMULAI transisi fade-out
+        preloader.classList.add('hidden');
+        // --- AKHIR BAGIAN PENTING ---
       }
     });
     // --- AKHIR LOGIKA PRELOADER BARU ---
