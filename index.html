@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Portofolio | Jari Muhammad</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
@@ -11,38 +11,57 @@
         extend: {
           colors: {
             brand: {
-              light: '#3B82F6', // biru terang
-              DEFAULT: '#1E3A8A', // biru tua
-              dark: '#0F172A' // hampir hitam
+              light: '#60A5FA',
+              DEFAULT: '#1E3A8A',
+              dark: '#0F172A'
             }
+          },
+          keyframes: {
+            float: { '0%,100%': { transform: 'translateY(0px)' },
+                     '50%': { transform: 'translateY(-10px)' } },
+            glow:  { '0%,100%': { opacity: '1' },
+                     '50%': { opacity: '.4' } },
+            bgShift: {
+              '0%,100%': { backgroundPosition: '0% 50%' },
+              '50%': { backgroundPosition: '100% 50%' }
+            },
+            fadeInUp: {
+              '0%': { opacity: '0', transform: 'translateY(30px)' },
+              '100%': { opacity: '1', transform: 'translateY(0)' }
+            }
+          },
+          animation: {
+            float: 'float 4s ease-in-out infinite',
+            glow: 'glow 2s ease-in-out infinite',
+            bgShift: 'bgShift 10s ease infinite',
+            fadeInUp: 'fadeInUp 1s ease forwards'
           }
         }
       }
     }
   </script>
+  <style>
+    html { scroll-behavior: smooth; }
+    .reveal { opacity: 0; transform: translateY(40px); transition: all .8s ease; }
+    .reveal.active { opacity: 1; transform: translateY(0); }
+  </style>
 </head>
-<body class="bg-brand-dark text-gray-200 font-sans scroll-smooth">
+
+<body class="bg-brand-dark text-gray-200 font-sans relative overflow-x-hidden">
 
   <!-- Navbar -->
-  <nav class="fixed top-0 w-full bg-brand-dark/80 backdrop-blur-md shadow z-50">
-    <div class="max-w-6xl mx-auto px-4 py-3 flex justify-between items-center">
+  <nav class="fixed top-0 w-full bg-brand-dark/80 backdrop-blur-md z-50 border-b border-gray-700">
+    <div class="max-w-6xl mx-auto px-6 py-3 flex justify-between items-center">
       <h1 class="text-xl font-bold text-brand-light tracking-wide">Jari Muhammad</h1>
-
-      <!-- Menu Desktop -->
       <div class="hidden md:flex space-x-8 text-sm font-medium">
-        <a href="#about" class="hover:text-brand-light transition">Tentang</a>
-        <a href="#skills" class="hover:text-brand-light transition">Keahlian</a>
-        <a href="#stack" class="hover:text-brand-light transition">Tech Stack</a>
-        <a href="#projects" class="hover:text-brand-light transition">Proyek</a>
-        <a href="#contact" class="hover:text-brand-light transition">Kontak</a>
+        <a href="#about" class="hover:text-brand-light">Tentang</a>
+        <a href="#skills" class="hover:text-brand-light">Keahlian</a>
+        <a href="#stack" class="hover:text-brand-light">Tech Stack</a>
+        <a href="#projects" class="hover:text-brand-light">Proyek</a>
+        <a href="#contact" class="hover:text-brand-light">Kontak</a>
       </div>
-
-      <!-- Menu Mobile -->
-      <button id="menu-btn" class="md:hidden text-brand-light" onclick="toggleMenu()">
-        ☰
-      </button>
+      <button id="menu-btn" class="md:hidden text-brand-light" onclick="toggleMenu()">☰</button>
     </div>
-
     <div id="mobile-menu" class="hidden md:hidden bg-brand-dark/95 border-t border-gray-700 text-center">
       <a href="#about" class="block py-2 hover:bg-brand-light/20">Tentang</a>
       <a href="#skills" class="block py-2 hover:bg-brand-light/20">Keahlian</a>
@@ -53,54 +72,47 @@
   </nav>
 
   <!-- Hero -->
-  <section class="pt-32 pb-20 text-center bg-gradient-to-b from-brand-dark to-brand.DEFAULT">
+  <section class="pt-40 pb-24 text-center relative bg-gradient-to-br from-brand-dark via-brand.DEFAULT to-brand-light bg-[length:400%_400%] animate-bgShift">
+    <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] opacity-10"></div>
     <img src="./IMG_7880.JPG" alt="Foto Jari Muhammad"
-      class="w-36 h-36 mx-auto rounded-full object-cover shadow-lg ring-4 ring-brand-light/50 hover:scale-105 transition-transform duration-500">
-    <h2 class="text-4xl font-extrabold mt-6 text-white">Hai, Saya <span class="text-brand-light">Jari Muhammad</span> 👋</h2>
-    <p class="mt-3 text-gray-300 text-lg max-w-md mx-auto">
-      Saya membangun solusi digital berbasis <span class="text-brand-light">Machine Learning</span> dan <span class="text-brand-light">Automation</span>.
-    </p>
-
-    <div class="flex justify-center gap-4 mt-6">
-      <a href="https://github.com/finger15945" target="_blank" class="bg-brand-light text-brand-dark font-semibold px-5 py-2 rounded-lg hover:bg-white transition">GitHub</a>
-      <a href="https://linkedin.com/in/jari-muhammad" target="_blank" class="border border-brand-light text-brand-light px-5 py-2 rounded-lg hover:bg-brand-light hover:text-brand-dark transition">LinkedIn</a>
+      class="relative w-36 h-36 mx-auto rounded-full object-cover shadow-2xl ring-4 ring-brand-light/60 animate-float" />
+    <h2 class="relative text-4xl sm:text-5xl font-extrabold mt-8 text-white drop-shadow-lg">
+      Hai, Saya <span class="text-brand-light animate-glow">Jari Muhammad</span> 👋
+    </h2>
+    <p id="typed" class="mt-4 text-lg text-gray-300 max-w-xl mx-auto"></p>
+    <div class="relative flex justify-center gap-4 mt-8">
+      <a href="https://github.com/finger15945" target="_blank" class="bg-brand-light text-brand-dark font-semibold px-6 py-2 rounded-lg hover:scale-105 transition-transform">GitHub</a>
+      <a href="https://linkedin.com/in/jari-muhammad" target="_blank" class="border border-brand-light text-brand-light px-6 py-2 rounded-lg hover:bg-brand-light hover:text-brand-dark transition">LinkedIn</a>
     </div>
-
-    <button onclick="scrollToSection('projects')" 
-      class="mt-8 bg-brand-light text-brand-dark font-semibold px-6 py-3 rounded-lg hover:bg-white hover:shadow-lg transition">
-      🚀 Lihat Proyek Saya
-    </button>
   </section>
 
   <!-- Tentang -->
-  <section id="about" class="max-w-4xl mx-auto px-6 py-20">
-    <h3 class="text-3xl font-bold text-brand-light mb-6 text-center">Tentang Saya</h3>
-    <p class="text-gray-300 leading-relaxed text-center">
-      Saya adalah lulusan <strong>S1 Sistem Informasi</strong> yang berfokus pada pengembangan solusi digital berbasis data. 
-      Saya menikmati proses <span class="text-brand-light font-semibold">menganalisis, membangun sistem,</span> dan <span class="text-brand-light font-semibold">menciptakan pengalaman pengguna</span> yang efektif. 
-      Teknologi bagi saya bukan sekadar alat — tetapi sarana untuk membuat perubahan yang bermakna.
+  <section id="about" class="max-w-4xl mx-auto px-6 py-24 text-center reveal">
+    <h3 class="text-3xl font-bold text-brand-light mb-6">Tentang Saya</h3>
+    <p class="text-gray-300 leading-relaxed">
+      Saya adalah lulusan <strong>S1 Sistem Informasi</strong> yang berfokus pada solusi digital berbasis data. 
+      Saya menikmati proses <span class="text-brand-light font-semibold">analisis, pengembangan sistem,</span> 
+      dan <span class="text-brand-light font-semibold">perancangan pengalaman pengguna</span> yang efektif dan manusiawi.
     </p>
   </section>
 
   <!-- Keahlian -->
-  <section id="skills" class="bg-brand-dark py-20 border-t border-gray-700">
-    <div class="max-w-5xl mx-auto px-6">
-      <h3 class="text-3xl font-bold text-brand-light mb-10 text-center">Keahlian Utama</h3>
-      <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6 text-center">
-        <div class="bg-brand.DEFAULT/30 border border-brand-light rounded-lg p-4 hover:bg-brand-light hover:text-brand-dark transition">HTML</div>
-        <div class="bg-brand.DEFAULT/30 border border-brand-light rounded-lg p-4 hover:bg-brand-light hover:text-brand-dark transition">CSS</div>
-        <div class="bg-brand.DEFAULT/30 border border-brand-light rounded-lg p-4 hover:bg-brand-light hover:text-brand-dark transition">Javascript</div>
-        <div class="bg-brand.DEFAULT/30 border border-brand-light rounded-lg p-4 hover:bg-brand-light hover:text-brand-dark transition">Bootstrap</div>
-        <div class="bg-brand.DEFAULT/30 border border-brand-light rounded-lg p-4 hover:bg-brand-light hover:text-brand-dark transition">Machine Learning</div>
-        <div class="bg-brand.DEFAULT/30 border border-brand-light rounded-lg p-4 hover:bg-brand-light hover:text-brand-dark transition">Deep Learning</div>
-        <div class="bg-brand.DEFAULT/30 border border-brand-light rounded-lg p-4 hover:bg-brand-light hover:text-brand-dark transition">Data Visualization</div>
-        <div class="bg-brand.DEFAULT/30 border border-brand-light rounded-lg p-4 hover:bg-brand-light hover:text-brand-dark transition">Chatbot Automation</div>
-      </div>
+  <section id="skills" class="bg-brand-dark py-24 border-t border-gray-700 reveal">
+    <h3 class="text-3xl font-bold text-brand-light mb-10 text-center">Keahlian Utama</h3>
+    <div class="max-w-5xl mx-auto grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6 px-6">
+      <div class="bg-brand.DEFAULT/30 border border-brand-light rounded-lg p-4 hover:-translate-y-2 transition">HTML</div>
+      <div class="bg-brand.DEFAULT/30 border border-brand-light rounded-lg p-4 hover:-translate-y-2 transition">CSS</div>
+      <div class="bg-brand.DEFAULT/30 border border-brand-light rounded-lg p-4 hover:-translate-y-2 transition">JavaScript</div>
+      <div class="bg-brand.DEFAULT/30 border border-brand-light rounded-lg p-4 hover:-translate-y-2 transition">TailwindCSS</div>
+      <div class="bg-brand.DEFAULT/30 border border-brand-light rounded-lg p-4 hover:-translate-y-2 transition">Machine Learning</div>
+      <div class="bg-brand.DEFAULT/30 border border-brand-light rounded-lg p-4 hover:-translate-y-2 transition">Deep Learning</div>
+      <div class="bg-brand.DEFAULT/30 border border-brand-light rounded-lg p-4 hover:-translate-y-2 transition">Data Viz</div>
+      <div class="bg-brand.DEFAULT/30 border border-brand-light rounded-lg p-4 hover:-translate-y-2 transition">Chatbot</div>
     </div>
   </section>
 
   <!-- Tech Stack -->
-  <section id="stack" class="bg-brand-dark py-16 border-t border-gray-700">
+  <section id="stack" class="bg-brand-dark py-20 border-t border-gray-700 reveal">
     <h3 class="text-3xl font-bold text-center text-brand-light mb-10">Tech Stack</h3>
     <div class="flex flex-wrap justify-center gap-10 grayscale hover:grayscale-0 transition">
       <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" class="w-12 h-12" />
@@ -113,54 +125,99 @@
   </section>
 
   <!-- Proyek -->
-  <section id="projects" class="max-w-6xl mx-auto px-6 py-20">
+  <section id="projects" class="max-w-6xl mx-auto px-6 py-24 reveal">
     <h3 class="text-3xl font-bold text-brand-light mb-10 text-center">Proyek Terbaru</h3>
-    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
-      <div class="bg-brand.DEFAULT/20 border border-brand-light rounded-xl overflow-hidden hover:scale-105 transition transform hover:shadow-2xl">
-        <img src="https://placehold.co/400x250/1E3A8A/FFFFFF?text=Chatbot+WhatsApp" class="w-full" alt="Chatbot WhatsApp">
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-10">
+      <div class="group bg-brand.DEFAULT/20 border border-brand-light rounded-xl overflow-hidden relative hover:shadow-2xl transition-transform hover:-translate-y-2">
+        <img src="https://placehold.co/400x250/1E3A8A/FFFFFF?text=Chatbot+WhatsApp" class="w-full" />
         <div class="p-4">
           <h4 class="font-semibold text-lg text-brand-light">Chatbot WhatsApp</h4>
-          <p class="text-sm text-gray-300 mt-2">Sistem otomatis untuk menjawab pertanyaan konsumen dan mengirim notifikasi menggunakan API WhatsApp.</p>
+          <p class="text-sm text-gray-300 mt-2">Sistem otomatis menjawab pertanyaan dan mengirim notifikasi menggunakan API WhatsApp.</p>
+        </div>
+        <div class="absolute inset-0 bg-brand-light/10 opacity-0 group-hover:opacity-100 flex items-center justify-center transition">
+          <a href="#" class="bg-brand-light text-brand-dark px-4 py-2 rounded-lg font-semibold">Lihat Detail</a>
         </div>
       </div>
-      <div class="bg-brand.DEFAULT/20 border border-brand-light rounded-xl overflow-hidden hover:scale-105 transition transform hover:shadow-2xl">
-        <img src="https://placehold.co/400x250/1E3A8A/FFFFFF?text=Chatbot+Budi" class="w-full" alt="Chatbot Budi">
+
+      <div class="group bg-brand.DEFAULT/20 border border-brand-light rounded-xl overflow-hidden relative hover:shadow-2xl transition-transform hover:-translate-y-2">
+        <img src="https://placehold.co/400x250/1E3A8A/FFFFFF?text=Chatbot+Budi" class="w-full" />
         <div class="p-4">
           <h4 class="font-semibold text-lg text-brand-light">Chatbot Budi</h4>
-          <p class="text-sm text-gray-300 mt-2">Chatbot interaktif yang memperkenalkan budaya Indonesia melalui tanya jawab seputar rumah adat, alat musik, dan lagu daerah.</p>
+          <p class="text-sm text-gray-300 mt-2">Chatbot edukatif untuk memperkenalkan budaya Indonesia.</p>
+        </div>
+        <div class="absolute inset-0 bg-brand-light/10 opacity-0 group-hover:opacity-100 flex items-center justify-center transition">
+          <a href="#" class="bg-brand-light text-brand-dark px-4 py-2 rounded-lg font-semibold">Lihat Detail</a>
         </div>
       </div>
-      <div class="bg-brand.DEFAULT/20 border border-brand-light rounded-xl overflow-hidden hover:scale-105 transition transform hover:shadow-2xl">
-        <img src="https://placehold.co/400x250/1E3A8A/FFFFFF?text=Analisis+Sentimen" class="w-full" alt="Analisis Sentimen">
+
+      <div class="group bg-brand.DEFAULT/20 border border-brand-light rounded-xl overflow-hidden relative hover:shadow-2xl transition-transform hover:-translate-y-2">
+        <img src="https://placehold.co/400x250/1E3A8A/FFFFFF?text=Analisis+Sentimen" class="w-full" />
         <div class="p-4">
-          <h4 class="font-semibold text-lg text-brand-light">Analisis Sentimen Produk Skincare</h4>
-          <p class="text-sm text-gray-300 mt-2">Analisis komentar YouTube dengan Machine Learning (Naïve Bayes, SVM, Logistic Regression) untuk memahami opini pengguna.</p>
+          <h4 class="font-semibold text-lg text-brand-light">Analisis Sentimen</h4>
+          <p class="text-sm text-gray-300 mt-2">Analisis komentar YouTube dengan Machine Learning untuk memahami opini pengguna.</p>
+        </div>
+        <div class="absolute inset-0 bg-brand-light/10 opacity-0 group-hover:opacity-100 flex items-center justify-center transition">
+          <a href="#" class="bg-brand-light text-brand-dark px-4 py-2 rounded-lg font-semibold">Lihat Detail</a>
         </div>
       </div>
     </div>
   </section>
 
   <!-- Kontak -->
-  <section id="contact" class="bg-brand.DEFAULT text-white py-20 text-center">
+  <section id="contact" class="bg-brand.DEFAULT text-white py-24 text-center reveal">
     <h3 class="text-3xl font-bold mb-4">Hubungi Saya</h3>
-    <p class="mb-8 text-indigo-100">Tertarik bekerja sama atau ingin berdiskusi seputar proyek digital?</p>
-    <button 
-      onclick="window.open('https://wa.me/6287776058465', '_blank')" 
-      class="bg-white text-brand-dark font-semibold px-6 py-3 rounded-lg hover:bg-brand-light transition">
+    <p class="mb-8 text-indigo-100">Tertarik bekerja sama atau berdiskusi seputar proyek digital?</p>
+    <button onclick="window.open('https://wa.me/6287776058465', '_blank')"
+      class="bg-white text-brand-dark font-semibold px-8 py-3 rounded-lg hover:bg-brand-light transition animate-pulse">
       💬 Chat via WhatsApp
     </button>
   </section>
 
   <!-- Footer -->
   <footer class="bg-brand-dark text-gray-400 text-center py-6 text-sm border-t border-gray-700">
-    © <span id="year"></span> Jari Muhammad. Dibuat dengan ❤️ menggunakan TailwindCSS.
+    © <span id="year"></span> Jari Muhammad | Made with 💙 TailwindCSS
   </footer>
 
   <script>
+    // tahun
     document.getElementById("year").innerText = new Date().getFullYear();
-    function scrollToSection(id) {
-      document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
+
+    // parallax ringan di foto
+    document.addEventListener('mousemove', e => {
+      const hero = document.querySelector('section');
+      hero.style.backgroundPositionX = 50 + (e.clientX / window.innerWidth - 0.5) * 20 + '%';
+      hero.style.backgroundPositionY = 50 + (e.clientY / window.innerHeight - 0.5) * 20 + '%';
+    });
+
+    // reveal on scroll
+    const reveals = document.querySelectorAll('.reveal');
+    window.addEventListener('scroll', () => {
+      const trigger = window.innerHeight * 0.85;
+      reveals.forEach(r => {
+        const top = r.getBoundingClientRect().top;
+        if (top < trigger) r.classList.add('active');
+      });
+    });
+
+    // typing effect
+    const words = ["Front-End Developer", "Machine Learning Enthusiast", "Automation Builder"];
+    let i = 0, j = 0, current = "", isDeleting = false;
+    const typed = document.getElementById("typed");
+    function type() {
+      if (i < words.length) {
+        current = words[i];
+        if (!isDeleting && j <= current.length) {
+          typed.innerHTML = current.substring(0, j++);
+        } else if (isDeleting && j >= 0) {
+          typed.innerHTML = current.substring(0, j--);
+        }
+        if (j === current.length) { isDeleting = true; setTimeout(type, 1000); }
+        else if (isDeleting && j === 0) { isDeleting = false; i = (i + 1) % words.length; }
+        setTimeout(type, isDeleting ? 60 : 120);
+      }
     }
+    type();
+
     function toggleMenu() {
       document.getElementById("mobile-menu").classList.toggle("hidden");
     }
