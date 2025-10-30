@@ -247,6 +247,27 @@ nav.intro-anim {
   transition: opacity 0.8s ease-out, transform 0.8s ease-out;
 }
 /* --- AKHIR CSS Intro --- */
+/* --- TAMBAHAN: CSS Navbar Scroll-Aware --- */
+nav.fixed {
+  /* Tambahkan transisi yang mulus untuk 'background' dan 'blur' */
+  transition-property: background-color, border-color, backdrop-filter;
+  transition-duration: 300ms;
+  transition-timing-function: ease-out;
+  
+  /* State Awal (di atas): Transparan */
+  background-color: transparent;
+  border-bottom-color: transparent;
+  backdrop-filter: blur(0px);
+}
+
+nav.navbar-scrolled {
+  /* State Saat Scroll: Menjadi 'glass' */
+  /* Menggunakan 'brand-bg' Anda dengan transparansi */
+  background-color: rgba(26, 35, 50, 0.75); 
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1); /* Mirip border-white/10 */
+  backdrop-filter: blur(12px); /* Blur kuat untuk readability */
+}
+/* --- AKHIR CSS --- */
   </style>
 </head>
 <body class="font-sans antialiased selection:bg-brand-accent selection:text-brand-bg">
@@ -861,8 +882,26 @@ nav.intro-anim {
     }
     // --- AKHIR LOGIKA CHATBOT ---
 
-// --- LOGIKA BARU: STAGGERED INTRO ---
+    // --- LOGIKA BARU: Scroll-Aware Navbar ---
+    function initScrollAwareNavbar() {
+      // Kita targetkan nav yang punya kelas 'fixed'
+      const nav = document.querySelector('nav.fixed');
+      if (!nav) return; // Keluar jika nav tidak ditemukan
+
+      // Dengar event 'scroll' di window
+      window.addEventListener('scroll', () => {
+        // Jika user scroll lebih dari 10px
+        if (window.scrollY > 10) {
+          nav.classList.add('navbar-scrolled');
+        } else {
+          // Jika user kembali ke atas
+          nav.classList.remove('navbar-scrolled');
+        }
+      }, { passive: true }); // {passive: true} untuk performa scroll
+    }
+    // --- AKHIR LOGIKA BARU ---
     
+    // Fungsi untuk menjalankan skrip utama Anda
     // Fungsi untuk menjalankan skrip utama Anda
     function runPageScripts() {
       const el = document.getElementById('typeText');
@@ -873,6 +912,9 @@ nav.intro-anim {
       initHeroParallax();
       initModalLogic();
       initChatbot();
+      
+      // --- TAMBAHKAN SATU BARIS INI ---
+      initScrollAwareNavbar();
     }
 
     // Fungsi untuk menjalankan animasi intro
