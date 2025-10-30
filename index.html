@@ -101,44 +101,29 @@
       }
     }
     
-    /* --- TAMBAHAN: CSS Chatbot (REVISI) --- */
+   /* --- TAMBAHAN: CSS Chatbot (Perbaikan Definitif) --- */
     #chat-window {
       scroll-behavior: smooth;
-      /* BARU: Memaksa bubble chat jadi kolom */
       display: flex;
       flex-direction: column;
-      gap: 0.75rem; /* 12px, menggantikan space-y-4 */
+      gap: 0.75rem; /* 12px */
     }
     .chat-bubble {
+      /* Ini HANYA untuk animasi 'pop-in' */
       opacity: 0;
       transform: translateY(10px);
       animation: popIn 0.3s cubic-bezier(.2,.9,.2,1) forwards;
     }
-    .chat-bubble-bot {
-      /* REVISI: Dibuat lebih bulat (rounded-xl) */
-      @apply bg-white/5 p-3 rounded-xl max-w-[80%] text-brand-text;
-      align-self: flex-start;
-      margin-right: auto; /* BARU: Mendorong ke kiri */
-    }
-    .chat-bubble-user {
-      /* REVISI: Dibuat lebih bulat (rounded-xl) */
-      @apply bg-brand-accent p-3 rounded-xl max-w-[80%] text-brand-bg font-medium;
-      align-self: flex-end;
-      margin-left: auto; /* BARU: Mendorong ke kanan */
-    }
     .chat-option-btn {
-      /* REVISI: Dibuat lebih solid seperti tombol/chip */
-      @apply text-sm px-4 py-2 rounded-full bg-brand-accent/20 text-brand-accent transition-all duration-200;
-      @apply hover:bg-brand-accent hover:text-brand-bg hover:scale-105 focus:scale-105;
-      border: 1px solid rgba(125, 211, 192, 0.3); /* border tipis transparan */
+      /* Ini HANYA untuk animasi 'pop-in' */
       opacity: 0;
       transform: scale(0.95);
       animation: popIn 0.3s cubic-bezier(.2,.9,.2,1) forwards;
     }
     .chat-link {
+      /* Ini SATU-SATUNYA style yg kita @apply-kan */
       @apply text-brand-accent font-medium underline hover:text-brand-secondary;
     }
-
     @keyframes popIn {
       from { opacity: 0; transform: translateY(10px) scale(0.95); }
       to { opacity: 1; transform: translateY(0) scale(1); }
@@ -659,7 +644,16 @@
       // Fungsi untuk menambahkan pesan ke UI
       function addMessage(text, sender = 'bot') {
         const bubble = document.createElement('div');
-        bubble.className = `chat-bubble ${sender === 'bot' ? 'chat-bubble-bot' : 'chat-bubble-user'}`;
+        
+        // --- INI PERUBAHANNYA ---
+        // Kita tambahkan semua kelas Tailwind di sini
+        if (sender === 'bot') {
+          bubble.className = 'chat-bubble bg-white/5 p-3 rounded-xl max-w-[80%] text-brand-text self-start mr-auto';
+        } else {
+          bubble.className = 'chat-bubble bg-brand-accent p-3 rounded-xl max-w-[80%] text-brand-bg font-medium self-end ml-auto';
+        }
+        // --- AKHIR PERUBAHAN ---
+        
         // Amankan & render link jika ada (untuk pesan 'contact')
         bubble.innerHTML = text.replace(/(https?:\/\/[^\s]+)/g, '<a href="$1" target="_blank" rel="noopener" class="chat-link">$1</a>');
         chatWindow.appendChild(bubble);
@@ -668,12 +662,17 @@
       }
 
       // Fungsi untuk menampilkan opsi tombol
+      // Fungsi untuk menampilkan opsi tombol
       function showOptions(options) {
         chatOptions.innerHTML = ''; // Kosongkan opsi lama
         
         options.forEach((opt, index) => {
           const btn = document.createElement('button');
-          btn.className = 'chat-option-btn';
+          
+          // --- INI PERUBAHANNYA ---
+          btn.className = 'chat-option-btn text-sm px-4 py-2 rounded-full bg-brand-accent/20 text-brand-accent transition-all duration-200 hover:bg-brand-accent hover:text-brand-bg hover:scale-105 focus:scale-105 border border-brand-accent/30';
+          // --- AKHIR PERUBAHAN ---
+          
           btn.textContent = opt.text;
           btn.style.animationDelay = `${index * 100}ms`; // Animasi stagger
           
@@ -695,7 +694,11 @@
          linkEl.href = link.href;
          linkEl.target = "_blank";
          linkEl.rel = "noopener";
-         linkEl.className = "chat-option-btn";
+         
+         // --- INI PERUBAHANNYA ---
+         linkEl.className = "chat-option-btn text-sm px-4 py-2 rounded-full bg-brand-accent/20 text-brand-accent transition-all duration-200 hover:bg-brand-accent hover:text-brand-bg hover:scale-105 focus:scale-105 border border-brand-accent/30";
+         // --- AKHIR PERUBAHAN ---
+         
          linkEl.textContent = link.text;
          linkEl.style.animationDelay = '100ms';
          chatOptions.appendChild(linkEl);
