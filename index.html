@@ -174,14 +174,51 @@
       animation: popIn 0.3s cubic-bezier(.2,.9,.2,1) forwards;
     }
     .chat-link {
-      /* Ini SATU-SATUNYA style yg kita @apply-kan */
-      @apply text-brand-accent font-medium underline hover:text-brand-secondary;
+      /* CSS murni pengganti @apply */
+      color: #7dd3c0; /* text-brand-accent */
+      font-weight: 500; /* font-medium */
+      text-decoration-line: underline; /* underline */
+    }
+    .chat-link:hover {
+      color: #6ba5a8; /* hover:text-brand-secondary */
     }
     @keyframes popIn {
       from { opacity: 0; transform: translateY(10px) scale(0.95); }
       to { opacity: 1; transform: translateY(0) scale(1); }
     }
     /* --- AKHIR CSS CHATBOT --- */
+
+    /* --- TAMBAHAN: CSS Typing Indicator --- */
+@keyframes typingBounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-3px); }
+}
+.chat-bubble-typing {
+  /* CSS murni pengganti @apply */
+  background-color: rgba(255, 255, 255, 0.05); /* bg-white/5 */
+  padding: 0.75rem; /* p-3 */
+  border-radius: 0.75rem; /* rounded-xl */
+  max-width: 80%; /* max-w-[80%] */
+  color: #e8eef2; /* text-brand-text (dari config Anda) */
+  align-self: flex-start; /* self-start */
+  margin-right: auto; /* mr-auto */
+  
+  /* Ini adalah 3 titik-titik */
+  display: flex;
+  gap: 4px;
+  align-items: center;
+}
+.chat-bubble-typing span {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: #a8b8d8; /* Warna subtext */
+  animation: typingBounce 1.2s ease-in-out infinite;
+}
+/* Delay animasi untuk setiap titik */
+.chat-bubble-typing span:nth-child(2) { animation-delay: 0.2s; }
+.chat-bubble-typing span:nth-child(3) { animation-delay: 0.4s; }
+/* --- AKHIR CSS Typing Indicator --- */
   </style>
 </head>
 <body class="font-sans antialiased selection:bg-brand-accent selection:text-brand-bg">
@@ -672,6 +709,30 @@
 
       let currentStep = 'start';
 
+      // --- TAMBAHAN BARU ---
+      function showTyping() {
+        // Cek dulu agar tidak duplikat
+        if (document.getElementById('typing-indicator')) return;
+        
+        const bubble = document.createElement('div');
+        bubble.className = 'chat-bubble-typing'; // Pakai kelas CSS baru kita
+        bubble.id = 'typing-indicator'; // Beri ID agar gampang dihapus
+        
+        // Buat 3 titik-titik
+        bubble.innerHTML = '<span></span><span></span><span></span>';
+        
+        chatWindow.appendChild(bubble);
+        chatWindow.scrollTop = chatWindow.scrollHeight; // Auto-scroll
+      }
+
+      function hideTyping() {
+        const typingBubble = document.getElementById('typing-indicator');
+        if (typingBubble) {
+          typingBubble.remove();
+        }
+      }
+      // --- AKHIR TAMBAHAN BARU ---
+
       // Fungsi untuk menambahkan pesan ke UI
       function addMessage(text, sender = 'bot') {
         const bubble = document.createElement('div');
@@ -736,21 +797,34 @@
       }
 
       // Fungsi untuk pindah alur
+      // --- GANTI DENGAN FUNGSI BARU INI ---
       function goToStep(stepName) {
         const step = chatFlow[stepName];
         if (!step) return;
 
         currentStep = stepName;
+        
+        // 1. Langsung tampilkan 'typing'
+        showTyping();
+        
+        // 2. Kosongkan opsi lama (UX-improvement!)
+        //    Ini mencegah user mengklik tombol lama saat bot sedang "mengetik"
+        chatOptions.innerHTML = ''; 
 
-        // Tampilkan pesan bot
+        // 3. Tunda jawaban bot (seperti sebelumnya)
         setTimeout(() => {
+          // 4. Sembunyikan 'typing'
+          hideTyping(); 
+          
+          // 5. Tampilkan pesan bot
           addMessage(step.message, 'bot');
-          // Tampilkan opsi & link setelah pesan bot muncul
+          
+          // 6. Tampilkan opsi & link setelah pesan bot muncul
           setTimeout(() => {
             showOptions(step.options);
             showLink(step.link); // Tampilkan link jika ada
           }, 400); // delay kecil untuk UX
-        }, 800); // Bot "berpikir"
+        }, 800); // <-- Ini adalah durasi "bot mengetik"
       }
 
       // Mulai chatbot
