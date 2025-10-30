@@ -236,8 +236,17 @@ nav.intro-anim {
   opacity: 1;
   transform: translateY(0);
 }
+.intro-anim {
+  opacity: 0;
+  transform: translateY(20px);
+  
+  /* GANTI INI: */
+  /* transition: opacity 0.6s ease-out, transform 0.6s ease-out; */
+  
+  /* MENJADI INI (lebih lambat & smooth): */
+  transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+}
 /* --- AKHIR CSS Intro --- */
-
   </style>
 </head>
 <body class="font-sans antialiased selection:bg-brand-accent selection:text-brand-bg">
@@ -873,14 +882,16 @@ nav.intro-anim {
         // Beri jeda 150ms antar elemen
         setTimeout(() => {
           el.classList.add('is-visible');
-        }, index * 150); 
+        }, index * 250); 
       });
     }
 
     // Panggil semuanya setelah halaman SIAP
     window.addEventListener('load', () => {
       runPageScripts();
-      runIntroAnimation();
+      
+      // Kasih jeda 100ms agar browser "napas" dulu
+      setTimeout(runIntroAnimation, 100);
     });
     // --- AKHIR LOGIKA BARU ---
 
