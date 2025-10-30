@@ -219,9 +219,41 @@
 .chat-bubble-typing span:nth-child(2) { animation-delay: 0.2s; }
 .chat-bubble-typing span:nth-child(3) { animation-delay: 0.4s; }
 /* --- AKHIR CSS Typing Indicator --- */
+
+/* --- TAMBAHAN: CSS Preloader (Decrypt) --- */
+#preloader {
+  /* Transisi untuk fade-out */
+  transition: opacity 0.5s ease-out;
+}
+#preloader.hidden {
+  opacity: 0;
+  pointer-events: none; /* Agar tidak menghalangi klik */
+}
+
+/* Kursor mengetik untuk efek 'decrypt' */
+#preloader-text::after {
+  content: '█';
+  /* Gunakan warna subtext Anda */
+  color: #a8b8d8; 
+  animation: blink 1s step-end infinite;
+}
+@keyframes blink {
+  50% { opacity: 0; }
+}
+/* --- AKHIR CSS Preloader --- */
   </style>
 </head>
 <body class="font-sans antialiased selection:bg-brand-accent selection:text-brand-bg">
+
+  <div id="preloader" class="fixed inset-0 z-[100] flex items-center justify-center bg-brand-bg" aria-busy="true">
+    <div class="font-mono text-center px-4">
+      
+      <div id="preloader-text" class="text-lg sm:text-2xl text-brand-accent"></div>
+      
+      <div id="preloader-counter" class="text-sm text-brand-subtext mt-2">0%</div>
+
+    </div>
+  </div>
 
   <!-- NAV -->
   <nav class="fixed inset-x-0 top-0 z-50">
@@ -834,6 +866,70 @@
     }
     // --- AKHIR LOGIKA CHATBOT ---
 
+    // --- FUNGSI ANIMASI PRELOADER BARU ---
+    
+    /**
+     * Menjalankan efek 'decrypt' / 'scramble' pada sebuah elemen.
+     */
+    function runScrambleEffect(element, text, duration) {
+      const chars = '!<>-$%#@*?+[]{}';
+      let frame = 0;
+      const frameRate = 50; // update setiap 50ms
+      const totalFrames = duration / frameRate;
+
+      const interval = setInterval(() => {
+        frame++;
+        const progress = frame / totalFrames;
+        
+        let newText = '';
+        for (let i = 0; i < text.length; i++) {
+          if (i < text.length * progress) {
+            newText += text[i];
+          } else {
+            newText += chars[Math.floor(Math.random() * chars.length)];
+          }
+        }
+        element.textContent = newText;
+
+        if (frame >= totalFrames) {
+          clearInterval(interval);
+          element.textContent = text; // Pastikan teks akhir benar
+        }
+      }, frameRate);
+    }
+
+    /**
+     * Menjalankan counter dari 0 ke 100.
+     */
+    function runCounter(element, duration) {
+      let current = 0;
+      const frameRate = 50; // update setiap 50ms
+      const increment = 100 / (duration / frameRate);
+
+      const interval = setInterval(() => {
+        current = Math.min(current + increment, 100);
+        element.textContent = Math.floor(current) + '%';
+        
+        if (current >= 100) {
+          clearInterval(interval);
+          element.textContent = '100%'; // Pastikan 100%
+        }
+      }, frameRate);
+    }
+
+    // --- BARU: KUMPULKAN SEMUA SKRIP 'LOAD' ---
+    function runPageScripts() {
+      const el = document.getElementById('typeText');
+      if (el) runTypewriter(el, phrases);
+      
+      initRevealObserver();
+      initSpotlightEffect();
+      initHeroParallax();
+      initModalLogic();
+      initChatbot();
+    }
+    // --- AKHIR FUNGSI BARU ---
+
     // Gantikan initTilt() dengan ini
 function initSpotlightEffect() {
   const cards = document.querySelectorAll('#skills .glass, #projects .glass');
@@ -863,17 +959,46 @@ function initSpotlightEffect() {
   });
 }
 
-// Jangan lupa panggil fungsi baru Anda
-window.addEventListener('load', () => {
-  const el = document.getElementById('typeText');
-  if (el) runTypewriter(el, phrases);
-  initRevealObserver();
-  // initTilt(); // <-- HAPUS INI
-  initSpotlightEffect(); // <-- TAMBAHKAN INI
-  initHeroParallax();
-  initModalLogic();
-  initChatbot();
-});
+// --- LOGIKA PRELOADER BARU (DENGAN JAMINAN WAKTU MINIMUM) ---
+    
+    // 1. Tentukan waktu minimum (dalam milidetik)
+    const MIN_DISPLAY_TIME = 1500; // 1.5 detik
+
+    // 2. Ambil elemen preloader
+    const preloaderText = document.getElementById('preloader-text');
+    const preloaderCounter = document.getElementById('preloader-counter');
+
+    // 3. Buat promise untuk waktu minimum
+    const minTimePromise = new Promise(resolve => {
+      setTimeout(resolve, MIN_DISPLAY_TIME);
+    });
+
+    // 4. Buat promise untuk 'window.load'
+    const windowLoadPromise = new Promise(resolve => {
+      window.addEventListener('load', resolve);
+    });
+
+    // 5. Jalankan skrip halaman SEGERA setelah halaman selesai load
+    windowLoadPromise.then(runPageScripts);
+    
+    // 6. Mulai animasi SEKARANG
+    const animDuration = MIN_DISPLAY_TIME - 200; // 1.3 detik
+    if (preloaderText) runScrambleEffect(preloaderText, 'JARI MUHAMMAD', animDuration);
+    if (preloaderCounter) runCounter(preloaderCounter, animDuration);
+
+    // 7. TUNGGU KEDUA promise selesai untuk menyembunyikan preloader
+    Promise.all([minTimePromise, windowLoadPromise]).then(() => {
+      // Baris ini HANYA akan berjalan setelah:
+      // a) Halaman selesai load, DAN
+      // b) 1.5 detik telah berlalu
+
+      const preloader = document.getElementById('preloader');
+      if (preloader) {
+        preloader.classList.add('hidden'); // Mulai fade-out
+        setTimeout(() => preloader.remove(), 500); // Hapus dari DOM setelah fade
+      }
+    });
+    // --- AKHIR LOGIKA PRELOADER BARU ---
   </script>
 
   <div id="modal-container" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 transition-opacity duration-300" style="display: none; opacity: 0;">
