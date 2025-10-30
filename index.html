@@ -5,6 +5,12 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Jari Muhammad — Portfolio</title>
 
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@600&display=swap" rel="stylesheet">
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+
   <!-- Tailwind CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
 
@@ -27,8 +33,8 @@
             bgShift: { '0%': { backgroundPosition: '0% 50%' }, '50%': { backgroundPosition: '100% 50%' }, '100%': { backgroundPosition: '0% 50%' } }
           },
           animation: {
-            floaty: 'floaty 6s ease-in-out infinite',
-            bgShift: 'bgShift 18s linear infinite'
+            floaty: 'floaty 10s ease-in-out infinite',
+            bgShift: 'bgShift 30s linear infinite'
           }
         }
       }
@@ -40,7 +46,9 @@
     body {
       background: linear-gradient(270deg, #0B132B, #0F203A, #071428);
       background-size: 600% 600%;
-      animation: bgShift 18s linear infinite;
+      /* Durasi ini sekarang mengambil dari config 'animate-bgShift' */
+      /* Jika body tidak menggunakan kelas itu, ubah di sini: */
+      animation: bgShift 30s linear infinite; /* <-- DIUBAH (dari 18s) */
       color: #F1F5F9;
     }
 
@@ -63,9 +71,39 @@
 
     a:focus, button:focus { outline: 3px solid rgba(111,255,233,0.18); outline-offset: 2px; }
 
+    /* --- TAMBAHAN: Terapkan font "tech" ke semua heading --- */
+    h2, h3, h4 {
+      font-family: "JetBrains Mono", monospace;
+    }
+    /* --- AKHIR TAMBAHAN --- */
+
+
     @media (max-width:640px) {
       .typewriter { font-size: 0.95rem; }
     }
+    
+    /* --- TAMBAHAN: Media Query untuk Aksesibilitas --- */
+    @media (prefers-reduced-motion: reduce) {
+      /* Hentikan semua animasi & transisi yang bergerak */
+      body, .animate-floaty, .animate-bgShift, .reveal, .tilt, a, button, #heroPhoto {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+        animation: none !important;
+        transition: none !important;
+      }
+      /* Reset state hover/focus yg mungkin bergantung pada transisi */
+      .tilt {
+        transform: none !important;
+        box-shadow: none !important;
+      }
+      .reveal {
+        opacity: 1;
+        transform: none;
+      }
+    }
+    /* --- AKHIR TAMBAHAN --- */
   </style>
 </head>
 <body class="font-sans antialiased selection:bg-brand-accent selection:text-brand-bg">
