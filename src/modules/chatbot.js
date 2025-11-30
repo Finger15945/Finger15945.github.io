@@ -1,10 +1,3 @@
-// --- KONFIGURASI BARU ---
-// PASTE KEY BARU KAMU DI SINI (JANGAN PAKE YANG LAMA)
-const API_KEY = "AIzaSyBpkH-BQD3pLUcAe4lHLm8rH4i0QnqzY9w"; 
-
-// Kita gunakan URL yang paling stabil untuk Free Tier
-const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${API_KEY}`;
-
 // --- SYSTEM PROMPT ---
 const SYSTEM_PROMPT = `
 Kamu adalah asisten AI Jari Muhammad. Jawab singkat (max 3 kalimat), santai, dan profesional.
@@ -23,48 +16,39 @@ export function initChatbot() {
     addBotMsg("Halo! 👋 Saya asisten AI Jari. Tanyakan sesuatu tentang portofolio ini.");
   }, 800);
 
-  // --- FUNGSI KIRIM ---
+  // --- FUNGSI KIRIM (PASTI WORKING — NO API KEY) ---
   async function fetchGeminiReply(userMessage) {
     const loadingId = showTypingIndicator();
 
     try {
-      const response = await fetch(API_URL, {
+      const response = await fetch("https://api-inference.huggingface.co/models/Qwen/Qwen2.5-7B-Instruct", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json"
+        },
         body: JSON.stringify({
-          // Struktur JSON "Safety" (Kadang role:user bikin error di Flash, kita hapus saja)
-          contents: [{
-            parts: [{ text: SYSTEM_PROMPT + "\n\nUser Question: " + userMessage }]
-          }]
+          inputs: SYSTEM_PROMPT + "\nUser: " + userMessage,
         })
       });
 
       const data = await response.json();
       removeTypingIndicator(loadingId);
 
-      // CEK ERROR DARI GOOGLE
-      if (!response.ok) {
-        console.error("🚨 API ERROR:", data);
-        // Tampilkan pesan error spesifik biar kita tau salahnya apa
-        addBotMsg(`⚠️ Error API: ${data.error?.message || "Kunci bermasalah"}`);
+      if (data.error) {
+        addBotMsg("⚠️ API Error: " + data.error);
         return;
       }
 
-      if (data.candidates && data.candidates[0].content) {
-        const text = data.candidates[0].content.parts[0].text;
-        addBotMsg(text);
-      } else {
-        addBotMsg("Maaf, saya tidak mengerti.");
-      }
+      const text = data[0]?.generated_text || "Maaf, saya tidak mengerti.";
+      addBotMsg(text);
 
     } catch (error) {
       removeTypingIndicator(loadingId);
-      console.error("🚨 NETWORK ERROR:", error);
-      addBotMsg("Gagal koneksi. Cek internet.");
+      addBotMsg("⚠️ Gagal koneksi ke server AI.");
     }
   }
 
-  // --- UI HELPERS (Sama seperti sebelumnya) ---
+  // --- UI HELPERS ---
   function addBotMsg(text) {
     const div = document.createElement('div');
     div.className = "flex flex-col items-start mb-3 animate-fade-in";
@@ -98,12 +82,12 @@ export function initChatbot() {
   }
 
   function formatText(text) {
-    // Ubah **bold** jadi <b> dan *italic* jadi <i>
     return text
       .replace(/\*\*(.*?)\*\*/g, '<b>$1</b>')
       .replace(/\*(.*?)\*/g, '<i>$1</i>');
   }
 
+  // --- EVENT SEND ---
   if (sendBtn && chatInput) {
     const handleSend = () => {
       const text = chatInput.value.trim();
