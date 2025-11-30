@@ -1,11 +1,16 @@
-// ✅ IMPORT LIBRARY RESMI GOOGLE (LANGSUNG DARI CDN)
+// 🔥 IMPORT SDK RESMI GOOGLE (LANGSUNG DARI CLOUD)
 import { GoogleGenerativeAI } from "https://esm.run/@google/generative-ai";
 
 // --- KONFIGURASI ---
 const API_KEY = "AIzaSyBpkH-BQD3pLUcAe4lHLm8rH4i0QnqzY9w"; 
 
-// System Prompt
-const SYSTEM_PROMPT = "Kamu adalah asisten AI Jari Muhammad. Jawab singkat, padat, dan profesional. Konteks: Jari adalah AI Engineer (Python/JS).";
+// System Prompt: Identitas AI
+const SYSTEM_INSTRUCTION = `
+Kamu adalah asisten profesional untuk Jari Muhammad (AI Engineer).
+Style: Singkat, padat, teknis tapi ramah.
+Fakta: Jari ahli Python, TensorFlow, JS, dan membangun bot WA otomatis.
+Tugas: Jawab pertanyaan recruiter tentang skill dan proyek Jari.
+`;
 
 export function initChatbot() {
   const chatWindow = document.getElementById('chat-window');
@@ -14,34 +19,35 @@ export function initChatbot() {
 
   if (!chatWindow) return;
 
-  // Inisialisasi SDK Google (Biar dia yang urus CORS & Header)
-  let genAI = null;
+  // Inisialisasi AI (Hanya sekali di awal)
   let model = null;
-
   try {
-    genAI = new GoogleGenerativeAI(API_KEY);
+    const genAI = new GoogleGenerativeAI(API_KEY);
     model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
   } catch (e) {
-    console.error("Gagal inisialisasi AI:", e);
-    addBotMsg("⚠️ Error konfigurasi API Key.");
+    console.error("AI Init Error:", e);
   }
 
-  // Sapaan Awal
+  // Pesan Pembuka
   setTimeout(() => {
-    addBotMsg("Halo! Sistem AI Jari siap. Ada yang bisa saya bantu?");
+    addBotMsg("Halo! 👋 Saya AI yang dilatih dari data Jari. Silakan tanya teknis atau pengalaman kerja.");
   }, 1000);
 
-  // --- FUNGSI KIRIM (PAKAI SDK) ---
+  // --- LOGIKA UTAMA ---
   async function fetchGeminiReply(userMessage) {
-    if (!model) return;
+    if (!model) {
+      addBotMsg("⚠️ Error: AI belum siap (API Key invalid).");
+      return;
+    }
 
     const loadingId = showTypingIndicator();
 
-    // Gabungkan Prompt (Teknik Prepend)
-    const finalPrompt = `${SYSTEM_PROMPT}\n\nUser bertanya: "${userMessage}"\nJawab:`;
-
     try {
-      // PANGGIL AI PAKAI SDK RESMI (Lebih stabil daripada fetch manual)
+      // TEKNIK: Kita gabung System Prompt + User Chat biar AI paham konteks
+      // (Ini lebih stabil daripada pakai parameter system_instruction terpisah di versi web)
+      const finalPrompt = `${SYSTEM_INSTRUCTION}\n\nUser bertanya: "${userMessage}"\nJawab:`;
+
+      // KIRIM KE GOOGLE (SDK yang urus semua format & headers)
       const result = await model.generateContent(finalPrompt);
       const response = await result.response;
       const text = response.text();
@@ -51,19 +57,18 @@ export function initChatbot() {
 
     } catch (error) {
       removeTypingIndicator(loadingId);
-      console.error("SDK ERROR:", error);
+      console.error("GEMINI ERROR:", error); // Cek Console (F12) untuk detail
+
+      let msg = "Maaf, koneksi terputus.";
+      if (error.message.includes("400")) msg = "Request ditolak (Cek API Key).";
+      if (error.message.includes("429")) msg = "Server sibuk (Kuota habis).";
+      if (error.message.includes("Failed to fetch")) msg = "Koneksi diblokir browser (Cek API Key Restriction).";
       
-      // Deteksi jenis error biar jelas
-      let errorMsg = "Maaf, terjadi kesalahan.";
-      if (error.message.includes("400")) errorMsg = "Format request ditolak (400).";
-      if (error.message.includes("403")) errorMsg = "Akses ditolak (Cek API Key/Lokasi).";
-      if (error.message.includes("Failed to fetch")) errorMsg = "Koneksi/CORS Error.";
-      
-      addBotMsg(`⚠️ ${errorMsg}`);
+      addBotMsg(`⚠️ ${msg}`);
     }
   }
 
-  // --- UI HELPERS (Tetap Sama) ---
+  // --- UI HELPERS (JANGAN DIUBAH) ---
   function addBotMsg(text) {
     const div = document.createElement('div');
     div.className = "flex flex-col items-start mb-3 animate-fade-in";
@@ -96,9 +101,9 @@ export function initChatbot() {
     if(el) el.remove();
   }
 
+  // Ubah Markdown Bold (**) jadi HTML <b>
   function formatText(t) { 
-    if(!t) return "";
-    return t.replace(/\*\*(.*?)\*\*/g, '<b>$1</b>'); 
+    return t ? t.replace(/\*\*(.*?)\*\*/g, '<b>$1</b>') : ""; 
   }
 
   if (sendBtn && chatInput) {
