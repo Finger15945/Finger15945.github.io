@@ -13,14 +13,16 @@ export default {
         sans: ['Inter', 'system-ui', 'sans-serif'],
         mono: ['JetBrains Mono', 'monospace'],
       },
-      // Ganti bagian colors di tailwind.config.js
       colors: {
         brand: {
-          bg: '#0F172A',         // Slate-900 (Lebih modern daripada #0B132B)
-          surface: '#1E293B',    // Slate-800
-          accent: '#38BDF8',     // Sky-400 (Warna "Tech" standar industri saat ini)
-          text: '#F8FAFC',       
-          subtext: '#94A3B8',    
+          // JANGAN UBAH INI KE HEX KODE MANUAL
+          // Biarkan dia membaca variabel dari style.css
+          bg: 'rgb(var(--color-bg) / <alpha-value>)',
+          surface: 'rgb(var(--color-surface) / <alpha-value>)',
+          text: 'rgb(var(--color-text) / <alpha-value>)',
+          muted: 'rgb(var(--color-muted) / <alpha-value>)',
+          border: 'rgb(var(--color-border) / <alpha-value>)',
+          accent: 'rgb(var(--color-accent) / <alpha-value>)',
         }
       },
       boxShadow: {
