@@ -3,7 +3,8 @@ export default {
   content: [
     "./index.html",
     "./src/**/*.{js,ts,jsx,tsx}",
-    "./*.js"
+    "./*.js",
+    "./modules/*.js" // Menambahkan scan folder modules
   ],
   theme: {
     extend: {
@@ -13,20 +14,18 @@ export default {
       },
       colors: {
         brand: {
-          bg: '#050A14',        // Lebih gelap dari sebelumnya (Deep Space)
-          surface: '#0F172A',   // Slate-900 untuk kartu
-          accent: '#38BDF8',    // Sky-400 (Lebih neon/hidup dibanding teal lama)
-          secondary: '#6366F1', // Indigo untuk gradasi
-          text: '#F8FAFC',      // Off-white (Slate-50) agar mata tidak sakit
-          muted: '#94A3B8',     // Slate-400
+          bg: '#020617',        // Slate 950 (Lebih gelap & premium)
+          surface: '#0f172a',   // Slate 900
+          surfaceHighlight: '#1e293b', // Slate 800
+          accent: '#2dd4bf',    // Teal 400 (Lebih neon)
+          secondary: '#6366f1', // Indigo 500 (Untuk gradasi)
+          text: '#f8fafc',      // Slate 50
+          muted: '#94a3b8',     // Slate 400
         }
-      },
-      backgroundImage: {
-        'grid-pattern': "linear-gradient(to right, #1e293b 1px, transparent 1px), linear-gradient(to bottom, #1e293b 1px, transparent 1px)",
       },
       animation: {
         'blob': 'blob 7s infinite',
-        'fade-in': 'fadeIn 0.5s ease-out forwards',
+        'fade-in-up': 'fadeInUp 0.8s ease-out forwards',
       },
       keyframes: {
         blob: {
@@ -35,8 +34,8 @@ export default {
           '66%': { transform: 'translate(-20px, 20px) scale(0.9)' },
           '100%': { transform: 'translate(0px, 0px) scale(1)' },
         },
-        fadeIn: {
-          '0%': { opacity: '0', transform: 'translateY(10px)' },
+        fadeInUp: {
+          '0%': { opacity: '0', transform: 'translateY(20px)' },
           '100%': { opacity: '1', transform: 'translateY(0)' },
         }
       }

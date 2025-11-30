@@ -3,106 +3,118 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Jari Muhammad — Machine Learning & Frontend Engineer</title>
-  <meta name="description" content="Portfolio of Jari Muhammad, Specialist in AI Integration & Modern Web.">
+  <title>Jari Muhammad | IT Expert & AI Engineer</title>
+  <meta name="description" content="Portfolio of Jari Muhammad, Frontend & ML Expert.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/src/style.css">
 </head>
-<body class="font-sans text-brand-text bg-brand-bg">
+<body class="font-sans overflow-x-hidden">
 
-  <div class="fixed inset-0 bg-grid-pattern bg-grid opacity-[0.03] pointer-events-none z-0"></div>
-  
-  <nav class="fixed inset-x-0 top-0 z-40 transition-all duration-300 backdrop-blur-md bg-brand-bg/70 border-b border-white/5">
-    <div class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
-      <a href="#" class="flex items-center gap-3 group">
-        <div class="w-8 h-8 rounded bg-gradient-to-br from-brand-secondary to-brand-accent flex items-center justify-center font-mono font-bold text-black text-xs group-hover:rotate-12 transition-transform">
-          JM
+  <div class="fixed inset-0 pointer-events-none overflow-hidden -z-10">
+    <div class="absolute top-0 left-1/4 w-96 h-96 bg-brand-accent/10 rounded-full blur-[128px] animate-blob"></div>
+    <div class="absolute bottom-0 right-1/4 w-96 h-96 bg-brand-secondary/10 rounded-full blur-[128px] animate-blob animation-delay-2000"></div>
+  </div>
+
+  <nav class="fixed inset-x-0 top-0 z-50 transition-all duration-300 backdrop-blur-md bg-brand-bg/70 border-b border-white/5">
+    <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+      <a href="#" class="group flex items-center gap-3">
+        <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-brand-secondary to-brand-accent p-[1px]">
+          <div class="w-full h-full bg-brand-bg rounded-lg flex items-center justify-center">
+            <span class="font-mono font-bold text-brand-accent group-hover:text-white transition-colors">JM</span>
+          </div>
         </div>
-        <span class="font-mono text-sm font-bold tracking-tight text-brand-text group-hover:text-brand-accent transition-colors">Jari.Dev</span>
+        <div class="flex flex-col">
+          <span class="font-bold text-brand-text tracking-tight">Jari Muhammad</span>
+          <span class="text-[10px] text-brand-muted font-mono uppercase tracking-widest">Fullstack AI Engineer</span>
+        </div>
       </a>
 
-      <div class="hidden md:flex items-center gap-8 text-sm font-medium text-brand-muted font-mono">
-        <a href="#about" class="hover:text-brand-accent transition-colors">/about</a>
-        <a href="#projects" class="hover:text-brand-accent transition-colors">/projects</a>
-        <a href="#contact" class="hover:text-brand-accent transition-colors">/contact</a>
+      <div class="hidden md:flex items-center gap-8">
+        <a href="#about" class="nav-link">About</a>
+        <a href="#projects" class="nav-link">Projects</a>
+        <a href="#contact" class="nav-link">AI Assistant</a>
+        <button onclick="window.open('https://wa.me/6287776058465')" class="px-5 py-2 rounded-full border border-brand-accent/30 text-brand-accent hover:bg-brand-accent hover:text-brand-bg transition-all font-mono text-xs font-bold">
+          Hire Me
+        </button>
       </div>
 
-      <button onclick="window.open('https://wa.me/6287776058465')" class="hidden md:block px-4 py-1.5 border border-white/10 rounded text-xs font-mono hover:bg-brand-accent hover:text-black hover:border-transparent transition-all">
-        Hire Expert
+      <button id="mobileToggle" class="md:hidden text-brand-text p-2">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
       </button>
-      
-      <button id="mobileToggle" class="md:hidden text-brand-text"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg></button>
     </div>
-    <div id="mobileMenu" class="hidden md:hidden absolute top-full left-0 w-full bg-brand-bg border-b border-white/10 p-5 flex flex-col gap-4 shadow-2xl">
-      <a href="#about" class="block py-2 font-mono text-brand-muted hover:text-brand-accent">/about</a>
-      <a href="#projects" class="block py-2 font-mono text-brand-muted hover:text-brand-accent">/projects</a>
-      <a href="#contact" class="block py-2 font-mono text-brand-muted hover:text-brand-accent">/contact</a>
+    
+    <div id="mobileMenu" class="hidden md:hidden absolute top-full left-0 w-full bg-brand-bg border-b border-white/10 p-6 flex flex-col gap-4 shadow-2xl backdrop-blur-xl">
+      <a href="#about" class="block py-2 text-brand-muted hover:text-brand-accent">About</a>
+      <a href="#projects" class="block py-2 text-brand-muted hover:text-brand-accent">Projects</a>
+      <a href="#contact" class="block py-2 text-brand-muted hover:text-brand-accent">Contact</a>
     </div>
   </nav>
 
-  <section id="about" class="min-h-screen flex items-center pt-24 relative overflow-hidden">
-    <div class="absolute top-1/4 -right-20 w-96 h-96 bg-brand-secondary/20 rounded-full blur-[128px] animate-blob mix-blend-screen pointer-events-none"></div>
-    <div class="absolute -bottom-32 -left-20 w-96 h-96 bg-brand-accent/10 rounded-full blur-[128px] animate-blob animation-delay-2000 pointer-events-none"></div>
-
-    <div class="max-w-6xl mx-auto px-6 grid lg:grid-cols-5 gap-12 items-center relative z-10">
-      <div class="lg:col-span-3 space-y-6 reveal">
-        <div class="inline-flex items-center gap-2 px-3 py-1 rounded bg-brand-accent/5 border border-brand-accent/20 text-xs font-mono text-brand-accent">
+  <section id="about" class="min-h-screen flex items-center pt-24 relative">
+    <div class="max-w-7xl mx-auto px-6 grid lg:grid-cols-2 gap-16 items-center">
+      <div class="space-y-8 reveal">
+        <div class="inline-flex items-center gap-3 px-4 py-2 rounded-full bg-brand-surfaceHighlight/50 border border-brand-accent/20 text-xs font-mono text-brand-accent">
           <span class="relative flex h-2 w-2">
             <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand-accent opacity-75"></span>
             <span class="relative inline-flex rounded-full h-2 w-2 bg-brand-accent"></span>
           </span>
-          System Status: Online & Available
+          System Online • Ready for Projects
         </div>
         
         <h1 class="text-5xl md:text-7xl font-bold leading-tight tracking-tight">
-          Engineering <br>
-          <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-accent via-brand-secondary to-purple-500 animate-gradient">Intelligence</span>.
+          Designing <br>
+          <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-accent via-blue-400 to-brand-secondary">Intelligent</span> <br>
+          Digital Experiences.
         </h1>
         
-        <p class="text-brand-muted text-lg max-w-xl leading-relaxed">
-          Saya Jari Muhammad. Saya membangun jembatan antara <span class="text-brand-text font-medium border-b border-brand-accent/30">User Interface</span> yang indah dan <span class="text-brand-text font-medium border-b border-brand-accent/30">Machine Learning</span> yang kompleks. Solusi presisi untuk masalah bisnis modern.
+        <p class="text-brand-muted text-lg leading-relaxed max-w-xl">
+          Menggabungkan presisi <strong class="text-brand-text">Frontend Engineering</strong> dengan kekuatan <strong class="text-brand-text">Machine Learning</strong>. Saya membangun aplikasi web yang tidak hanya indah, tapi juga adaptif dan cerdas.
         </p>
 
-        <div class="flex flex-wrap gap-4 pt-4">
-          <a href="#projects" class="btn-primary">
-            Explore Work
+        <div class="flex flex-wrap gap-4 pt-2">
+          <a href="#projects" class="btn-primary group">
+            Explore Work <span class="inline-block transition-transform group-hover:translate-x-1">-></span>
           </a>
-          <a href="https://github.com/username" target="_blank" class="px-6 py-3 rounded-lg border border-white/10 hover:bg-white/5 hover:border-white/30 transition-colors font-mono text-sm flex items-center gap-2">
-            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
-            GitHub
+          <a href="https://github.com/username" target="_blank" class="px-8 py-3 rounded-lg border border-white/10 hover:bg-white/5 hover:text-brand-accent transition-colors font-mono font-bold text-brand-muted">
+            <span class="mr-2">github.com/jari</span> ↗
           </a>
+        </div>
+        
+        <div class="pt-8 border-t border-white/5">
+          <p class="text-xs font-mono text-brand-muted mb-4 uppercase tracking-widest">Powering Solutions With</p>
+          <div class="flex gap-6 text-2xl text-brand-muted/50 grayscale hover:grayscale-0 transition-all duration-500">
+            <i class="devicon-react-original"></i> <span class="hover:text-brand-accent cursor-default">React</span>
+            <span class="hover:text-brand-accent cursor-default">Python</span>
+            <span class="hover:text-brand-accent cursor-default">TensorFlow</span>
+            <span class="hover:text-brand-accent cursor-default">Tailwind</span>
+          </div>
         </div>
       </div>
 
-      <div class="lg:col-span-2 relative reveal delay-200 hidden lg:block">
-        <div class="relative z-10 p-2 bg-white/5 rounded-2xl border border-white/10 backdrop-blur-sm shadow-2xl">
-           <img id="heroPhoto" src="/public/profile.jpg" alt="Jari Muhammad" class="w-full h-auto rounded-xl grayscale hover:grayscale-0 transition-all duration-700">
-        </div>
-        <div class="absolute -bottom-6 -right-6 glass-card p-4 rounded-xl z-20 animate-bounce delay-700">
-          <div class="flex gap-2 mb-2">
-            <div class="w-2 h-2 rounded-full bg-red-500"></div>
-            <div class="w-2 h-2 rounded-full bg-yellow-500"></div>
-            <div class="w-2 h-2 rounded-full bg-green-500"></div>
+      <div class="relative reveal delay-200 hidden lg:block">
+        <div class="relative z-10 rounded-3xl overflow-hidden border border-white/10 shadow-2xl bg-brand-surface/30 backdrop-blur-sm group">
+          <div class="absolute inset-0 bg-gradient-to-t from-brand-bg via-transparent to-transparent z-10 opacity-80"></div>
+          <img id="heroPhoto" src="./image_015e95.png" alt="Jari Muhammad" class="w-full h-auto object-cover opacity-90 transition-transform duration-700 group-hover:scale-105">
+          
+          <div class="absolute bottom-6 left-6 z-20 font-mono text-xs text-brand-accent bg-black/50 backdrop-blur-md p-3 rounded-lg border border-white/10">
+            <div class="flex gap-2 mb-1"><div class="w-2 h-2 rounded-full bg-red-500"></div><div class="w-2 h-2 rounded-full bg-yellow-500"></div><div class="w-2 h-2 rounded-full bg-green-500"></div></div>
+            <p>> initializing neural_net...</p>
+            <p>> optimization: 99.8%</p>
           </div>
-          <code class="font-mono text-xs text-brand-accent">
-            git commit -m "Deploy"<br>
-            <span class="text-brand-muted">>> Success!</span>
-          </code>
         </div>
+        <div class="absolute -inset-4 border-2 border-brand-accent/20 rounded-3xl z-0 translate-x-4 translate-y-4 border-dashed"></div>
       </div>
     </div>
   </section>
 
   <section id="projects" class="py-32 relative">
-    <div class="max-w-6xl mx-auto px-6">
+    <div class="max-w-7xl mx-auto px-6">
       <div class="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-4 reveal">
         <div>
-          <h2 class="text-3xl font-bold mb-2 flex items-center gap-3">
-            <span class="text-brand-accent font-mono text-xl">01.</span> Selected Works
-          </h2>
-          <p class="text-brand-muted">Perpaduan logika algoritma & estetika desain.</p>
+          <h2 class="text-4xl font-bold mb-4 tracking-tight">Selected Projects</h2>
+          <p class="text-brand-muted text-lg max-w-lg">Implementasi nyata dari solusi Web Development & Artificial Intelligence yang berdampak bisnis.</p>
         </div>
       </div>
 
@@ -111,66 +123,82 @@
     </div>
   </section>
 
-  <section id="contact" class="py-32 relative">
-    <div class="max-w-5xl mx-auto px-6">
-      <div class="grid md:grid-cols-2 gap-12 items-center">
-        <div class="reveal">
-          <h2 class="text-3xl font-bold mb-6 flex items-center gap-3">
-            <span class="text-brand-accent font-mono text-xl">02.</span> Initialize Link
-          </h2>
-          <p class="text-brand-muted mb-8 leading-relaxed">
-            Tidak perlu form email kuno. Gunakan terminal asisten AI saya untuk mendapatkan informasi instan tentang skill, ketersediaan, atau menjadwalkan meeting.
-          </p>
-          <div class="space-y-4 font-mono text-sm text-brand-muted">
-             <div class="flex items-center gap-3">
-               <span class="w-2 h-2 bg-brand-accent rounded-full"></span>
-               <span>Email: <span class="text-brand-text">jari@example.com</span></span>
-             </div>
-             <div class="flex items-center gap-3">
-               <span class="w-2 h-2 bg-brand-secondary rounded-full"></span>
-               <span>Location: <span class="text-brand-text">Jakarta, ID</span></span>
-             </div>
-          </div>
+  <section id="contact" class="py-32 relative overflow-hidden">
+    <div class="absolute inset-0 bg-brand-surfaceHighlight/20 skew-y-3 transform origin-bottom-right -z-10"></div>
+    
+    <div class="max-w-5xl mx-auto px-6 grid md:grid-cols-5 gap-12 items-start">
+      <div class="md:col-span-2 space-y-6 reveal">
+        <h2 class="text-3xl font-bold font-mono">Talk to my <br> <span class="text-brand-accent">AI Interface</span></h2>
+        <p class="text-brand-muted">Ingin diskusi proyek atau sekadar tanya skill? Asisten virtual saya yang ditenagai <span class="text-brand-text font-semibold">Logic-Flow</span> siap menjawab 24/7 sebelum kita meeting.</p>
+        
+        <div class="space-y-4 pt-4">
+            <div class="flex items-center gap-4 text-sm text-brand-muted">
+                <div class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-brand-accent">📧</div>
+                <span>email@jarimuhammad.com</span>
+            </div>
+            <div class="flex items-center gap-4 text-sm text-brand-muted">
+                <div class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-brand-accent">📱</div>
+                <span>+62 877 7605 8465</span>
+            </div>
         </div>
+      </div>
 
-        <div class="glass-card h-[500px] flex flex-col font-mono text-sm shadow-2xl reveal delay-100">
-          <div class="bg-black/40 p-3 flex items-center justify-between border-b border-white/5">
-            <div class="flex gap-2">
-              <div class="w-3 h-3 rounded-full bg-red-500/80"></div>
-              <div class="w-3 h-3 rounded-full bg-yellow-500/80"></div>
-              <div class="w-3 h-3 rounded-full bg-green-500/80"></div>
+      <div class="md:col-span-3 reveal delay-100">
+        <div class="glass-card h-[550px] flex flex-col overflow-hidden border-t-4 border-t-brand-accent bg-[#0f172a]">
+          <div class="px-4 py-3 bg-brand-bg border-b border-white/5 flex justify-between items-center">
+            <div class="flex items-center gap-2">
+              <span class="w-3 h-3 rounded-full bg-red-500/80"></span>
+              <span class="w-3 h-3 rounded-full bg-yellow-500/80"></span>
+              <span class="w-3 h-3 rounded-full bg-green-500/80"></span>
             </div>
-            <div class="text-xs text-brand-muted">bash — jari-ai — 80x24</div>
+            <div class="font-mono text-xs text-brand-muted/60">jari_bot.exe — bash — 80x24</div>
           </div>
 
-          <div id="chat-window" class="flex-1 p-5 overflow-y-auto space-y-4 scrollbar-hide text-brand-text/90">
+          <div id="chat-window" class="flex-1 p-6 overflow-y-auto space-y-6 font-mono text-sm scrollbar-thin">
             </div>
 
-          <div class="p-4 bg-black/20 border-t border-white/5">
-             <div id="chat-options" class="flex flex-wrap gap-2"></div>
+          <div class="p-4 bg-brand-bg border-t border-white/5">
+             <div class="text-xs text-brand-accent mb-3 font-mono">Suggested Commands:</div>
+             <div id="chat-options" class="flex flex-wrap gap-3"></div>
           </div>
         </div>
       </div>
     </div>
   </section>
 
-  <footer class="py-12 text-center text-sm text-brand-muted border-t border-white/5 mt-12 font-mono">
-    <p>Designed & Engineered by <span class="text-brand-text">Jari Muhammad</span></p>
-    <p class="text-xs mt-2 opacity-50">Built with Vite, Tailwind, & Vanila JS.</p>
+  <footer class="py-12 border-t border-white/5 bg-brand-bg mt-12">
+    <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-6">
+      <div class="text-brand-muted text-sm font-mono">
+        © <span id="ftYear">2025</span> Jari Muhammad. <span class="text-brand-accent">Engineered for Excellence.</span>
+      </div>
+      <div class="flex gap-6 text-sm font-bold text-brand-text">
+        <a href="#" class="hover:text-brand-accent transition-colors">LinkedIn</a>
+        <a href="#" class="hover:text-brand-accent transition-colors">GitHub</a>
+        <a href="#" class="hover:text-brand-accent transition-colors">Instagram</a>
+      </div>
+    </div>
   </footer>
 
-  <div id="modal-container" class="fixed inset-0 bg-black/90 backdrop-blur-sm z-[100] flex items-center justify-center p-4 opacity-0 pointer-events-none transition-opacity duration-300 hidden" aria-hidden="true">
-    <div id="modal-panel" class="glass-card w-full max-w-2xl transform scale-95 transition-all duration-300 opacity-0 flex flex-col max-h-[90vh]">
-      <div class="p-6 border-b border-white/10 flex justify-between items-start bg-brand-surface/50">
+  <div id="modal-container" class="fixed inset-0 z-[100] flex items-center justify-center p-4 transition-all duration-300 opacity-0 pointer-events-none hidden" aria-hidden="true">
+    <div class="absolute inset-0 bg-brand-bg/90 backdrop-blur-sm" id="modal-overlay"></div>
+    <div id="modal-panel" class="relative bg-brand-surface w-full max-w-3xl rounded-2xl border border-white/10 shadow-2xl transform transition-all duration-300 scale-95 opacity-0 flex flex-col max-h-[90vh] overflow-hidden">
+      
+      <div class="p-6 md:p-8 border-b border-white/5 flex justify-between items-start bg-brand-bg/50">
         <div>
-          <h3 id="modal-title" class="text-2xl font-bold text-brand-text font-mono">Title</h3>
-          <p id="modal-subtitle" class="text-sm text-brand-accent mt-1 font-mono">Subtitle</p>
+          <span class="text-brand-accent font-mono text-xs uppercase tracking-wider mb-2 block">Project Detail</span>
+          <h3 id="modal-title" class="text-3xl font-bold text-white tracking-tight"></h3>
         </div>
-        <button id="modal-close-btn" class="text-brand-muted hover:text-white transition-colors">
+        <button id="modal-close-btn" class="text-brand-muted hover:text-white p-2 rounded-lg hover:bg-white/5 transition-colors">
           <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
         </button>
       </div>
-      <div class="p-8 overflow-y-auto font-sans leading-relaxed text-brand-muted space-y-6" id="modal-body"></div>
+
+      <div class="p-6 md:p-8 overflow-y-auto font-sans text-brand-muted space-y-6" id="modal-body">
+        </div>
+      
+      <div class="p-6 md:p-8 border-t border-white/5 bg-brand-bg/50 flex justify-end">
+        <button class="px-6 py-2 bg-brand-accent text-brand-bg font-bold rounded-lg hover:bg-brand-accent/90">View Live Demo</button>
+      </div>
     </div>
   </div>
 

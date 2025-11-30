@@ -7,56 +7,60 @@
     @apply scroll-smooth scroll-pt-24;
   }
   body {
-    @apply bg-brand-bg text-brand-text antialiased selection:bg-brand-accent/30 selection:text-brand-accent overflow-x-hidden;
+    @apply bg-brand-bg text-brand-text antialiased selection:bg-brand-accent selection:text-brand-bg;
+    /* Tech Background Grid Pattern */
+    background-image: linear-gradient(to right, #1e293b 1px, transparent 1px),
+                      linear-gradient(to bottom, #1e293b 1px, transparent 1px);
+    background-size: 50px 50px;
+    background-attachment: fixed;
   }
-  /* Menambahkan texture noise agar terlihat premium */
-  body::before {
-    content: "";
-    position: fixed;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E");
-    pointer-events: none;
-    z-index: 50;
+  
+  /* Hilangkan garis grid di background biar subtle (opsional, pakai mask) */
+  .bg-grid-mask {
+    mask-image: linear-gradient(to bottom, transparent, black, transparent);
+    -webkit-mask-image: linear-gradient(to bottom, transparent 5%, black 40%, black 70%, transparent 95%);
   }
+
+  ::-webkit-scrollbar { width: 8px; }
+  ::-webkit-scrollbar-track { @apply bg-brand-bg; }
+  ::-webkit-scrollbar-thumb { @apply bg-brand-surfaceHighlight rounded-full; }
+  ::-webkit-scrollbar-thumb:hover { @apply bg-brand-accent; }
 }
 
 @layer components {
-  /* GLASS CARD PREMIUM (Thin borders, subtle gradient) */
   .glass-card {
-    @apply bg-brand-surface/40 backdrop-blur-xl border border-white/5 shadow-2xl transition-all duration-300 relative overflow-hidden;
-  }
-  
-  /* Efek kilau (Sheen) saat hover */
-  .glass-card::after {
-    content: '';
-    @apply absolute inset-0 bg-gradient-to-tr from-white/5 to-transparent opacity-0 transition-opacity duration-300 pointer-events-none;
+    @apply bg-brand-surface/60 backdrop-blur-md border border-white/5 rounded-2xl shadow-xl transition-all duration-300;
   }
   
   .glass-card:hover {
-    @apply border-brand-accent/20 -translate-y-1 shadow-brand-accent/10;
-  }
-  .glass-card:hover::after {
-    @apply opacity-100;
-  }
-
-  /* Grid Background Utility */
-  .bg-grid {
-    background-size: 40px 40px;
-    mask-image: linear-gradient(to bottom, transparent, 10%, black, 90%, transparent);
+    @apply border-brand-accent/40 shadow-lg shadow-brand-accent/10 -translate-y-1 bg-brand-surface/80;
   }
 
   .btn-primary {
-    @apply px-6 py-3 bg-brand-accent text-brand-bg font-bold font-mono rounded-lg hover:bg-brand-accent/90 hover:shadow-[0_0_20px_rgba(56,189,248,0.4)] active:scale-95 transition-all duration-200;
+    @apply relative overflow-hidden px-8 py-3 bg-brand-accent text-brand-bg font-bold font-mono rounded-lg transition-all duration-300 hover:shadow-[0_0_20px_rgba(45,212,191,0.5)];
+  }
+
+  .nav-link {
+    @apply text-sm font-medium text-brand-muted hover:text-brand-accent transition-colors duration-200 relative;
+  }
+  
+  .nav-link::after {
+    content: '';
+    @apply absolute -bottom-1 left-0 w-0 h-0.5 bg-brand-accent transition-all duration-300;
+  }
+  
+  .nav-link:hover::after {
+    @apply w-full;
   }
 }
 
-/* Scrollbar Custom */
-::-webkit-scrollbar { width: 6px; }
-::-webkit-scrollbar-track { @apply bg-brand-bg; }
-::-webkit-scrollbar-thumb { @apply bg-brand-surface border border-white/10 rounded-full; }
-::-webkit-scrollbar-thumb:hover { @apply bg-brand-accent; }
+.reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
 
-.reveal { opacity: 0; transform: translateY(30px); transition: all 1s cubic-bezier(0.16, 1, 0.3, 1); }
-.reveal.active { opacity: 1; transform: translateY(0); }
+.reveal.active {
+  opacity: 1;
+  transform: translateY(0);
+}
