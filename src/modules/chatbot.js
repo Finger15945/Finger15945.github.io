@@ -1,16 +1,12 @@
-// 🔥 IMPORT SDK RESMI GOOGLE (LANGSUNG DARI CLOUD)
-import { GoogleGenerativeAI } from "https://esm.run/@google/generative-ai";
-
 // --- KONFIGURASI ---
 const API_KEY = "AIzaSyBpkH-BQD3pLUcAe4lHLm8rH4i0QnqzY9w"; 
 
-// System Prompt: Identitas AI
-const SYSTEM_INSTRUCTION = `
-Kamu adalah asisten profesional untuk Jari Muhammad (AI Engineer).
-Style: Singkat, padat, teknis tapi ramah.
-Fakta: Jari ahli Python, TensorFlow, JS, dan membangun bot WA otomatis.
-Tugas: Jawab pertanyaan recruiter tentang skill dan proyek Jari.
-`;
+// 🔥 TRIK BYPASS CORS: Kita bungkus URL Google dengan Proxy
+const BASE_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent";
+const PROXY_URL = "https://corsproxy.io/?"; 
+const API_URL = PROXY_URL + encodeURIComponent(`${BASE_URL}?key=${API_KEY}`);
+
+const SYSTEM_PROMPT = "Kamu adalah asisten AI Jari Muhammad. Jawab singkat, profesional, dan santai. Konteks: Jari adalah AI Engineer (Python/JS/Tailwind).";
 
 export function initChatbot() {
   const chatWindow = document.getElementById('chat-window');
@@ -19,56 +15,54 @@ export function initChatbot() {
 
   if (!chatWindow) return;
 
-  // Inisialisasi AI (Hanya sekali di awal)
-  let model = null;
-  try {
-    const genAI = new GoogleGenerativeAI(API_KEY);
-    model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
-  } catch (e) {
-    console.error("AI Init Error:", e);
-  }
-
-  // Pesan Pembuka
+  // Sapaan
   setTimeout(() => {
-    addBotMsg("Halo! 👋 Saya AI yang dilatih dari data Jari. Silakan tanya teknis atau pengalaman kerja.");
+    addBotMsg("Halo! Sistem AI Jari siap. Tanyakan tentang skill atau proyek saya.");
   }, 1000);
 
-  // --- LOGIKA UTAMA ---
+  // --- FUNGSI KIRIM ---
   async function fetchGeminiReply(userMessage) {
-    if (!model) {
-      addBotMsg("⚠️ Error: AI belum siap (API Key invalid).");
-      return;
-    }
-
     const loadingId = showTypingIndicator();
 
     try {
-      // TEKNIK: Kita gabung System Prompt + User Chat biar AI paham konteks
-      // (Ini lebih stabil daripada pakai parameter system_instruction terpisah di versi web)
-      const finalPrompt = `${SYSTEM_INSTRUCTION}\n\nUser bertanya: "${userMessage}"\nJawab:`;
+      // Kita pakai fetch biasa (tanpa SDK) karena SDK tidak support lewat Proxy
+      const response = await fetch(API_URL, {
+        method: "POST",
+        headers: { 
+          "Content-Type": "application/json" 
+        },
+        body: JSON.stringify({
+          contents: [{
+            parts: [{ text: `${SYSTEM_PROMPT}\n\nUser: ${userMessage}\nAI:` }]
+          }]
+        })
+      });
 
-      // KIRIM KE GOOGLE (SDK yang urus semua format & headers)
-      const result = await model.generateContent(finalPrompt);
-      const response = await result.response;
-      const text = response.text();
+      // Cek Error
+      if (!response.ok) {
+        const errData = await response.json();
+        console.error("PROXY/API ERROR:", errData);
+        throw new Error(errData.error?.message || "Server Error");
+      }
 
+      const data = await response.json();
       removeTypingIndicator(loadingId);
-      addBotMsg(text);
+
+      const reply = data.candidates?.[0]?.content?.parts?.[0]?.text;
+      addBotMsg(reply || "Maaf, tidak ada jawaban.");
 
     } catch (error) {
       removeTypingIndicator(loadingId);
-      console.error("GEMINI ERROR:", error); // Cek Console (F12) untuk detail
-
-      let msg = "Maaf, koneksi terputus.";
-      if (error.message.includes("400")) msg = "Request ditolak (Cek API Key).";
-      if (error.message.includes("429")) msg = "Server sibuk (Kuota habis).";
-      if (error.message.includes("Failed to fetch")) msg = "Koneksi diblokir browser (Cek API Key Restriction).";
+      console.error("NETWORK ERROR:", error);
       
-      addBotMsg(`⚠️ ${msg}`);
+      let msg = "Gagal koneksi.";
+      if (error.message.includes("Failed to fetch")) msg = "Terblokir Proxy/CORS.";
+      
+      addBotMsg(`⚠️ ${msg} (Coba refresh atau cek internet)`);
     }
   }
 
-  // --- UI HELPERS (JANGAN DIUBAH) ---
+  // --- UI HELPERS (Tetap Sama) ---
   function addBotMsg(text) {
     const div = document.createElement('div');
     div.className = "flex flex-col items-start mb-3 animate-fade-in";
@@ -101,10 +95,7 @@ export function initChatbot() {
     if(el) el.remove();
   }
 
-  // Ubah Markdown Bold (**) jadi HTML <b>
-  function formatText(t) { 
-    return t ? t.replace(/\*\*(.*?)\*\*/g, '<b>$1</b>') : ""; 
-  }
+  function formatText(t) { return t ? t.replace(/\*\*(.*?)\*\*/g, '<b>$1</b>') : ""; }
 
   if (sendBtn && chatInput) {
     const send = () => {
