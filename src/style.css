@@ -4,59 +4,42 @@
 
 @layer base {
   html {
-    @apply scroll-smooth scroll-pt-24;
+    @apply scroll-smooth scroll-pt-28;
   }
   body {
-    @apply bg-brand-bg text-brand-text antialiased selection:bg-brand-accent selection:text-brand-bg;
-    /* Tech Background Grid Pattern */
-    background-image: linear-gradient(to right, #1e293b 1px, transparent 1px),
-                      linear-gradient(to bottom, #1e293b 1px, transparent 1px);
-    background-size: 50px 50px;
-    background-attachment: fixed;
+    @apply bg-brand-bg text-brand-text antialiased selection:bg-brand-accent/20 selection:text-brand-accent;
   }
   
-  /* Hilangkan garis grid di background biar subtle (opsional, pakai mask) */
-  .bg-grid-mask {
-    mask-image: linear-gradient(to bottom, transparent, black, transparent);
-    -webkit-mask-image: linear-gradient(to bottom, transparent 5%, black 40%, black 70%, transparent 95%);
-  }
-
+  /* Scrollbar yang minimalis */
   ::-webkit-scrollbar { width: 8px; }
-  ::-webkit-scrollbar-track { @apply bg-brand-bg; }
-  ::-webkit-scrollbar-thumb { @apply bg-brand-surfaceHighlight rounded-full; }
-  ::-webkit-scrollbar-thumb:hover { @apply bg-brand-accent; }
+  ::-webkit-scrollbar-track { @apply bg-transparent; }
+  ::-webkit-scrollbar-thumb { @apply bg-slate-300 rounded-full border-2 border-white; }
+  ::-webkit-scrollbar-thumb:hover { @apply bg-slate-400; }
 }
 
 @layer components {
-  .glass-card {
-    @apply bg-brand-surface/60 backdrop-blur-md border border-white/5 rounded-2xl shadow-xl transition-all duration-300;
+  /* Kartu Putih Bersih dengan Shadow Halus */
+  .clean-card {
+    @apply bg-brand-surface rounded-2xl border border-brand-border shadow-soft transition-all duration-300;
   }
   
-  .glass-card:hover {
-    @apply border-brand-accent/40 shadow-lg shadow-brand-accent/10 -translate-y-1 bg-brand-surface/80;
+  .clean-card:hover {
+    @apply shadow-xl -translate-y-1 border-brand-accent/30;
   }
 
+  /* Tombol Gradient Halus */
   .btn-primary {
-    @apply relative overflow-hidden px-8 py-3 bg-brand-accent text-brand-bg font-bold font-mono rounded-lg transition-all duration-300 hover:shadow-[0_0_20px_rgba(45,212,191,0.5)];
+    @apply px-8 py-3 bg-brand-accent text-white font-medium rounded-full shadow-lg shadow-brand-accent/30 hover:bg-indigo-700 hover:shadow-indigo-700/20 active:scale-95 transition-all duration-200 flex items-center gap-2;
   }
 
   .nav-link {
-    @apply text-sm font-medium text-brand-muted hover:text-brand-accent transition-colors duration-200 relative;
-  }
-  
-  .nav-link::after {
-    content: '';
-    @apply absolute -bottom-1 left-0 w-0 h-0.5 bg-brand-accent transition-all duration-300;
-  }
-  
-  .nav-link:hover::after {
-    @apply w-full;
+    @apply text-sm font-medium text-brand-muted hover:text-brand-accent transition-colors duration-200;
   }
 }
 
 .reveal {
   opacity: 0;
-  transform: translateY(30px);
+  transform: translateY(20px);
   transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
