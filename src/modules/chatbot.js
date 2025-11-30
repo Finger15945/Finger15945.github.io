@@ -13,10 +13,10 @@ export function initChatbot() {
 
   function addBotMsg(text) {
     const div = document.createElement('div');
-    // Style Bubble Bot: Putih/Abu muda, teks gelap, shadow tipis
+    // Ganti border-slate-100 jadi border-stone-200 (lebih warm)
     div.className = "flex flex-col items-start animate-fade-in";
     div.innerHTML = `
-      <div class="bg-white border border-slate-100 text-slate-700 px-4 py-2.5 rounded-2xl rounded-tl-none shadow-sm max-w-[85%] text-sm leading-relaxed">
+      <div class="bg-white border border-stone-200 text-brand-text px-4 py-2.5 rounded-2xl rounded-tl-none shadow-sm max-w-[85%] text-sm leading-relaxed">
         ${text}
       </div>
     `;
@@ -26,10 +26,10 @@ export function initChatbot() {
 
   function addUserMsg(text) {
     const div = document.createElement('div');
-    // Style Bubble User: Indigo solid, teks putih
+    // Ganti bg-brand-accent (Teal sekarang)
     div.className = "flex flex-col items-end animate-fade-in";
     div.innerHTML = `
-      <div class="bg-brand-accent text-white px-4 py-2.5 rounded-2xl rounded-tr-none shadow-md shadow-indigo-200 max-w-[85%] text-sm font-medium">
+      <div class="bg-brand-accent text-white px-4 py-2.5 rounded-2xl rounded-tr-none shadow-md shadow-teal-900/10 max-w-[85%] text-sm font-medium">
         ${text}
       </div>
     `;

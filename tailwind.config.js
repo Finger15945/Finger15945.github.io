@@ -3,7 +3,8 @@ export default {
   content: [
     "./index.html",
     "./src/**/*.{js,ts,jsx,tsx}",
-    "./*.js"
+    "./*.js",
+    "./modules/*.js" 
   ],
   theme: {
     extend: {
@@ -13,31 +14,38 @@ export default {
       },
       colors: {
         brand: {
-          bg: '#FAFAFA',        // Neutral 50 (Bukan putih silau, tapi soft grey-white)
-          surface: '#ffffff',   // Pure White untuk kartu biar kontras dikit sama bg
+          // GANTI DARI SINI: Background diganti ke "Alabaster/Warm Grey"
+          bg: '#fdfbf7',        // Putih tulang hangat (Warm White/Creamy) - tidak silau
+          surface: '#ffffff',   // Surface tetap putih untuk kontras halus
           
-          // WARNA BARU: "Soft Violet" (Modern AI Vibe)
-          accent: '#8b5cf6',    // Violet 500 (Warna utama)
-          accentLight: '#a78bfa', // Violet 400 (Untuk hover/glow)
+          // Warna teks diganti ke "Soft Black" (Bukan hitam pekat)
+          text: '#2d2a26',      // Charcoal (Hitam kecoklatan sangat tua)
+          muted: '#78716c',     // Stone-500 (Abu-abu hangat)
           
-          text: '#171717',      // Neutral 900 (Hitam lembut, bukan #000000)
-          muted: '#737373',     // Neutral 500 (Abu-abu elegan)
-          border: '#e5e5e5',    // Border sangat tipis
+          // Warna Aksen diganti ke "Earthy Teal" (Lebih elegan & unik dibanding biru biasa)
+          accent: '#0d9488',    // Teal-600 (Warna hijau laut dalam)
+          accentLight: '#ccfbf1', // Teal-100 (Untuk background highlight)
+          
+          border: '#e7e5e4',    // Stone-200 (Garis batas hangat)
         }
       },
       animation: {
-        'float': 'float 8s ease-in-out infinite', // Diperlambat biar calm
+        'float': 'float 6s ease-in-out infinite',
+        'fade-in': 'fadeIn 0.8s ease-out forwards',
       },
       keyframes: {
         float: {
           '0%, 100%': { transform: 'translateY(0)' },
-          '50%': { transform: 'translateY(-15px)' },
+          '50%': { transform: 'translateY(-20px)' },
+        },
+        fadeIn: {
+          '0%': { opacity: '0', transform: 'translateY(10px)' },
+          '100%': { opacity: '1', transform: 'translateY(0)' },
         }
       },
       boxShadow: {
-        // Shadow berwarna (Glow) tapi sangat soft
-        'glow': '0 0 20px -5px rgba(139, 92, 246, 0.15)',
-        'card': '0 4px 6px -1px rgba(0, 0, 0, 0.02), 0 2px 4px -1px rgba(0, 0, 0, 0.02)',
+        // Shadow diganti jadi warm shadow
+        'soft': '0 4px 20px -2px rgba(44, 42, 38, 0.05)', 
       }
     },
   },
