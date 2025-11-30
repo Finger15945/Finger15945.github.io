@@ -3,7 +3,7 @@
 const API_KEY = "AIzaSyBpkH-BQD3pLUcAe4lHLm8rH4i0QnqzY9w"; 
 
 // Kita gunakan URL yang paling stabil untuk Free Tier
-const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${API_KEY}`;
+const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${API_KEY}`;
 
 // --- SYSTEM PROMPT ---
 const SYSTEM_PROMPT = `
