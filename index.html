@@ -9,20 +9,20 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@600&display=swap" rel="stylesheet">
 
-  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="styles.css">
 
-  <!-- Tailwind config (Neo Blue Complementary) -->
+  <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
       theme: {
         extend: {
           colors: {
             brand: {
-              bg: '#1a2332',        // softer navy background
-              accent: '#7dd3c0',    // muted aqua (primary accent)
-              secondary: '#6ba5a8', // softer teal (secondary)
-              text: '#e8eef2',      // softer off-white
-              subtext: '#a8b8d8'    // softer lavender blue
+              bg: '#1a2332',
+              accent: '#7dd3c0',
+              secondary: '#6ba5a8',
+              text: '#e8eef2',
+              subtext: '#a8b8d8'
             }
           },
           keyframes: {
@@ -37,241 +37,9 @@
       }
     }
   </script>
-
-  <style>
-    /* Animated background (subtle gradient shift) */
-    body {
-      background: linear-gradient(270deg, #0B132B, #0F203A, #071428);
-      background-size: 600% 600%;
-      /* Durasi ini sekarang mengambil dari config 'animate-bgShift' */
-      /* Jika body tidak menggunakan kelas itu, ubah di sini: */
-      animation: bgShift 30s linear infinite; /* <-- DIUBAH (dari 18s) */
-      color: #F1F5F9;
-    }
-
-    /* glass card */
-    .glass {
-      background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.015));
-      border: 1px solid rgba(255,255,255,0.06);
-      backdrop-filter: blur(6px);
-    }
-
-    /* typing effect small helper */
-    .typewriter { white-space: nowrap; overflow: hidden; display:inline-block; vertical-align:bottom; }
-
-    /* reveal */
-    .reveal { opacity: 0; transform: translateY(18px) scale(0.995); transition: opacity .7s cubic-bezier(.2,.9,.2,1), transform .7s cubic-bezier(.2,.9,.2,1); will-change: opacity, transform; }
-    .reveal.show { opacity: 1; transform: translateY(0) scale(1); }
-
-    /* tilt base */
-    .tilt { transform-style: preserve-3d; transition: transform .35s cubic-bezier(.2,.9,.2,1), box-shadow .35s; will-change: transform; perspective: 1000px; }
-
-    a:focus, button:focus { outline: 3px solid rgba(111,255,233,0.18); outline-offset: 2px; }
-
-    /* --- TAMBAHAN: Terapkan font "tech" ke semua heading --- */
-    h2, h3, h4 {
-      font-family: "JetBrains Mono", monospace;
-    }
-    /* --- AKHIR TAMBAHAN --- */
-
-
-    @media (max-width:640px) {
-      .typewriter { font-size: 0.95rem; }
-    }
-    
-    /* --- TAMBAHAN: Media Query untuk Aksesibilitas --- */
-    @media (prefers-reduced-motion: reduce) {
-      /* Hentikan semua animasi & transisi yang bergerak */
-      body, .animate-floaty, .animate-bgShift, .reveal, .tilt, a, button, #heroPhoto {
-        animation-duration: 0.01ms !important;
-        animation-iteration-count: 1 !important;
-        transition-duration: 0.01ms !important;
-        scroll-behavior: auto !important;
-        animation: none !important;
-        transition: none !important;
-      }
-      /* Reset state hover/focus yg mungkin bergantung pada transisi */
-      .tilt {
-        transform: none !important;
-        box-shadow: none !important;
-      }
-      .reveal {
-        opacity: 1;
-        transform: none;
-      }
-    }
-
-    /* Ganti .tilt (jika Anda menghapus kelas itu) atau gunakan selector yang sama */
-/* Kita akan menargetkan kartu proyek dan kartu skill */
-#skills .glass, #projects .glass {
-  position: relative; /* Diperlukan untuk memposisikan sorotan */
-  overflow: hidden; /* Diperlukan untuk 'menjebak' sorotan di dalam kartu */
-  
-  /* Hapus CSS tilt yang lama jika masih ada */
-  transform-style: unset; 
-  perspective: unset;
-  transition: transform 0.2s, box-shadow 0.2s; /* Transisi normal */
-}
-
-#skills .glass:hover, #projects .glass:hover {
-  /* Beri sedikit 'lift' saat hover (menggantikan tilt) */
-  transform: translateY(-4px) scale(1.02);
-  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-}
-
-/* Ini adalah 'spotlight'-nya */
-#skills .glass::before, 
-#projects .glass::before {
-  content: '';
-  position: absolute;
-  
-  /* Posisi akan dikontrol oleh JS via CSS Variables */
-  left: var(--mouse-x, 0px);
-  top: var(--mouse-y, 0px);
-  
-  width: 300px; /* Ukuran sorotan */
-  height: 300px;
-  
-  /* Titik tengah sorotan harus di kursor */
-  transform: translate(-50%, -50%);
-  
-  /* Gunakan warna brand-accent Anda! */
-  background: radial-gradient(circle, rgba(125, 211, 192, 0.15), transparent 60%);
-  
-  /* Efek blur yang lembut */
-  filter: blur(20px);
-  
-  opacity: var(--mouse-hover, 0); /* Kontrol visibilitas */
-  transition: opacity 0.3s ease;
-  pointer-events: none; /* Penting! Agar tidak mengganggu klik */
-  z-index: 1;
-}
-
-/* Pastikan konten kartu tetap di atas sorotan */
-#skills .glass > *, 
-#projects .glass > * {
-  position: relative;
-  z-index: 2;
-}
-    
-   /* --- TAMBAHAN: CSS Chatbot (Perbaikan Definitif) --- */
-    #chat-window {
-      scroll-behavior: smooth;
-      display: flex;
-      flex-direction: column;
-      gap: 0.75rem; /* 12px */
-    }
-    .chat-bubble {
-      /* Ini HANYA untuk animasi 'pop-in' */
-      opacity: 0;
-      transform: translateY(10px);
-      animation: popIn 0.3s cubic-bezier(.2,.9,.2,1) forwards;
-    }
-    .chat-option-btn {
-      /* Ini HANYA untuk animasi 'pop-in' */
-      opacity: 0;
-      transform: scale(0.95);
-      animation: popIn 0.3s cubic-bezier(.2,.9,.2,1) forwards;
-    }
-    .chat-link {
-      /* CSS murni pengganti @apply */
-      color: #7dd3c0; /* text-brand-accent */
-      font-weight: 500; /* font-medium */
-      text-decoration-line: underline; /* underline */
-    }
-    .chat-link:hover {
-      color: #6ba5a8; /* hover:text-brand-secondary */
-    }
-    @keyframes popIn {
-      from { opacity: 0; transform: translateY(10px) scale(0.95); }
-      to { opacity: 1; transform: translateY(0) scale(1); }
-    }
-    /* --- AKHIR CSS CHATBOT --- */
-
-    /* --- TAMBAHAN: CSS Typing Indicator --- */
-@keyframes typingBounce {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-3px); }
-}
-.chat-bubble-typing {
-  /* CSS murni pengganti @apply */
-  background-color: rgba(255, 255, 255, 0.05); /* bg-white/5 */
-  padding: 0.75rem; /* p-3 */
-  border-radius: 0.75rem; /* rounded-xl */
-  max-width: 80%; /* max-w-[80%] */
-  color: #e8eef2; /* text-brand-text (dari config Anda) */
-  align-self: flex-start; /* self-start */
-  margin-right: auto; /* mr-auto */
-  
-  /* Ini adalah 3 titik-titik */
-  display: flex;
-  gap: 4px;
-  align-items: center;
-}
-.chat-bubble-typing span {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background-color: #a8b8d8; /* Warna subtext */
-  animation: typingBounce 1.2s ease-in-out infinite;
-}
-/* Delay animasi untuk setiap titik */
-.chat-bubble-typing span:nth-child(2) { animation-delay: 0.2s; }
-.chat-bubble-typing span:nth-child(3) { animation-delay: 0.4s; }
-/* --- AKHIR CSS Typing Indicator --- */
-
-/* --- TAMBAHAN: CSS Staggered Intro --- */
-/* Sembunyikan elemen 'intro-anim' di awal */
-.intro-anim {
-  opacity: 0;
-  transform: translateY(20px); /* Mulai dari 20px di bawah */
-  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
-}
-/* Khusus untuk Navigasi, kita ingin dia 'slide' dari atas */
-nav.intro-anim {
-  transform: translateY(-100%); /* Mulai dari atas */
-}
-/* Kelas 'is-visible' ini akan ditambahkan oleh JS */
-.intro-anim.is-visible {
-  opacity: 1;
-  transform: translateY(0);
-}
-.intro-anim {
-  opacity: 0;
-  transform: translateY(20px);
-  
-  /* GANTI INI: */
-  /* transition: opacity 0.6s ease-out, transform 0.6s ease-out; */
-  
-  /* MENJADI INI (lebih lambat & smooth): */
-  transition: opacity 0.8s ease-out, transform 0.8s ease-out;
-}
-/* --- AKHIR CSS Intro --- */
-/* --- TAMBAHAN: CSS Navbar Scroll-Aware --- */
-nav.fixed {
-  /* Tambahkan transisi yang mulus untuk 'background' dan 'blur' */
-  transition-property: background-color, border-color, backdrop-filter;
-  transition-duration: 300ms;
-  transition-timing-function: ease-out;
-  
-  /* State Awal (di atas): Transparan */
-  background-color: transparent;
-  border-bottom-color: transparent;
-  backdrop-filter: blur(0px);
-}
-
-nav.navbar-scrolled {
-  /* State Saat Scroll: Menjadi 'glass' */
-  /* Menggunakan 'brand-bg' Anda dengan transparansi */
-  background-color: rgba(26, 35, 50, 0.75); 
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1); /* Mirip border-white/10 */
-  backdrop-filter: blur(12px); /* Blur kuat untuk readability */
-}
-/* --- AKHIR CSS --- */
-  </style>
 </head>
 <body class="font-sans antialiased selection:bg-brand-accent selection:text-brand-bg">
-  <!-- NAV -->
+
   <nav class="fixed inset-x-0 top-0 z-50 intro-anim">
     <div class="max-w-6xl mx-auto px-5 py-4 flex items-center justify-between">
       <div class="flex items-center gap-3">
@@ -297,7 +65,6 @@ nav.navbar-scrolled {
       </div>
     </div>
 
-    <!-- mobile menu -->
     <div id="mobileMenu" class="hidden md:hidden px-5 pb-4">
       <div class="flex flex-col gap-2 text-brand-text">
         <a href="#about" class="py-2 px-3 rounded-md hover:bg-white/5">About</a>
@@ -308,10 +75,8 @@ nav.navbar-scrolled {
     </div>
   </nav>
 
-  <!-- HERO -->
   <header class="pt-28 pb-14">
     <div class="max-w-5xl mx-auto px-5 text-center">
-
       <div class="relative mx-auto max-w-3xl glass rounded-2xl px-8 py-10 overflow-hidden intro-anim">
         <div class="absolute -left-24 -top-20 w-80 h-80 rounded-full bg-gradient-to-br from-brand.secondary/25 to-brand.accent/15 blur-3xl pointer-events-none"></div>
 
@@ -346,14 +111,12 @@ nav.navbar-scrolled {
     </div>
   </header>
 
-  <!-- ABOUT -->
   <section id="about" class="max-w-5xl mx-auto px-5 py-16 reveal" aria-labelledby="about-title">
     <h2 id="about-title" class="text-2xl font-bold text-brand-accent mb-4">About</h2>
     <div class="grid md:grid-cols-3 gap-6 items-center">
       <div class="md:col-span-2 text-brand-text">
         <p class="mb-4">Saya lulusan S1 Sistem Informasi. Fokus saya adalah membangun produk digital yang berguna dan dapat diskalakan — dari prototyping UI, implementasi frontend, hingga integrasi machine learning ringan dan automasi.</p>
         <p class="mb-1">Pendekatan saya: <strong class="text-brand.secondary">Design-first</strong> → build → measure.</p>
-
         <ul class="mt-4 grid grid-cols-2 gap-2 text-sm text-brand-subtext">
           <li>• UX Research dasar</li>
           <li>• Prototyping (Figma → HTML)</li>
@@ -361,7 +124,6 @@ nav.navbar-scrolled {
           <li>• ML: Python, scikit-learn</li>
         </ul>
       </div>
-
       <div class="flex justify-center md:block">
         <div class="glass p-4 rounded-xl w-full max-w-xs text-center reveal">
           <h3 class="font-semibold text-brand.secondary">I make things people use</h3>
@@ -371,7 +133,6 @@ nav.navbar-scrolled {
     </div>
   </section>
 
-  <!-- SKILLS -->
   <section id="skills" class="border-t border-white/6 py-16">
     <div class="max-w-6xl mx-auto px-5">
       <h2 class="text-2xl font-bold text-brand-accent mb-8 text-center">Skills & Tools</h2>
@@ -380,17 +141,14 @@ nav.navbar-scrolled {
           <h4 class="font-semibold text-brand-text">Frontend</h4>
           <p class="text-sm text-brand-subtext mt-2">HTML, CSS, JavaScript, Tailwind, Bootstrap</p>
         </div>
-
         <div class="glass rounded-xl p-5 tilt reveal" data-tilt>
           <h4 class="font-semibold text-brand-text">Machine Learning</h4>
           <p class="text-sm text-brand-subtext mt-2">scikit-learn, pandas, preprocessing, model eval</p>
         </div>
-
         <div class="glass rounded-xl p-5 tilt reveal" data-tilt>
           <h4 class="font-semibold text-brand-text">Automation</h4>
           <p class="text-sm text-brand-subtext mt-2">Botpress / WhatsApp API, Google Sheets integration</p>
         </div>
-
         <div class="glass rounded-xl p-5 tilt reveal" data-tilt>
           <h4 class="font-semibold text-brand-text">Design & Prototyping</h4>
           <p class="text-sm text-brand-subtext mt-2">Figma, accessibility-aware UI, microinteractions</p>
@@ -399,603 +157,141 @@ nav.navbar-scrolled {
     </div>
   </section>
 
-  <!-- PROJECTS -->
   <section id="projects" class="py-16">
-  <div class="max-w-6xl mx-auto px-5">
-    <h2 class="text-2xl font-bold text-brand-accent mb-8 text-center">Selected Projects</h2>
+    <div class="max-w-6xl mx-auto px-5">
+      <h2 class="text-2xl font-bold text-brand-accent mb-8 text-center">Selected Projects</h2>
 
-    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
-      
-      <a href="#" 
-         class="open-modal-trigger tilt group block rounded-xl overflow-hidden glass p-1.5 hover:shadow-xl hover:shadow-[#6ba5a8]/10 reveal"
-         data-tilt
-         data-title="Chatbot WhatsApp (Botpress)"
-         data-subtitle="Integrasi AI & Otomatisasi WhatsApp"
-         data-problem="Klien (agensi travel) kesulitan merespons pertanyaan umum pelanggan di luar jam kerja. Tim support kewalahan dengan pertanyaan berulang."
-         data-solution="Saya merancang dan mengimplementasikan chatbot menggunakan Botpress. Chatbot diintegrasikan dengan API WhatsApp Business dan dilatih (NLU) untuk menangani 50+ skenario pertanyaan umum, seperti 'cek harga', 'jadwal tur', dan 'promo'."
-         data-result="Mengurangi 60% pertanyaan manual yang masuk ke tim support. Waktu respons pelanggan di luar jam kerja menjadi instan, meningkatkan kepuasan pelanggan sebesar 25% (berdasarkan survei internal Klien)."
-      >
-        <div class="relative rounded-lg overflow-hidden h-48">
-          <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent"></div>
-          <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" src="https://placehold.co/800x450/0B132B/6FFFE9?text=Chatbot+WhatsApp" alt="Botpress Chatbot">
-          <div class="absolute bottom-3 left-3 flex gap-1.5">
-            <span class="text-xs font-semibold bg-brand-accent/20 text-brand-accent py-1 px-2.5 rounded-full">Botpress</span>
-            <span class="text-xs font-semibold bg-brand-accent/20 text-brand-accent py-1 px-2.5 rounded-full">Automation</span>
+      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
+        
+        <a href="#" 
+           class="open-modal-trigger tilt group block rounded-xl overflow-hidden glass p-1.5 hover:shadow-xl hover:shadow-[#6ba5a8]/10 reveal"
+           data-tilt
+           data-title="Chatbot WhatsApp (Botpress)"
+           data-subtitle="Integrasi AI & Otomatisasi WhatsApp"
+           data-problem="Klien (agensi travel) kesulitan merespons pertanyaan umum pelanggan di luar jam kerja. Tim support kewalahan dengan pertanyaan berulang."
+           data-solution="Saya merancang dan mengimplementasikan chatbot menggunakan Botpress. Chatbot diintegrasikan dengan API WhatsApp Business dan dilatih (NLU) untuk menangani 50+ skenario pertanyaan umum, seperti 'cek harga', 'jadwal tur', dan 'promo'."
+           data-result="Mengurangi 60% pertanyaan manual yang masuk ke tim support. Waktu respons pelanggan di luar jam kerja menjadi instan, meningkatkan kepuasan pelanggan sebesar 25% (berdasarkan survei internal Klien)."
+        >
+          <div class="relative rounded-lg overflow-hidden h-48">
+            <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent"></div>
+            <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" src="https://placehold.co/800x450/0B132B/6FFFE9?text=Chatbot+WhatsApp" alt="Botpress Chatbot">
+            <div class="absolute bottom-3 left-3 flex gap-1.5">
+              <span class="text-xs font-semibold bg-brand-accent/20 text-brand-accent py-1 px-2.5 rounded-full">Botpress</span>
+              <span class="text-xs font-semibold bg-brand-accent/20 text-brand-accent py-1 px-2.5 rounded-full">Automation</span>
+            </div>
           </div>
-        </div>
-        <div class="p-4">
-          <h3 class="font-semibold text-lg text-brand-text">Chatbot WhatsApp</h3>
-          <p class="text-sm text-brand-subtext mt-1">Integrasi AI Chatbot untuk efisiensi bisnis.</p>
-          <span class="text-xs font-medium text-brand-accent mt-3 inline-block group-hover:underline">Case study →</span>
-        </div>
-      </a>
-      <a href="#" 
-         class="open-modal-trigger tilt group block rounded-xl overflow-hidden glass p-1.5 hover:shadow-xl hover:shadow-[#6ba5a8]/10 reveal"
-         data-tilt
-         data-title="Analisis Sentimen (ML)"
-         data-subtitle="Klasifikasi Teks dengan Scikit-learn"
-         data-problem="Sebuah platform e-commerce ingin secara otomatis mengkategorikan ribuan ulasan produk (positif, negatif, netral) untuk memprioritaskan masukan pelanggan."
-         data-solution="Membangun pipeline ML: 1. Preprocessing teks (membersihkan, tokenisasi, stopword removal). 2. Vektorisasi menggunakan TF-IDF. 3. Melatih model klasifikasi (SVM) dengan dataset berlabel. 4. Mengevaluasi model (akurasi, F1-score)."
-         data-result="Model mencapai akurasi 88% pada data tes. Tim produk kini memiliki dashboard yang secara otomatis menandai ulasan negatif mendesak, mengurangi waktu respons terhadap keluhan sebesar 40%."
-      >
-        <div class="relative rounded-lg overflow-hidden h-48">
-          <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent"></div>
-          <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" src="https://placehold.co/800x450/0B132B/5BC0BE?text=Sentiment+Analysis" alt="Sentiment Analysis">
-          <div class="absolute bottom-3 left-3 flex gap-1.5">
-            <span class="text-xs font-semibold bg-brand-accent/20 text-brand-accent py-1 px-2.5 rounded-full">scikit-learn</span>
-            <span class="text-xs font-semibold bg-brand-accent/20 text-brand-accent py-1 px-2.5 rounded-full">ML</span>
+          <div class="p-4">
+            <h3 class="font-semibold text-lg text-brand-text">Chatbot WhatsApp</h3>
+            <p class="text-sm text-brand-subtext mt-1">Integrasi AI Chatbot untuk efisiensi bisnis.</p>
+            <span class="text-xs font-medium text-brand-accent mt-3 inline-block group-hover:underline">Case study →</span>
           </div>
-        </div>
-        <div class="p-4">
-          <h3 class="font-semibold text-lg text-brand-text">Analisis Sentimen</h3>
-          <p class="text-sm text-brand-subtext mt-1">Klasifikasi ulasan produk menggunakan SVM.</p>
-          <span class="text-xs font-medium text-brand-accent mt-3 inline-block group-hover:underline">Case study →</span>
-        </div>
-      </a>
-      <a href="#" 
-         class="open-modal-trigger tilt group block rounded-xl overflow-hidden glass p-1.5 hover:shadow-xl hover:shadow-[#6ba5a8]/10 reveal"
-         data-tilt
-         data-title="Automation Flow (Google Sheets)"
-         data-subtitle="Integrasi Webhook & Manajemen Lead"
-         data-problem="Tim sales masih manual memasukkan data lead dari formulir website ke Google Sheets, menyebabkan delay dan human error."
-         data-solution="Membuat *endpoint* API sederhana (bisa pakai Netlify Function/Cloud Function) yang menerima data formulir (webhook). Script ini kemudian memvalidasi dan secara otomatis memasukkan data ke baris baru di Google Sheets menggunakan Google Sheets API."
-         data-result="Proses entri data menjadi instan (real-time). Menghilangkan 100% human error saat entri data dan menghemat waktu tim sales sekitar 5 jam per minggu."
-      >
-        <div class="relative rounded-lg overflow-hidden h-48">
-          <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent"></div>
-          <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" src="https://placehold.co/800x450/0B132B/6FFFE9?text=Automation+Flow" alt="Automation Flow">
-          <div class="absolute bottom-3 left-3 flex gap-1.5">
-            <span class="text-xs font-semibold bg-brand-accent/20 text-brand-accent py-1 px-2.5 rounded-full">Google API</span>
-            <span class="text-xs font-semibold bg-brand-accent/20 text-brand-accent py-1 px-2.5 rounded-full">Webhook</span>
+        </a>
+
+        <a href="#" 
+           class="open-modal-trigger tilt group block rounded-xl overflow-hidden glass p-1.5 hover:shadow-xl hover:shadow-[#6ba5a8]/10 reveal"
+           data-tilt
+           data-title="Analisis Sentimen (ML)"
+           data-subtitle="Klasifikasi Teks dengan Scikit-learn"
+           data-problem="Sebuah platform e-commerce ingin secara otomatis mengkategorikan ribuan ulasan produk (positif, negatif, netral) untuk memprioritaskan masukan pelanggan."
+           data-solution="Membangun pipeline ML: 1. Preprocessing teks (membersihkan, tokenisasi, stopword removal). 2. Vektorisasi menggunakan TF-IDF. 3. Melatih model klasifikasi (SVM) dengan dataset berlabel. 4. Mengevaluasi model (akurasi, F1-score)."
+           data-result="Model mencapai akurasi 88% pada data tes. Tim produk kini memiliki dashboard yang secara otomatis menandai ulasan negatif mendesak, mengurangi waktu respons terhadap keluhan sebesar 40%."
+        >
+          <div class="relative rounded-lg overflow-hidden h-48">
+            <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent"></div>
+            <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" src="https://placehold.co/800x450/0B132B/5BC0BE?text=Sentiment+Analysis" alt="Sentiment Analysis">
+            <div class="absolute bottom-3 left-3 flex gap-1.5">
+              <span class="text-xs font-semibold bg-brand-accent/20 text-brand-accent py-1 px-2.5 rounded-full">scikit-learn</span>
+              <span class="text-xs font-semibold bg-brand-accent/20 text-brand-accent py-1 px-2.5 rounded-full">ML</span>
+            </div>
           </div>
-        </div>
-        <div class="p-4">
-          <h3 class="font-semibold text-lg text-brand-text">Automation Flow</h3>
-          <p class="text-sm text-brand-subtext mt-1">Manajemen lead otomatis ke Google Sheets.</p>
-          <span class="text-xs font-medium text-brand-accent mt-3 inline-block group-hover:underline">Case study →</span>
-        </div>
-      </a>
+          <div class="p-4">
+            <h3 class="font-semibold text-lg text-brand-text">Analisis Sentimen</h3>
+            <p class="text-sm text-brand-subtext mt-1">Klasifikasi ulasan produk menggunakan SVM.</p>
+            <span class="text-xs font-medium text-brand-accent mt-3 inline-block group-hover:underline">Case study →</span>
+          </div>
+        </a>
+
+        <a href="#" 
+           class="open-modal-trigger tilt group block rounded-xl overflow-hidden glass p-1.5 hover:shadow-xl hover:shadow-[#6ba5a8]/10 reveal"
+           data-tilt
+           data-title="Automation Flow (Google Sheets)"
+           data-subtitle="Integrasi Webhook & Manajemen Lead"
+           data-problem="Tim sales masih manual memasukkan data lead dari formulir website ke Google Sheets, menyebabkan delay dan human error."
+           data-solution="Membuat *endpoint* API sederhana (bisa pakai Netlify Function/Cloud Function) yang menerima data formulir (webhook). Script ini kemudian memvalidasi dan secara otomatis memasukkan data ke baris baru di Google Sheets menggunakan Google Sheets API."
+           data-result="Proses entri data menjadi instan (real-time). Menghilangkan 100% human error saat entri data dan menghemat waktu tim sales sekitar 5 jam per minggu."
+        >
+          <div class="relative rounded-lg overflow-hidden h-48">
+            <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent"></div>
+            <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" src="https://placehold.co/800x450/0B132B/6FFFE9?text=Automation+Flow" alt="Automation Flow">
+            <div class="absolute bottom-3 left-3 flex gap-1.5">
+              <span class="text-xs font-semibold bg-brand-accent/20 text-brand-accent py-1 px-2.5 rounded-full">Google API</span>
+              <span class="text-xs font-semibold bg-brand-accent/20 text-brand-accent py-1 px-2.5 rounded-full">Webhook</span>
+            </div>
+          </div>
+          <div class="p-4">
+            <h3 class="font-semibold text-lg text-brand-text">Automation Flow</h3>
+            <p class="text-sm text-brand-subtext mt-1">Manajemen lead otomatis ke Google Sheets.</p>
+            <span class="text-xs font-medium text-brand-accent mt-3 inline-block group-hover:underline">Case study →</span>
+          </div>
+        </a>
       </div>
-  </div>
-</section>
+    </div>
+  </section>
 
-  <!-- CONTACT -->
   <section id="contact" class="bg-gradient-to-b from-black/30 to-transparent py-16">
-  <div class="max-w-2xl mx-auto px-5">
-    
-    <div class="text-center mb-8 reveal">
-      <h2 class="text-2xl font-bold text-brand-accent mb-3">Let's Connect</h2>
-      <p class="text-brand-subtext">Saya membuat asisten mini untuk membantu Anda. Silakan mulai percakapan.</p>
-    </div>
-
-    <div class="glass rounded-xl shadow-2xl border border-white/10 overflow-hidden reveal">
-      
-      <div id="chat-window" class="p-6 h-80 overflow-y-auto">
-        </div>
-      
-      <div class="border-t border-white/10 p-4">
-        <div id="chat-options" class="flex flex-wrap gap-3 justify-center">
-          </div>
+    <div class="max-w-2xl mx-auto px-5">
+      <div class="text-center mb-8 reveal">
+        <h2 class="text-2xl font-bold text-brand-accent mb-3">Let's Connect</h2>
+        <p class="text-brand-subtext">Saya membuat asisten mini untuk membantu Anda. Silakan mulai percakapan.</p>
       </div>
 
+      <div class="glass rounded-xl shadow-2xl border border-white/10 overflow-hidden reveal">
+        <div id="chat-window" class="p-6 h-80 overflow-y-auto"></div>
+        <div class="border-t border-white/10 p-4">
+          <div id="chat-options" class="flex flex-wrap gap-3 justify-center"></div>
+        </div>
+      </div>
     </div>
-    </div>
-</section>
+  </section>
 
-  <!-- FOOTER -->
   <footer class="py-8 text-center text-sm text-brand-subtext">
     © <span id="ftYear"></span> Jari Muhammad — Crafted with accessible motion
   </footer>
 
-  <!-- SCRIPTS -->
-  <script>
-    // Year
-    document.getElementById('ftYear').innerText = new Date().getFullYear();
-
-    // Mobile menu
-    const mobileToggle = document.getElementById('mobileToggle');
-    const mobileMenu = document.getElementById('mobileMenu');
-    if (mobileToggle) {
-      mobileToggle.addEventListener('click', () => {
-        const hidden = mobileMenu.classList.toggle('hidden');
-        mobileToggle.setAttribute('aria-expanded', (!hidden).toString());
-      });
-    }
-
-    // Typing effect
-    const phrases = ["Frontend Developer", "Machine Learning Enthusiast", "Chatbot / Automation Builder", "UX-minded Engineer"];
-    async function runTypewriter(el, phrases) {
-      for (const p of phrases) {
-        await typeString(el, p);
-        await wait(900);
-        await deleteString(el);
-        await wait(300);
-      }
-      runTypewriter(el, phrases);
-    }
-    function typeString(el, str) {
-      return new Promise(resolve => {
-        el.textContent = '';
-        let i = 0;
-        const speed = 40;
-        const t = setInterval(() => {
-          el.textContent += str[i++];
-          if (i >= str.length) { clearInterval(t); resolve(); }
-        }, speed);
-      });
-    }
-    function deleteString(el) {
-      return new Promise(resolve => {
-        let str = el.textContent;
-        const speed = 28;
-        const t = setInterval(() => {
-          str = str.slice(0, -1);
-          el.textContent = str;
-          if (str.length === 0) { clearInterval(t); resolve(); }
-        }, speed);
-      });
-    }
-    function wait(ms){ return new Promise(res=>setTimeout(res, ms)); }
-
-    // Reveal observer
-    function initRevealObserver() {
-      const reveals = document.querySelectorAll('.reveal');
-      const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('show');
-            observer.unobserve(entry.target);
-          }
-        });
-      }, { threshold: 0.16 });
-      reveals.forEach(r => observer.observe(r));
-    }
-
-    // Hero parallax
-    function initHeroParallax() {
-      const wrap = document.getElementById('heroPhotoWrap');
-      const img = document.getElementById('heroPhoto');
-      if (!wrap || !img) return;
-      wrap.addEventListener('mousemove', (e) => {
-        const rect = wrap.getBoundingClientRect();
-        const px = (e.clientX - rect.left) / rect.width - 0.5;
-        const py = (e.clientY - rect.top) / rect.height - 0.5;
-        img.style.transform = `translate(${px * 8}px, ${py * 6}px) scale(1.03)`;
-      });
-      wrap.addEventListener('mouseleave', () => img.style.transform = 'translate(0,0) scale(1)');
-      window.addEventListener('scroll', () => {
-        const top = wrap.getBoundingClientRect().top;
-        const offset = Math.min(Math.max(-top / 100, -8), 8);
-        wrap.style.transform = `translateY(${offset}px)`;
-      }, { passive: true });
-    }
-
-    // ... (kode JS Anda yang lain, seperti initHeroParallax) ...
-
-    // --- TEMPELKAN SEMUA KODE MODAL DI BAWAH INI ---
-    function initModalLogic() {
-      const modalContainer = document.getElementById('modal-container');
-      if (!modalContainer) return; // Keluar jika modal tidak ada
-      
-      const modalPanel = document.getElementById('modal-panel');
-      const closeBtn = document.getElementById('modal-close-btn');
-      
-      const modalTitle = document.getElementById('modal-title');
-      const modalSubtitle = document.getElementById('modal-subtitle');
-      
-      const tabButtons = modalContainer.querySelectorAll('.modal-tab-btn');
-      const tabContents = modalContainer.querySelectorAll('.modal-tab-panel');
-      
-      const problemContent = modalContainer.querySelector('[data-tab-content="problem"] p');
-      const solutionContent = modalContainer.querySelector('[data-tab-content="solution"] p');
-      const resultContent = modalContainer.querySelector('[data-tab-content="result"] p');
-
-      // 1. Logika Buka Modal
-      document.querySelectorAll('.open-modal-trigger').forEach(trigger => {
-        trigger.addEventListener('click', (e) => {
-          e.preventDefault(); // Mencegah link `href="#_"` melompat
-          
-          // Ambil data dari tombol yang diklik
-          const data = trigger.dataset;
-          
-          // Isi konten modal
-          modalTitle.textContent = data.title;
-          modalSubtitle.textContent = data.subtitle;
-          problemContent.textContent = data.problem;
-          solutionContent.textContent = data.solution;
-          resultContent.textContent = data.result;
-          
-          // Reset ke tab pertama
-          resetTabs();
-          
-          // Tampilkan modal
-          modalContainer.style.display = 'flex';
-          setTimeout(() => {
-            modalContainer.style.opacity = '1';
-            modalPanel.style.opacity = '1';
-            modalPanel.style.transform = 'scale(1)';
-          }, 10); // delay kecil untuk memicu transisi
-        });
-      });
-
-      // 2. Logika Tutup Modal
-      function closeModal() {
-        modalPanel.style.opacity = '0';
-        modalPanel.style.transform = 'scale(0.95)';
-        modalContainer.style.opacity = '0';
-        setTimeout(() => {
-          modalContainer.style.display = 'none';
-        }, 300); // Sesuaikan dengan durasi transisi
-      }
-      
-      closeBtn.addEventListener('click', closeModal);
-      modalContainer.addEventListener('click', (e) => {
-        // Tutup jika klik di luar panel (di backdrop)
-        if (e.target === modalContainer) {
-          closeModal();
-        }
-      });
-
-      // 3. Logika Tab
-      tabButtons.forEach(btn => {
-        btn.addEventListener('click', () => {
-          const tabName = btn.dataset.tab;
-          
-          // Update visual tombol
-          tabButtons.forEach(b => {
-            b.classList.remove('text-brand-accent', 'border-brand-accent', 'border-b-2');
-            b.classList.add('text-brand-subtext');
-          });
-          btn.classList.add('text-brand-accent', 'border-brand-accent', 'border-b-2');
-          btn.classList.remove('text-brand-subtext');
-          
-          // Tampilkan konten tab
-          tabContents.forEach(content => {
-            if (content.dataset.tabContent === tabName) {
-              content.style.display = 'block';
-            } else {
-              content.style.display = 'none';
-            }
-          });
-        });
-      });
-      
-      function resetTabs() {
-        tabButtons.forEach((btn, index) => {
-          const tabName = btn.dataset.tab;
-          if (index === 0) {
-            // Aktifkan tab pertama
-            btn.classList.add('text-brand-accent', 'border-brand-accent', 'border-b-2');
-            btn.classList.remove('text-brand-subtext');
-            modalContainer.querySelector(`[data-tab-content="${tabName}"]`).style.display = 'block';
-          } else {
-            // Nonaktifkan tab lain
-            btn.classList.remove('text-brand-accent', 'border-brand-accent', 'border-b-2');
-            btn.classList.add('text-brand-subtext');
-            modalContainer.querySelector(`[data-tab-content="${tabName}"]`).style.display = 'none';
-          }
-        });
-      }
-    }
-    // --- AKHIR BLOK KODE MODAL ---
-
-    // ... (setelah akhir fungsi initModalLogic) ...
-
-    // --- LOGIKA CHATBOT ---
-    function initChatbot() {
-      const chatWindow = document.getElementById('chat-window');
-      const chatOptions = document.getElementById('chat-options');
-      if (!chatWindow) return; // Keluar jika chatbot tidak ada
-
-      // "Otak" Bot: Alur percakapan (decision tree)
-      const chatFlow = {
-        'start': {
-          message: "Halo! Saya asisten mini Jari. 👋 Apa yang ingin Anda ketahui?",
-          options: [
-            { text: "Tanya soal skill", next: "skills" },
-            { text: "Lihat proyek", next: "projects" },
-            { text: "Kontak langsung", next: "contact" }
-          ]
-        },
-        'skills': {
-          message: "Jari fokus pada 3 area: 1. Frontend (Tailwind, JS), 2. ML (scikit-learn), 3. Automasi (Botpress).",
-          options: [
-            { text: "Keren!", next: "more_help" }
-          ]
-        },
-        'projects': {
-          message: "Anda bisa melihat proyek-proyeknya di bagian atas halaman ini. Yang favorit saya adalah 'Chatbot WhatsApp'!",
-          options: [
-            { text: "OK, Paham", next: "more_help" }
-          ]
-        },
-        'contact': {
-          message: "Pilihan terbaik! Anda bisa langsung chat Jari via WhatsApp untuk respons cepat. Link-nya di bawah ini:",
-          link: { text: "💬 Chat Jari di WhatsApp", href: "https://wa.me/6287776058465" },
-          options: [
-            { text: "Terima kasih!", next: "more_help" }
-          ]
-        },
-        'more_help': {
-          message: "Ada lagi yang bisa saya bantu?",
-          options: [
-            { text: "Tanya skill", next: "skills" },
-            { text: "Lihat proyek", next: "projects" },
-            { text: "Kontak", next: "contact" },
-            { text: "Sudah cukup", next: "end" }
-          ]
-        },
-        'end': {
-          message: "Siap! Terima kasih sudah mampir. Semoga harimu menyenangkan! ✨",
-          options: []
-        }
-      };
-
-      let currentStep = 'start';
-
-      // --- TAMBAHAN BARU ---
-      function showTyping() {
-        // Cek dulu agar tidak duplikat
-        if (document.getElementById('typing-indicator')) return;
-        
-        const bubble = document.createElement('div');
-        bubble.className = 'chat-bubble-typing'; // Pakai kelas CSS baru kita
-        bubble.id = 'typing-indicator'; // Beri ID agar gampang dihapus
-        
-        // Buat 3 titik-titik
-        bubble.innerHTML = '<span></span><span></span><span></span>';
-        
-        chatWindow.appendChild(bubble);
-        chatWindow.scrollTop = chatWindow.scrollHeight; // Auto-scroll
-      }
-
-      function hideTyping() {
-        const typingBubble = document.getElementById('typing-indicator');
-        if (typingBubble) {
-          typingBubble.remove();
-        }
-      }
-      // --- AKHIR TAMBAHAN BARU ---
-
-      // Fungsi untuk menambahkan pesan ke UI
-      function addMessage(text, sender = 'bot') {
-        const bubble = document.createElement('div');
-        
-        // --- INI PERUBAHANNYA ---
-        // Kita tambahkan semua kelas Tailwind di sini
-        if (sender === 'bot') {
-          bubble.className = 'chat-bubble bg-white/5 p-3 rounded-xl max-w-[80%] text-brand-text self-start mr-auto';
-        } else {
-          bubble.className = 'chat-bubble bg-brand-accent p-3 rounded-xl max-w-[80%] text-brand-bg font-medium self-end ml-auto';
-        }
-        // --- AKHIR PERUBAHAN ---
-        
-        // Amankan & render link jika ada (untuk pesan 'contact')
-        bubble.innerHTML = text.replace(/(https?:\/\/[^\s]+)/g, '<a href="$1" target="_blank" rel="noopener" class="chat-link">$1</a>');
-        chatWindow.appendChild(bubble);
-        // Auto-scroll ke pesan terbaru
-        chatWindow.scrollTop = chatWindow.scrollHeight;
-      }
-
-      // Fungsi untuk menampilkan opsi tombol
-      // Fungsi untuk menampilkan opsi tombol
-      function showOptions(options) {
-        chatOptions.innerHTML = ''; // Kosongkan opsi lama
-        
-        options.forEach((opt, index) => {
-          const btn = document.createElement('button');
-          
-          // --- INI PERUBAHANNYA ---
-          btn.className = 'chat-option-btn text-sm px-4 py-2 rounded-full bg-brand-accent/20 text-brand-accent transition-all duration-200 hover:bg-brand-accent hover:text-brand-bg hover:scale-105 focus:scale-105 border border-brand-accent/30';
-          // --- AKHIR PERUBAHAN ---
-          
-          btn.textContent = opt.text;
-          btn.style.animationDelay = `${index * 100}ms`; // Animasi stagger
-          
-          btn.addEventListener('click', () => {
-            // 1. Tampilkan jawaban user
-            addMessage(opt.text, 'user');
-            // 2. Tampilkan jawaban bot berikutnya
-            goToStep(opt.next);
-          });
-          
-          chatOptions.appendChild(btn);
-        });
-      }
-      
-      // Fungsi untuk menampilkan link (jika ada) 
-      function showLink(link) {
-         if (!link) return;
-         const linkEl = document.createElement('a');
-         linkEl.href = link.href;
-         linkEl.target = "_blank";
-         linkEl.rel = "noopener";
-         
-         // --- INI PERUBAHANNYA ---
-         linkEl.className = "chat-option-btn text-sm px-4 py-2 rounded-full bg-brand-accent/20 text-brand-accent transition-all duration-200 hover:bg-brand-accent hover:text-brand-bg hover:scale-105 focus:scale-105 border border-brand-accent/30";
-         // --- AKHIR PERUBAHAN ---
-         
-         linkEl.textContent = link.text;
-         linkEl.style.animationDelay = '100ms';
-         chatOptions.appendChild(linkEl);
-      }
-
-      // Fungsi untuk pindah alur
-      // --- GANTI DENGAN FUNGSI BARU INI ---
-      function goToStep(stepName) {
-        const step = chatFlow[stepName];
-        if (!step) return;
-
-        currentStep = stepName;
-        
-        // 1. Langsung tampilkan 'typing'
-        showTyping();
-        
-        // 2. Kosongkan opsi lama (UX-improvement!)
-        //    Ini mencegah user mengklik tombol lama saat bot sedang "mengetik"
-        chatOptions.innerHTML = ''; 
-
-        // 3. Tunda jawaban bot (seperti sebelumnya)
-        setTimeout(() => {
-          // 4. Sembunyikan 'typing'
-          hideTyping(); 
-          
-          // 5. Tampilkan pesan bot
-          addMessage(step.message, 'bot');
-          
-          // 6. Tampilkan opsi & link setelah pesan bot muncul
-          setTimeout(() => {
-            showOptions(step.options);
-            showLink(step.link); // Tampilkan link jika ada
-          }, 400); // delay kecil untuk UX
-        }, 800); // <-- Ini adalah durasi "bot mengetik"
-      }
-
-      // Mulai chatbot
-      setTimeout(() => {
-        goToStep('start');
-      }, 1000); // Mulai setelah 1 detik
-    }
-    // --- AKHIR LOGIKA CHATBOT ---
-
-    // --- LOGIKA BARU: Scroll-Aware Navbar ---
-    function initScrollAwareNavbar() {
-      // Kita targetkan nav yang punya kelas 'fixed'
-      const nav = document.querySelector('nav.fixed');
-      if (!nav) return; // Keluar jika nav tidak ditemukan
-
-      // Dengar event 'scroll' di window
-      window.addEventListener('scroll', () => {
-        // Jika user scroll lebih dari 10px
-        if (window.scrollY > 10) {
-          nav.classList.add('navbar-scrolled');
-        } else {
-          // Jika user kembali ke atas
-          nav.classList.remove('navbar-scrolled');
-        }
-      }, { passive: true }); // {passive: true} untuk performa scroll
-    }
-    // --- AKHIR LOGIKA BARU ---
-    
-    // Fungsi untuk menjalankan skrip utama Anda
-    // Fungsi untuk menjalankan skrip utama Anda
-    function runPageScripts() {
-      const el = document.getElementById('typeText');
-      if (el) runTypewriter(el, phrases);
-      
-      initRevealObserver();
-      initSpotlightEffect();
-      initHeroParallax();
-      initModalLogic();
-      initChatbot();
-      
-      // --- TAMBAHKAN SATU BARIS INI ---
-      initScrollAwareNavbar();
-    }
-
-    // Fungsi untuk menjalankan animasi intro
-    function runIntroAnimation() {
-      const elements = document.querySelectorAll('.intro-anim');
-      elements.forEach((el, index) => {
-        // Beri jeda 150ms antar elemen
-        setTimeout(() => {
-          el.classList.add('is-visible');
-        }, index * 250); 
-      });
-    }
-
-    // Panggil semuanya setelah halaman SIAP
-    window.addEventListener('load', () => {
-      runPageScripts();
-      
-      // Kasih jeda 100ms agar browser "napas" dulu
-      setTimeout(runIntroAnimation, 100);
-    });
-    // --- AKHIR LOGIKA BARU ---
-
-    // Gantikan initTilt() dengan ini
-function initSpotlightEffect() {
-  const cards = document.querySelectorAll('#skills .glass, #projects .glass');
-
-  cards.forEach(el => {
-    el.addEventListener('mousemove', (e) => {
-      const rect = el.getBoundingClientRect();
-      
-      // Hitung posisi mouse RELATIF terhadap elemen
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
-      
-      // Update CSS Variables secara real-time
-      el.style.setProperty('--mouse-x', `${x}px`);
-      el.style.setProperty('--mouse-y', `${y}px`);
-    });
-
-    // Tampilkan sorotan saat mouse masuk
-    el.addEventListener('mouseenter', () => {
-      el.style.setProperty('--mouse-hover', '1');
-    });
-
-    // Sembunyikan sorotan saat mouse keluar
-    el.addEventListener('mouseleave', () => {
-      el.style.setProperty('--mouse-hover', '0');
-    });
-  });
-}
-  </script>
-
   <div id="modal-container" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 transition-opacity duration-300" style="display: none; opacity: 0;">
-  
-  <div id="modal-panel" class="glass w-full max-w-2xl rounded-2xl border border-white/10 shadow-2xl relative transform transition-all duration-300" style="transform: scale(0.95); opacity: 0;">
-    
-    <div class="p-6 border-b border-white/10">
-      <h3 id="modal-title" class="text-xl font-semibold text-brand-text font-['JetBrains_Mono']">Modal Title</h3>
-      <p id="modal-subtitle" class="text-sm text-brand-subtext">Project Subtitle</p>
-    </div>
-
-    <div class="p-6">
-      <div class="flex border-b border-white/10 mb-4">
-        <button data-tab="problem" class="modal-tab-btn px-4 py-2 text-brand-accent border-b-2 border-brand-accent">1. Masalah</button>
-        <button data-tab="solution" class="modal-tab-btn px-4 py-2 text-brand-subtext">2. Solusi</button>
-        <button data-tab="result" class="modal-tab-btn px-4 py-2 text-brand-subtext">3. Hasil</button>
+    <div id="modal-panel" class="glass w-full max-w-2xl rounded-2xl border border-white/10 shadow-2xl relative transform transition-all duration-300" style="transform: scale(0.95); opacity: 0;">
+      
+      <div class="p-6 border-b border-white/10">
+        <h3 id="modal-title" class="text-xl font-semibold text-brand-text font-['JetBrains_Mono']">Modal Title</h3>
+        <p id="modal-subtitle" class="text-sm text-brand-subtext">Project Subtitle</p>
       </div>
 
-      <div id="modal-tab-content">
-        <div data-tab-content="problem" class="modal-tab-panel">
-          <p class="text-brand-text">... konten masalah ...</p>
+      <div class="p-6">
+        <div class="flex border-b border-white/10 mb-4">
+          <button data-tab="problem" class="modal-tab-btn px-4 py-2 text-brand-accent border-b-2 border-brand-accent">1. Masalah</button>
+          <button data-tab="solution" class="modal-tab-btn px-4 py-2 text-brand-subtext">2. Solusi</button>
+          <button data-tab="result" class="modal-tab-btn px-4 py-2 text-brand-subtext">3. Hasil</button>
         </div>
-        <div data-tab-content="solution" class="modal-tab-panel" style="display: none;">
-          <p class="text-brand-text">... konten solusi ...</p>
-        </div>
-        <div data-tab-content="result" class="modal-tab-panel" style="display: none;">
-          <p class="text-brand-text">... konten hasil ...</p>
+
+        <div id="modal-tab-content">
+          <div data-tab-content="problem" class="modal-tab-panel">
+            <p class="text-brand-text">... konten masalah ...</p>
+          </div>
+          <div data-tab-content="solution" class="modal-tab-panel" style="display: none;">
+            <p class="text-brand-text">... konten solusi ...</p>
+          </div>
+          <div data-tab-content="result" class="modal-tab-panel" style="display: none;">
+            <p class="text-brand-text">... konten hasil ...</p>
+          </div>
         </div>
       </div>
-    </div>
 
-    <button id="modal-close-btn" class="absolute top-4 right-4 text-brand-subtext hover:text-brand-text transition-colors">
-      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-    </button>
+      <button id="modal-close-btn" class="absolute top-4 right-4 text-brand-subtext hover:text-brand-text transition-colors">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+      </button>
+    </div>
   </div>
-</div>
+
+  <script src="script.js"></script>
 </body>
 </html>

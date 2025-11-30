@@ -1,0 +1,166 @@
+/* Animated background (subtle gradient shift) */
+body {
+  background: linear-gradient(270deg, #0B132B, #0F203A, #071428);
+  background-size: 600% 600%;
+  /* Mengambil animasi dari Tailwind config di HTML, tapi fallback di sini jika perlu */
+  animation: bgShift 30s linear infinite;
+  color: #F1F5F9;
+}
+
+/* Glass card effect */
+.glass {
+  background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.015));
+  border: 1px solid rgba(255,255,255,0.06);
+  backdrop-filter: blur(6px);
+}
+
+/* Typography Helpers */
+.typewriter { white-space: nowrap; overflow: hidden; display:inline-block; vertical-align:bottom; }
+h2, h3, h4 { font-family: "JetBrains Mono", monospace; }
+
+/* Reveal Animation */
+.reveal { opacity: 0; transform: translateY(18px) scale(0.995); transition: opacity .7s cubic-bezier(.2,.9,.2,1), transform .7s cubic-bezier(.2,.9,.2,1); will-change: opacity, transform; }
+.reveal.show { opacity: 1; transform: translateY(0) scale(1); }
+
+/* Tilt Base */
+.tilt { transform-style: preserve-3d; transition: transform .35s cubic-bezier(.2,.9,.2,1), box-shadow .35s; will-change: transform; perspective: 1000px; }
+
+/* Focus States */
+a:focus, button:focus { outline: 3px solid rgba(111,255,233,0.18); outline-offset: 2px; }
+
+/* Responsive Adjustments */
+@media (max-width:640px) {
+  .typewriter { font-size: 0.95rem; }
+}
+
+/* Accessibility: Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  body, .animate-floaty, .animate-bgShift, .reveal, .tilt, a, button, #heroPhoto {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+    animation: none !important;
+    transition: none !important;
+  }
+  .tilt { transform: none !important; box-shadow: none !important; }
+  .reveal { opacity: 1; transform: none; }
+}
+
+/* Spotlight Effect Base */
+#skills .glass, #projects .glass {
+  position: relative;
+  overflow: hidden;
+  transform-style: unset; 
+  perspective: unset;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+#skills .glass:hover, #projects .glass:hover {
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+}
+
+/* Spotlight Element */
+#skills .glass::before, 
+#projects .glass::before {
+  content: '';
+  position: absolute;
+  left: var(--mouse-x, 0px);
+  top: var(--mouse-y, 0px);
+  width: 300px; 
+  height: 300px;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(circle, rgba(125, 211, 192, 0.15), transparent 60%);
+  filter: blur(20px);
+  opacity: var(--mouse-hover, 0);
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+  z-index: 1;
+}
+
+#skills .glass > *, 
+#projects .glass > * {
+  position: relative;
+  z-index: 2;
+}
+
+/* Chatbot UI */
+#chat-window {
+  scroll-behavior: smooth;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+.chat-bubble {
+  opacity: 0;
+  transform: translateY(10px);
+  animation: popIn 0.3s cubic-bezier(.2,.9,.2,1) forwards;
+}
+.chat-option-btn {
+  opacity: 0;
+  transform: scale(0.95);
+  animation: popIn 0.3s cubic-bezier(.2,.9,.2,1) forwards;
+}
+.chat-link {
+  color: #7dd3c0; 
+  font-weight: 500;
+  text-decoration-line: underline;
+}
+.chat-link:hover { color: #6ba5a8; }
+
+@keyframes popIn {
+  from { opacity: 0; transform: translateY(10px) scale(0.95); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* Typing Indicator Animation */
+@keyframes typingBounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-3px); }
+}
+.chat-bubble-typing {
+  background-color: rgba(255, 255, 255, 0.05);
+  padding: 0.75rem;
+  border-radius: 0.75rem;
+  max-width: 80%;
+  color: #e8eef2;
+  align-self: flex-start;
+  margin-right: auto;
+  display: flex;
+  gap: 4px;
+  align-items: center;
+}
+.chat-bubble-typing span {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: #a8b8d8;
+  animation: typingBounce 1.2s ease-in-out infinite;
+}
+.chat-bubble-typing span:nth-child(2) { animation-delay: 0.2s; }
+.chat-bubble-typing span:nth-child(3) { animation-delay: 0.4s; }
+
+/* Staggered Intro Animation */
+.intro-anim {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+}
+nav.intro-anim { transform: translateY(-100%); }
+.intro-anim.is-visible { opacity: 1; transform: translateY(0); }
+
+/* Scroll-Aware Navbar */
+nav.fixed {
+  transition-property: background-color, border-color, backdrop-filter;
+  transition-duration: 300ms;
+  transition-timing-function: ease-out;
+  background-color: transparent;
+  border-bottom-color: transparent;
+  backdrop-filter: blur(0px);
+}
+nav.navbar-scrolled {
+  background-color: rgba(26, 35, 50, 0.75); 
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(12px);
+}
