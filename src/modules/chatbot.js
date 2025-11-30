@@ -1,67 +1,66 @@
-// --- KONFIGURASI ---
-// Pastikan tidak ada spasi di awal/akhir Key!
-const API_KEY = "AIzaSyBz5uZsWTAnVxF3DipP5b5JSS5RbRrAP_s"; 
-const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-001:generateContent?key=${API_KEY}`;
+// --- KONFIGURASI BARU ---
+// PASTE KEY BARU KAMU DI SINI (JANGAN PAKE YANG LAMA)
+const API_KEY = "AIzaSyBpkH-BQD3pLUcAe4lHLm8rH4i0QnqzY9w"; 
+
+// Kita gunakan URL yang paling stabil untuk Free Tier
+const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`;
+
+// --- SYSTEM PROMPT ---
 const SYSTEM_PROMPT = `
-Kamu adalah asisten portofolio Jari Muhammad.
-Jawab singkat (max 3 kalimat), profesional, santai.
-Konteks: AI Engineer, Tech Stack (Python, JS, Tailwind), Project (WA Bot, Sentiment Engine).
+Kamu adalah asisten AI Jari Muhammad. Jawab singkat (max 3 kalimat), santai, dan profesional.
+Data: AI Engineer, Tech Stack (Python, JS, Tailwind), Project (WA Bot, Sentiment Engine).
 `;
 
-// --- FUNGSI UTAMA ---
 export function initChatbot() {
   const chatWindow = document.getElementById('chat-window');
   const chatInput = document.getElementById('chat-input');
   const sendBtn = document.getElementById('chat-send-btn');
 
-  if (!chatWindow) return; 
+  if (!chatWindow) return;
 
-  // Sapaan awal
+  // Pesan sambutan
   setTimeout(() => {
-    addBotMsg("Halo! 👋 Saya asisten AI Jari. Silakan tanya tentang pengalaman atau skill saya.");
+    addBotMsg("Halo! 👋 Saya asisten AI Jari. Tanyakan sesuatu tentang portofolio ini.");
   }, 800);
 
-  // --- LOGIKA KIRIM (YANG DIPERBAIKI) ---
+  // --- FUNGSI KIRIM ---
   async function fetchGeminiReply(userMessage) {
     const loadingId = showTypingIndicator();
 
     try {
-      // 1. Kirim Request
       const response = await fetch(API_URL, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          // Format Paling Aman untuk Gemini Flash:
+          // Struktur JSON "Safety" (Kadang role:user bikin error di Flash, kita hapus saja)
           contents: [{
             parts: [{ text: SYSTEM_PROMPT + "\n\nUser Question: " + userMessage }]
           }]
         })
       });
 
-      // 2. Baca Respon
       const data = await response.json();
       removeTypingIndicator(loadingId);
 
-      // 3. Cek Apakah Sukses atau Error
+      // CEK ERROR DARI GOOGLE
       if (!response.ok) {
-        // Ini akan memunculkan pesan error ASLI dari Google di Console (F12)
-        console.error("🚨 GOOGLE API ERROR:", data);
-        addBotMsg(`Maaf, ada error teknis: ${data.error?.message || "Unknown Error"}`);
+        console.error("🚨 API ERROR:", data);
+        // Tampilkan pesan error spesifik biar kita tau salahnya apa
+        addBotMsg(`⚠️ Error API: ${data.error?.message || "Kunci bermasalah"}`);
         return;
       }
 
-      // 4. Tampilkan Jawaban
-      if (data.candidates && data.candidates.length > 0) {
-        const botReply = data.candidates[0].content.parts[0].text;
-        addBotMsg(botReply);
+      if (data.candidates && data.candidates[0].content) {
+        const text = data.candidates[0].content.parts[0].text;
+        addBotMsg(text);
       } else {
-        addBotMsg("Maaf, saya bingung (No response).");
+        addBotMsg("Maaf, saya tidak mengerti.");
       }
 
     } catch (error) {
       removeTypingIndicator(loadingId);
       console.error("🚨 NETWORK ERROR:", error);
-      addBotMsg("Gagal koneksi. Cek internet kamu.");
+      addBotMsg("Gagal koneksi. Cek internet.");
     }
   }
 
@@ -99,7 +98,10 @@ export function initChatbot() {
   }
 
   function formatText(text) {
-    return text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+    // Ubah **bold** jadi <b> dan *italic* jadi <i>
+    return text
+      .replace(/\*\*(.*?)\*\*/g, '<b>$1</b>')
+      .replace(/\*(.*?)\*/g, '<i>$1</i>');
   }
 
   if (sendBtn && chatInput) {
