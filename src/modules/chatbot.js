@@ -1,90 +1,89 @@
 export function initChatbot() {
+  // Kita inject HTML Floating Button & Chat Window langsung via JS
+  // biar kamu gak perlu obrak-abrik index.html lagi.
+  const chatbotHTML = `
+    <div class="fixed bottom-6 right-6 z-50 flex flex-col items-end gap-4">
+      <div id="chat-interface" class="bg-brand-surface border border-white/10 shadow-2xl rounded-2xl w-80 h-96 flex flex-col transition-all duration-300 transform translate-y-10 opacity-0 pointer-events-none hidden">
+        <div class="p-3 bg-brand-bg/90 border-b border-white/5 flex justify-between items-center rounded-t-2xl">
+          <div class="flex items-center gap-2">
+            <div class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
+            <span class="font-mono text-xs font-bold text-white">JARI_AI_BOT</span>
+          </div>
+          <button id="close-chat" class="text-gray-400 hover:text-white">✕</button>
+        </div>
+        <div id="chat-window" class="flex-1 p-4 overflow-y-auto space-y-3 scrollbar-hide text-sm"></div>
+        <div class="p-3 border-t border-white/5 bg-brand-bg/50">
+          <div id="chat-options" class="flex flex-wrap gap-2 justify-center"></div>
+        </div>
+      </div>
+
+      <button id="chat-toggle" class="w-14 h-14 bg-brand-accent rounded-full shadow-lg shadow-brand-accent/30 flex items-center justify-center hover:scale-110 transition-transform cursor-pointer group">
+        <svg class="w-7 h-7 text-brand-bg" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"></path></svg>
+      </button>
+    </div>
+  `;
+
+  document.body.insertAdjacentHTML('beforeend', chatbotHTML);
+
+  const toggleBtn = document.getElementById('chat-toggle');
+  const chatInterface = document.getElementById('chat-interface');
+  const closeBtn = document.getElementById('close-chat');
   const chatWindow = document.getElementById('chat-window');
   const chatOptions = document.getElementById('chat-options');
-  if (!chatWindow) return;
 
-  // Initial Message (Delay sedikit biar natural)
-  setTimeout(() => {
-    addBotMsg("Halo! 👋 Saya asisten virtual Jari. Ada yang bisa dibantu?");
+  let isOpen = false;
+
+  toggleBtn.onclick = () => {
+    isOpen = !isOpen;
+    if (isOpen) {
+      chatInterface.classList.remove('hidden', 'opacity-0', 'translate-y-10', 'pointer-events-none');
+      toggleBtn.classList.add('scale-0'); // Sembunyikan tombol saat chat terbuka
+      if (chatWindow.children.length === 0) startConversation();
+    }
+  };
+
+  closeBtn.onclick = () => {
+    isOpen = false;
+    chatInterface.classList.add('opacity-0', 'translate-y-10', 'pointer-events-none');
+    setTimeout(() => chatInterface.classList.add('hidden'), 300);
+    toggleBtn.classList.remove('scale-0');
+  };
+
+  function startConversation() {
+    addMsg("System Online. Halo! Saya AI Assistant Jari. Ada yang bisa dibantu?", 'bot');
     showOpts([
-      { text: "Lihat Skillset", label: "Skill & Tech Stack", action: () => reply("Fokus utama saya: Frontend (React/Tailwind) & Machine Learning (Python/TensorFlow). Kombinasi desain & data.") },
-      { text: "Hubungi WA", label: "Chat WhatsApp", action: () => { reply("Membuka WhatsApp sekarang..."); window.open("https://wa.me/6287776058465", "_blank"); } }
+      { text: "Keahlian Jari?", action: () => reply("Core Stack: React/Tailwind (Frontend) & Python/TensorFlow (Machine Learning).") },
+      { text: "Lihat Project", action: () => { reply("Scroll ke section Projects untuk melihat studi kasus."); document.getElementById('projects').scrollIntoView({behavior: 'smooth'}); } },
+      { text: "Contact WA", action: () => { reply("Membuka WhatsApp..."); window.open("https://wa.me/6287776058465", "_blank"); } }
     ]);
-  }, 800);
-
-  function addBotMsg(text) {
-    const div = document.createElement('div');
-    div.className = "flex flex-col items-start animate-fade-in";
-    
-    // PERBAIKAN DI SINI:
-    // 1. bg-white diganti jadi bg-brand-surface (Putih di Light, Slate di Dark)
-    // 2. border-stone-200 diganti jadi border-brand-border
-    // 3. text-brand-text otomatis jadi hitam di Light, putih di Dark
-    div.innerHTML = `
-      <div class="bg-brand-surface border border-brand-border text-brand-text px-4 py-2.5 rounded-2xl rounded-tl-none shadow-sm max-w-[85%] text-sm md:text-base leading-relaxed">
-        ${text}
-      </div>
-    `;
-    chatWindow.appendChild(div);
-    scrollToBottom();
   }
 
-  function addUserMsg(text) {
+  function addMsg(text, sender) {
     const div = document.createElement('div');
-    div.className = "flex flex-col items-end animate-fade-in";
-    
-    // PERBAIKAN KONTRAS TOMBOL USER:
-    // text-white (untuk Light Mode) dan dark:text-brand-bg (untuk Dark Mode)
-    // Agar teks terbaca jelas di atas warna Teal/Cyan
-    div.innerHTML = `
-      <div class="bg-brand-accent text-white dark:text-brand-bg px-4 py-2.5 rounded-2xl rounded-tr-none shadow-md shadow-brand-accent/10 max-w-[85%] text-sm md:text-base font-bold">
-        ${text}
-      </div>
-    `;
+    div.className = sender === 'bot'
+      ? "bg-white/10 text-brand-text p-3 rounded-xl rounded-tl-none self-start max-w-[85%] border border-white/5"
+      : "bg-brand-accent text-brand-bg p-3 rounded-xl rounded-tr-none self-end font-bold max-w-[85%]";
+    div.innerText = text;
     chatWindow.appendChild(div);
-    scrollToBottom();
+    chatWindow.scrollTop = chatWindow.scrollHeight;
+  }
+
+  function reply(text) {
+    const loading = document.createElement('div');
+    loading.className = "text-xs text-brand-muted animate-pulse ml-2 mb-2";
+    loading.innerText = "AI sedang mengetik...";
+    chatWindow.appendChild(loading);
+    setTimeout(() => { loading.remove(); addMsg(text, 'bot'); }, 800);
   }
 
   function showOpts(opts) {
     chatOptions.innerHTML = '';
     opts.forEach(o => {
       const btn = document.createElement('button');
-      
-      // PERBAIKAN TOMBOL OPSI:
-      // Menggunakan bg-brand-surface agar tidak putih polos di dark mode
-      btn.className = "px-4 py-2 bg-brand-surface border border-brand-border text-brand-text text-xs md:text-sm font-medium rounded-full hover:bg-brand-accent hover:text-white dark:hover:text-brand-bg hover:border-transparent transition-all active:scale-95 shadow-sm";
-      
-      btn.innerText = o.label;
-      btn.onclick = () => { 
-        addUserMsg(o.label);
-        chatOptions.innerHTML = '';
-        o.action(); 
-      };
+      btn.className = "text-[10px] px-3 py-1.5 border border-brand-accent/50 text-brand-accent rounded-full hover:bg-brand-accent hover:text-brand-bg transition";
+      btn.innerText = o.text;
+      btn.onclick = () => { addMsg(o.text, 'user'); o.action(); };
       chatOptions.appendChild(btn);
     });
-  }
-
-  function reply(text) {
-    const loading = document.createElement('div');
-    // Loading indicator mengikuti warna text brand
-    loading.className = "text-xs text-brand-muted ml-4 animate-pulse mb-2";
-    loading.innerText = "Jari's AI is typing...";
-    chatWindow.appendChild(loading);
-    scrollToBottom();
-
-    setTimeout(() => {
-      loading.remove();
-      addBotMsg(text);
-      setTimeout(() => {
-        showOpts([
-          { text: "Reset", label: "Menu Awal", action: () => reply("Silakan pilih topik:") },
-          { text: "WA", label: "Kontak Langsung", action: () => window.open("https://wa.me/6287776058465", "_blank") }
-        ]);
-      }, 800);
-    }, 1000); 
-  }
-
-  function scrollToBottom() {
-    chatWindow.scrollTop = chatWindow.scrollHeight;
   }
 }
