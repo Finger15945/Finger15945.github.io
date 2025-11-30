@@ -1,13 +1,22 @@
-import './style.css'; // Import CSS Global
-import { loadProjects } from './modules/data.js';
-import { initUI } from './modules/ui.js';
-import { initChatbot } from './modules/chatbot.js';
-import { initAnimations } from './modules/animations.js';
+// ❌ DELETE BARIS INI (Ini yang bikin error di GitHub Pages)
+// import './style.css'; 
+
+// ✅ PERBAIKI PATH (Gunakan '../' karena folder modules ada di luar folder src)
+import { loadProjects } from '../modules/data.js';
+import { initUI } from '../modules/ui.js';
+import { initChatbot } from '../modules/chatbot.js';
+import { initAnimations } from '../modules/animations.js';
 
 document.addEventListener('DOMContentLoaded', () => {
-  loadProjects();     // 1. Render Proyek
-  initUI();           // 2. Aktifkan Tombol/Modal
-  initChatbot();      // 3. Nyalakan Chatbot
-  initAnimations();   // 4. Jalankan Animasi
-  console.log("System Ready: Expert Mode");
+  console.log("🚀 System Booting..."); // Cek Console browser nanti
+
+  try {
+    loadProjects();     
+    initUI();           
+    initChatbot();      
+    initAnimations();   
+    console.log("✅ System Ready: All Modules Loaded");
+  } catch (error) {
+    console.error("❌ System Crash:", error);
+  }
 });
