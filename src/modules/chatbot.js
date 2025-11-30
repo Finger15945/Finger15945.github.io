@@ -1,8 +1,7 @@
 // --- KONFIGURASI ---
 // Pastikan tidak ada spasi di awal/akhir Key!
 const API_KEY = "AIzaSyBz5uZsWTAnVxF3DipP5b5JSS5RbRrAP_s"; 
-const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${API_KEY}`;
-
+const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-001:generateContent?key=${API_KEY}`;
 const SYSTEM_PROMPT = `
 Kamu adalah asisten portofolio Jari Muhammad.
 Jawab singkat (max 3 kalimat), profesional, santai.
