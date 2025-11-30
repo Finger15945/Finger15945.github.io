@@ -1,10 +1,11 @@
 /** @type {import('tailwindcss').Config} */
 export default {
+  darkMode: 'class', // Penting: Aktifkan mode gelap manual
   content: [
     "./index.html",
     "./src/**/*.{js,ts,jsx,tsx}",
     "./*.js",
-    "./modules/*.js" 
+    "./modules/*.js"
   ],
   theme: {
     extend: {
@@ -14,19 +15,14 @@ export default {
       },
       colors: {
         brand: {
-          // GANTI DARI SINI: Background diganti ke "Alabaster/Warm Grey"
-          bg: '#fdfbf7',        // Putih tulang hangat (Warm White/Creamy) - tidak silau
-          surface: '#ffffff',   // Surface tetap putih untuk kontras halus
-          
-          // Warna teks diganti ke "Soft Black" (Bukan hitam pekat)
-          text: '#2d2a26',      // Charcoal (Hitam kecoklatan sangat tua)
-          muted: '#78716c',     // Stone-500 (Abu-abu hangat)
-          
-          // Warna Aksen diganti ke "Earthy Teal" (Lebih elegan & unik dibanding biru biasa)
-          accent: '#0d9488',    // Teal-600 (Warna hijau laut dalam)
-          accentLight: '#ccfbf1', // Teal-100 (Untuk background highlight)
-          
-          border: '#e7e5e4',    // Stone-200 (Garis batas hangat)
+          // Syntax rgb(var(...)) ini agar opacity (bg-opacity-50) tetap jalan
+          bg: 'rgb(var(--color-bg) / <alpha-value>)',
+          surface: 'rgb(var(--color-surface) / <alpha-value>)',
+          text: 'rgb(var(--color-text) / <alpha-value>)',
+          muted: 'rgb(var(--color-muted) / <alpha-value>)',
+          border: 'rgb(var(--color-border) / <alpha-value>)',
+          accent: 'rgb(var(--color-accent) / <alpha-value>)',
+          accentLight: 'rgb(var(--color-accent-light) / <alpha-value>)',
         }
       },
       animation: {
@@ -44,8 +40,7 @@ export default {
         }
       },
       boxShadow: {
-        // Shadow diganti jadi warm shadow
-        'soft': '0 4px 20px -2px rgba(44, 42, 38, 0.05)', 
+        'soft': '0 4px 20px -2px rgba(0, 0, 0, 0.1)',
       }
     },
   },
