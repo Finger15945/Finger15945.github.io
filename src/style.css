@@ -2,78 +2,69 @@
 @tailwind components;
 @tailwind utilities;
 
-/* DEFINISI TEMA WARNA (RGB Values) */
 @layer base {
   :root {
-    /* --- LIGHT MODE (WARM / Kertas) --- */
-    /* Background: Putih tulang hangat */
-    --color-bg: 253 251 247;       /* #fdfbf7 */
-    /* Surface: Putih bersih */
+    /* --- MODE TERANG (Warm / Kertas) - Yang Anda suka --- */
+    --color-bg: 253 251 247;       /* #fdfbf7 (Putih Tulang) */
     --color-surface: 255 255 255;  /* #ffffff */
-    /* Text: Hitam Arang (Soft Black) */
-    --color-text: 45 42 38;        /* #2d2a26 */
-    /* Muted: Abu kecoklatan */
+    --color-text: 45 42 38;        /* #2d2a26 (Hitam Arang Soft) */
     --color-muted: 120 113 108;    /* #78716c */
-    /* Border: Abu muda hangat */
     --color-border: 231 229 228;   /* #e7e5e4 */
-    /* Accent: Teal Deep (Elegan) */
-    --color-accent: 13 148 136;    /* #0d9488 */
-    --color-accent-light: 204 251 241; /* #ccfbf1 */
+    --color-accent: 13 148 136;    /* #0d9488 (Teal Elegan) */
   }
 
-  /* --- DARK MODE (SOFT DARK / Modern Tech) --- */
+  /* --- MODE GELAP (Soft Dark / Slate) --- */
   .dark {
-    /* Background: Slate Sangat Gelap (Bukan Hitam Pekat) */
-    --color-bg: 15 23 42;          /* #0f172a (Slate 900) */
-    /* Surface: Slate Sedikit Terang */
-    --color-surface: 30 41 59;     /* #1e293b (Slate 800) */
-    /* Text: Putih Gading (Supaya tidak sakit mata) */
-    --color-text: 241 245 249;     /* #f1f5f9 (Slate 100) */
-    /* Muted: Abu kebiruan */
-    --color-muted: 148 163 184;    /* #94a3b8 (Slate 400) */
-    /* Border: Slate tipis */
-    --color-border: 51 65 85;      /* #334155 (Slate 700) */
-    /* Accent: Cyan Neon (Supaya pop-up di gelap) */
-    --color-accent: 45 212 191;    /* #2dd4bf (Teal 400) */
-    --color-accent-light: 15 23 42; /* Samakan dengan BG agar tidak belang */
+    /* Background: Slate 900 (Gelap tapi ada nuansa biru, bukan hitam mati) */
+    --color-bg: 15 23 42;          /* #0f172a */
+    /* Surface: Slate 800 (Sedikit lebih terang untuk kartu) */
+    --color-surface: 30 41 59;     /* #1e293b */
+    /* Text: Slate 100 (Putih Gading, tidak menyilaukan) */
+    --color-text: 241 245 249;     /* #f1f5f9 */
+    /* Muted: Slate 400 */
+    --color-muted: 148 163 184;    /* #94a3b8 */
+    /* Border: Slate 700 */
+    --color-border: 51 65 85;      /* #334155 */
+    /* Accent: Teal Neon (Supaya menyala di gelap) */
+    --color-accent: 45 212 191;    /* #2dd4bf */
   }
 
   html {
     @apply scroll-smooth scroll-pt-28;
   }
+  
   body {
     @apply bg-brand-bg text-brand-text antialiased transition-colors duration-500;
   }
 
-  /* Custom Scrollbar yang ikut berubah warna */
+  /* Scrollbar Custom mengikuti tema */
   ::-webkit-scrollbar { width: 8px; }
-  ::-webkit-scrollbar-track { @apply bg-transparent; }
+  ::-webkit-scrollbar-track { @apply bg-brand-bg; }
   ::-webkit-scrollbar-thumb { @apply bg-brand-border rounded-full; }
   ::-webkit-scrollbar-thumb:hover { @apply bg-brand-muted; }
 }
 
 @layer components {
-  .clean-card {
-    @apply bg-brand-surface rounded-2xl border border-brand-border shadow-soft transition-all duration-300;
+  .glass-card {
+    /* Kartu menyesuaikan mode: Putih di terang, Slate di gelap */
+    @apply bg-brand-surface border border-brand-border rounded-2xl shadow-xl transition-all duration-300;
   }
-  .clean-card:hover {
-    @apply shadow-xl -translate-y-1 border-brand-accent/40;
+  
+  .glass-card:hover {
+    @apply border-brand-accent/50 shadow-lg -translate-y-1;
   }
 
   .btn-primary {
-    @apply px-8 py-3 bg-brand-accent text-brand-bg font-bold rounded-full shadow-lg shadow-brand-accent/20 hover:opacity-90 active:scale-95 transition-all duration-200 flex items-center gap-2;
-  }
-
-  .nav-link {
-    @apply text-sm font-medium text-brand-muted hover:text-brand-accent transition-colors duration-200 cursor-pointer;
+    @apply px-6 py-3 bg-brand-accent text-brand-bg font-bold rounded-lg hover:brightness-110 hover:shadow-lg active:scale-95 transition-all duration-200;
   }
 }
 
 .reveal {
   opacity: 0;
   transform: translateY(20px);
-  transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: all 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
+
 .reveal.active {
   opacity: 1;
   transform: translateY(0);
