@@ -173,8 +173,26 @@
           <div id="chat-window" class="flex-1 bg-brand-bg/30 p-4 md:p-6 overflow-y-auto space-y-4">
             </div>
 
-          <div class="p-4 bg-brand-surface border-t border-brand-border">
-            <div id="chat-options" class="flex flex-wrap gap-2"></div>
+          <div class="p-3 bg-brand-surface border-t border-brand-border">
+            <div id="chat-options" class="flex flex-wrap gap-2 mb-2"></div>
+            
+            <div class="flex gap-2">
+              <input 
+                id="chat-input" 
+                type="text" 
+                placeholder="Tanya tentang Jari..." 
+                class="flex-1 bg-brand-bg border border-brand-border text-brand-text text-sm rounded-xl px-4 py-2 focus:outline-none focus:border-brand-accent focus:ring-1 focus:ring-brand-accent transition-all placeholder:text-brand-muted"
+              >
+              <button 
+                id="chat-send-btn" 
+                class="bg-brand-accent text-white p-2.5 rounded-xl hover:brightness-110 active:scale-95 transition-all shadow-lg shadow-brand-accent/20 flex items-center justify-center"
+                aria-label="Send Message"
+              >
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path>
+                </svg>
+              </button>
+            </div>
           </div>
         </div>
       </div>
