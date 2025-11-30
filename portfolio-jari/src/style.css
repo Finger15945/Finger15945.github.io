@@ -1,41 +1,55 @@
-/* 1. Tailwind Directives: Wajib ada di paling atas */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-
-/* 2. Custom Base Styles (Dari Analisa Sebelumnya) */
 @layer base {
-  /* Pastikan Body menggunakan warna yang sudah di-config di tailwind.config.js */
+  html {
+    @apply scroll-pt-24; /* Offset untuk scroll anchor */
+  }
   body {
+    /* Menggunakan font-sans (Inter) secara default */
     @apply bg-brand-bg text-brand-text antialiased;
   }
+  
+  /* Styling Scrollbar Modern */
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+  ::-webkit-scrollbar-track {
+    @apply bg-brand-bg;
+  }
+  ::-webkit-scrollbar-thumb {
+    @apply bg-brand-surface rounded-full border border-brand-bg;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-brand-accent/50;
+  }
 }
 
-/* 3. Custom Components (Glass Card & Button Helper) */
 @layer components {
-  /* Class glass-card yang kita panggil di HTML */
+  /* REVISI GLASS CARD: Lebih Solid & Clean */
   .glass-card {
-    /* Gunakan warna surface dari config */
-    @apply bg-brand-surface/30 backdrop-blur-md border border-white/10 rounded-xl shadow-lg;
+    @apply bg-brand-surface/70 backdrop-blur-xl border border-white/10 rounded-2xl shadow-xl transition-all duration-300;
   }
   
+  /* Hover effect untuk kartu */
+  .glass-card:hover {
+    @apply border-brand-accent/30 shadow-brand-accent/5 bg-brand-surface/80;
+  }
+
   .btn-primary {
-    @apply px-5 py-2.5 bg-brand-accent text-brand-bg font-bold rounded-lg hover:opacity-90 active:scale-95 transition-transform;
+    @apply px-6 py-3 bg-brand-accent text-brand-bg font-bold rounded-lg hover:bg-brand-accent/90 hover:shadow-lg hover:shadow-brand-accent/20 active:scale-95 transition-all duration-200;
   }
 }
 
-/* 4. Reveal Animation CSS (Wajib agar animasi .reveal berjalan) */
+/* Animasi Reveal */
 .reveal {
   opacity: 0;
-  transform: translateY(30px);
-  transition: all 0.8s cubic-bezier(0.5, 0, 0, 1);
+  transform: translateY(20px);
+  transition: all 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
 .reveal.active {
   opacity: 1;
   transform: translateY(0);
 }
-
-/* 5. Cleanup Mobile Toggle if needed */
-/* Pastikan tidak ada kode yang bertentangan dengan class Tailwind */
