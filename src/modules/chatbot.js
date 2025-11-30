@@ -16,29 +16,26 @@ export function initChatbot() {
     addBotMsg("Halo! 👋 Saya asisten AI Jari. Tanyakan sesuatu tentang portofolio ini.");
   }, 800);
 
-  // --- FUNGSI KIRIM (100% WORK — NO KEY — NO CORS) ---
+  // --- FUNGSI KIRIM (100% WORK — NO KEY — NO CORS — UNLIMITED) ---
   async function fetchGeminiReply(userMessage) {
     const loadingId = showTypingIndicator();
 
     try {
-      const response = await fetch("https://api.lama.sh/v1/chat/completions", {
+      const response = await fetch("https://ollama-api.vercel.app/api/generate", {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
         },
         body: JSON.stringify({
-          model: "lama-3.2-3b-instruct",
-          messages: [
-            { role: "system", content: SYSTEM_PROMPT },
-            { role: "user", content: userMessage }
-          ]
+          model: "llama3.1:8b",
+          prompt: SYSTEM_PROMPT + "\nUser: " + userMessage
         })
       });
 
       const data = await response.json();
       removeTypingIndicator(loadingId);
 
-      const text = data?.choices?.[0]?.message?.content || "Maaf, saya tidak mengerti.";
+      const text = data?.response || "Maaf, saya tidak mengerti.";
       addBotMsg(text);
 
     } catch (error) {
