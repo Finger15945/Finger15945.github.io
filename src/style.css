@@ -4,58 +4,60 @@
 
 @layer base {
   :root {
-    /* --- MODE TERANG (Warm / Kertas) - Yang Anda suka --- */
-    --color-bg: 253 251 247;       /* #fdfbf7 (Putih Tulang) */
-    --color-surface: 255 255 255;  /* #ffffff */
-    --color-text: 45 42 38;        /* #2d2a26 (Hitam Arang Soft) */
-    --color-muted: 120 113 108;    /* #78716c */
-    --color-border: 231 229 228;   /* #e7e5e4 */
-    --color-accent: 13 148 136;    /* #0d9488 (Teal Elegan) */
+    /* --- MODE TERANG (WARM / BERSIH) --- */
+    --color-bg: 253 251 247;       /* Warm White */
+    --color-surface: 255 255 255;  /* Pure White */
+    --color-text: 30 41 59;        /* Slate Dark (Bukan Hitam Pekat) */
+    --color-muted: 100 116 139;    /* Slate Grey */
+    --color-border: 226 232 240;   /* Light Grey */
+    --color-accent: 13 148 136;    /* Teal Elegan */
   }
 
-  /* --- MODE GELAP (Soft Dark / Slate) --- */
+  /* --- MODE GELAP (SOFT DARK / ENAK DI MATA) --- */
   .dark {
-    /* Background: Slate 900 (Gelap tapi ada nuansa biru, bukan hitam mati) */
-    --color-bg: 15 23 42;          /* #0f172a */
-    /* Surface: Slate 800 (Sedikit lebih terang untuk kartu) */
-    --color-surface: 30 41 59;     /* #1e293b */
-    /* Text: Slate 100 (Putih Gading, tidak menyilaukan) */
-    --color-text: 241 245 249;     /* #f1f5f9 */
-    /* Muted: Slate 400 */
-    --color-muted: 148 163 184;    /* #94a3b8 */
-    /* Border: Slate 700 */
-    --color-border: 51 65 85;      /* #334155 */
-    /* Accent: Teal Neon (Supaya menyala di gelap) */
-    --color-accent: 45 212 191;    /* #2dd4bf */
+    --color-bg: 15 23 42;          /* Slate 900 (Gelap Biru Tua, bukan Hitam Mati) */
+    --color-surface: 30 41 59;     /* Slate 800 */
+    --color-text: 241 245 249;     /* Slate 100 (Putih Gading) */
+    --color-muted: 148 163 184;    /* Slate 400 */
+    --color-border: 51 65 85;      /* Slate 700 */
+    --color-accent: 45 212 191;    /* Teal Neon */
   }
 
   html {
-    @apply scroll-smooth scroll-pt-28;
+    @apply scroll-smooth scroll-pt-24;
+    /* FIX: Mencegah warna putih muncul saat over-scroll di HP/Mac */
+    background-color: rgb(var(--color-bg)); 
   }
   
   body {
-    @apply bg-brand-bg text-brand-text antialiased transition-colors duration-500;
+    @apply bg-brand-bg text-brand-text antialiased transition-colors duration-500 min-h-screen relative;
+    /* Pattern Grid Halus (Opsional, agar tidak terlalu polos) */
+    background-image: radial-gradient(rgba(148, 163, 184, 0.1) 1px, transparent 1px);
+    background-size: 30px 30px;
   }
 
-  /* Scrollbar Custom mengikuti tema */
+  /* Scrollbar Custom */
   ::-webkit-scrollbar { width: 8px; }
   ::-webkit-scrollbar-track { @apply bg-brand-bg; }
   ::-webkit-scrollbar-thumb { @apply bg-brand-border rounded-full; }
-  ::-webkit-scrollbar-thumb:hover { @apply bg-brand-muted; }
 }
 
 @layer components {
+  /* Kartu yang aman di Dark & Light Mode */
   .glass-card {
-    /* Kartu menyesuaikan mode: Putih di terang, Slate di gelap */
     @apply bg-brand-surface border border-brand-border rounded-2xl shadow-xl transition-all duration-300;
   }
   
   .glass-card:hover {
-    @apply border-brand-accent/50 shadow-lg -translate-y-1;
+    @apply border-brand-accent/40 shadow-lg -translate-y-1;
   }
 
   .btn-primary {
-    @apply px-6 py-3 bg-brand-accent text-brand-bg font-bold rounded-lg hover:brightness-110 hover:shadow-lg active:scale-95 transition-all duration-200;
+    @apply px-6 py-3 bg-brand-accent text-white dark:text-brand-bg font-bold rounded-lg hover:brightness-110 active:scale-95 transition-all duration-200 shadow-lg shadow-brand-accent/20;
+  }
+
+  .nav-link {
+    @apply text-sm font-medium text-brand-muted hover:text-brand-accent transition-colors cursor-pointer;
   }
 }
 
@@ -64,7 +66,6 @@
   transform: translateY(20px);
   transition: all 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
-
 .reveal.active {
   opacity: 1;
   transform: translateY(0);
