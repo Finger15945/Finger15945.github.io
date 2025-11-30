@@ -41,11 +41,8 @@
   <style>
     /* Animated background (subtle gradient shift) */
     body {
-      background: linear-gradient(270deg, #0B132B, #0F203A, #071428);
-      background-size: 600% 600%;
-      /* Durasi ini sekarang mengambil dari config 'animate-bgShift' */
-      /* Jika body tidak menggunakan kelas itu, ubah di sini: */
-      animation: bgShift 30s linear infinite; /* <-- DIUBAH (dari 18s) */
+      background: #0F172A;
+      background-size: 100% 100%;
       color: #F1F5F9;
     }
 
@@ -60,8 +57,16 @@
     .typewriter { white-space: nowrap; overflow: hidden; display:inline-block; vertical-align:bottom; }
 
     /* reveal */
-    .reveal { opacity: 0; transform: translateY(18px) scale(0.995); transition: opacity .7s cubic-bezier(.2,.9,.2,1), transform .7s cubic-bezier(.2,.9,.2,1); will-change: opacity, transform; }
-    .reveal.show { opacity: 1; transform: translateY(0) scale(1); }
+    .reveal {
+      opacity: 0;
+      transform: translateY(12px);
+      transition: opacity .55s ease-out, transform .55s ease-out;
+    }
+    
+    .reveal.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
 
     /* tilt base */
     .tilt { transform-style: preserve-3d; transition: transform .35s cubic-bezier(.2,.9,.2,1), box-shadow .35s; will-change: transform; perspective: 1000px; }
@@ -102,57 +107,6 @@
     }
 
     /* Ganti .tilt (jika Anda menghapus kelas itu) atau gunakan selector yang sama */
-/* Kita akan menargetkan kartu proyek dan kartu skill */
-#skills .glass, #projects .glass {
-  position: relative; /* Diperlukan untuk memposisikan sorotan */
-  overflow: hidden; /* Diperlukan untuk 'menjebak' sorotan di dalam kartu */
-  
-  /* Hapus CSS tilt yang lama jika masih ada */
-  transform-style: unset; 
-  perspective: unset;
-  transition: transform 0.2s, box-shadow 0.2s; /* Transisi normal */
-}
-
-#skills .glass:hover, #projects .glass:hover {
-  /* Beri sedikit 'lift' saat hover (menggantikan tilt) */
-  transform: translateY(-4px) scale(1.02);
-  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-}
-
-/* Ini adalah 'spotlight'-nya */
-#skills .glass::before, 
-#projects .glass::before {
-  content: '';
-  position: absolute;
-  
-  /* Posisi akan dikontrol oleh JS via CSS Variables */
-  left: var(--mouse-x, 0px);
-  top: var(--mouse-y, 0px);
-  
-  width: 300px; /* Ukuran sorotan */
-  height: 300px;
-  
-  /* Titik tengah sorotan harus di kursor */
-  transform: translate(-50%, -50%);
-  
-  /* Gunakan warna brand-accent Anda! */
-  background: radial-gradient(circle, rgba(125, 211, 192, 0.15), transparent 60%);
-  
-  /* Efek blur yang lembut */
-  filter: blur(20px);
-  
-  opacity: var(--mouse-hover, 0); /* Kontrol visibilitas */
-  transition: opacity 0.3s ease;
-  pointer-events: none; /* Penting! Agar tidak mengganggu klik */
-  z-index: 1;
-}
-
-/* Pastikan konten kartu tetap di atas sorotan */
-#skills .glass > *, 
-#projects .glass > * {
-  position: relative;
-  z-index: 2;
-}
     
    /* --- TAMBAHAN: CSS Chatbot (Perbaikan Definitif) --- */
     #chat-window {
@@ -537,7 +491,7 @@ nav.navbar-scrolled {
       return new Promise(resolve => {
         el.textContent = '';
         let i = 0;
-        const speed = 40;
+        const speed = 65;
         const t = setInterval(() => {
           el.textContent += str[i++];
           if (i >= str.length) { clearInterval(t); resolve(); }
@@ -547,7 +501,7 @@ nav.navbar-scrolled {
     function deleteString(el) {
       return new Promise(resolve => {
         let str = el.textContent;
-        const speed = 28;
+        const speed = 45;
         const t = setInterval(() => {
           str = str.slice(0, -1);
           el.textContent = str;
@@ -580,7 +534,7 @@ nav.navbar-scrolled {
         const rect = wrap.getBoundingClientRect();
         const px = (e.clientX - rect.left) / rect.width - 0.5;
         const py = (e.clientY - rect.top) / rect.height - 0.5;
-        img.style.transform = `translate(${px * 8}px, ${py * 6}px) scale(1.03)`;
+        img.style.transform = `translate(${px * 3}px, ${py * 2}px) scale(1.01)`;
       });
       wrap.addEventListener('mouseleave', () => img.style.transform = 'translate(0,0) scale(1)');
       window.addEventListener('scroll', () => {
@@ -904,7 +858,6 @@ nav.navbar-scrolled {
       if (el) runTypewriter(el, phrases);
       
       initRevealObserver();
-      initSpotlightEffect();
       initHeroParallax();
       initModalLogic();
       initChatbot();
