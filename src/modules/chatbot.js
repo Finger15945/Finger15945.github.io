@@ -1,12 +1,15 @@
-// --- KONFIGURASI ---
-// Paste API Key BARU kamu di sini
+// --- KONFIGURASI BARU ---
+// PASTE KEY BARU KAMU DI SINI (JANGAN PAKE YANG LAMA)
 const API_KEY = "AIzaSyBpkH-BQD3pLUcAe4lHLm8rH4i0QnqzY9w"; 
 
-// Kita pakai endpoint v1beta yang paling toleran
-const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`;
+// Kita gunakan URL yang paling stabil untuk Free Tier
+const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${API_KEY}`;
 
-// System Prompt kita simpan sebagai string biasa
-const SYSTEM_PROMPT = "Kamu adalah asisten AI Jari Muhammad. Jawab singkat, padat, dan profesional. Konteks: Jari adalah AI Engineer (Python/JS).";
+// --- SYSTEM PROMPT ---
+const SYSTEM_PROMPT = `
+Kamu adalah asisten AI Jari Muhammad. Jawab singkat (max 3 kalimat), santai, dan profesional.
+Data: AI Engineer, Tech Stack (Python, JS, Tailwind), Project (WA Bot, Sentiment Engine).
+`;
 
 export function initChatbot() {
   const chatWindow = document.getElementById('chat-window');
@@ -15,27 +18,23 @@ export function initChatbot() {
 
   if (!chatWindow) return;
 
-  // Sapaan Awal
+  // Pesan sambutan
   setTimeout(() => {
-    addBotMsg("Halo! Sistem AI Jari siap. Ada yang bisa saya bantu?");
-  }, 1000);
+    addBotMsg("Halo! 👋 Saya asisten AI Jari. Tanyakan sesuatu tentang portofolio ini.");
+  }, 800);
 
   // --- FUNGSI KIRIM ---
   async function fetchGeminiReply(userMessage) {
     const loadingId = showTypingIndicator();
-
-    // TEKNIK PREPEND: Gabungkan System Prompt + Pertanyaan User jadi satu teks
-    // Ini cara paling aman biar gak kena Error 400
-    const finalPrompt = `${SYSTEM_PROMPT}\n\nUser bertanya: "${userMessage}"\nJawab:`;
 
     try {
       const response = await fetch(API_URL, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          // STRUKTUR JSON YANG DISEDERHANAKAN (ANTI ERROR 400)
+          // Struktur JSON "Safety" (Kadang role:user bikin error di Flash, kita hapus saja)
           contents: [{
-            parts: [{ text: finalPrompt }]
+            parts: [{ text: SYSTEM_PROMPT + "\n\nUser Question: " + userMessage }]
           }]
         })
       });
@@ -43,23 +42,29 @@ export function initChatbot() {
       const data = await response.json();
       removeTypingIndicator(loadingId);
 
+      // CEK ERROR DARI GOOGLE
       if (!response.ok) {
-        console.error("DEBUG ERROR:", data); // Cek console kalau masih merah
-        addBotMsg(`⚠️ Maaf error: ${data.error?.message || "Format request ditolak"}`);
+        console.error("🚨 API ERROR:", data);
+        // Tampilkan pesan error spesifik biar kita tau salahnya apa
+        addBotMsg(`⚠️ Error API: ${data.error?.message || "Kunci bermasalah"}`);
         return;
       }
 
-      // Ambil jawaban
-      const reply = data.candidates?.[0]?.content?.parts?.[0]?.text;
-      addBotMsg(reply || "Maaf, tidak ada jawaban.");
+      if (data.candidates && data.candidates[0].content) {
+        const text = data.candidates[0].content.parts[0].text;
+        addBotMsg(text);
+      } else {
+        addBotMsg("Maaf, saya tidak mengerti.");
+      }
 
     } catch (error) {
       removeTypingIndicator(loadingId);
-      addBotMsg("Gagal koneksi internet.");
+      console.error("🚨 NETWORK ERROR:", error);
+      addBotMsg("Gagal koneksi. Cek internet.");
     }
   }
 
-  // --- UI HELPERS (Tetap Sama) ---
+  // --- UI HELPERS (Sama seperti sebelumnya) ---
   function addBotMsg(text) {
     const div = document.createElement('div');
     div.className = "flex flex-col items-start mb-3 animate-fade-in";
@@ -77,7 +82,7 @@ export function initChatbot() {
   }
 
   function showTypingIndicator() {
-    const id = 'l-' + Date.now();
+    const id = 'loading-' + Date.now();
     const div = document.createElement('div');
     div.id = id;
     div.className = "text-xs text-brand-muted ml-4 animate-pulse mb-2";
@@ -89,20 +94,25 @@ export function initChatbot() {
 
   function removeTypingIndicator(id) {
     const el = document.getElementById(id);
-    if(el) el.remove();
+    if (el) el.remove();
   }
 
-  function formatText(t) { return t.replace(/\*\*(.*?)\*\*/g, '<b>$1</b>'); }
+  function formatText(text) {
+    // Ubah **bold** jadi <b> dan *italic* jadi <i>
+    return text
+      .replace(/\*\*(.*?)\*\*/g, '<b>$1</b>')
+      .replace(/\*(.*?)\*/g, '<i>$1</i>');
+  }
 
   if (sendBtn && chatInput) {
-    const send = () => {
-      const txt = chatInput.value.trim();
-      if(!txt) return;
-      addUserMsg(txt);
+    const handleSend = () => {
+      const text = chatInput.value.trim();
+      if (!text) return;
+      addUserMsg(text);
       chatInput.value = '';
-      fetchGeminiReply(txt);
+      fetchGeminiReply(text);
     };
-    sendBtn.onclick = send;
-    chatInput.onkeypress = (e) => { if(e.key === 'Enter') send(); };
+    sendBtn.onclick = handleSend;
+    chatInput.onkeypress = (e) => { if (e.key === 'Enter') handleSend(); };
   }
 }
