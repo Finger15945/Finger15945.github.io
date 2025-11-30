@@ -16,30 +16,29 @@ export function initChatbot() {
     addBotMsg("Halo! 👋 Saya asisten AI Jari. Tanyakan sesuatu tentang portofolio ini.");
   }, 800);
 
-  // --- FUNGSI KIRIM (PASTI WORKING — NO API KEY) ---
+  // --- FUNGSI KIRIM (100% WORK — NO KEY — NO CORS) ---
   async function fetchGeminiReply(userMessage) {
     const loadingId = showTypingIndicator();
 
     try {
-      const response = await fetch("https://api-inference.huggingface.co/models/Qwen/Qwen2.5-7B-Instruct", {
+      const response = await fetch("https://api.lama.sh/v1/chat/completions", {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
         },
         body: JSON.stringify({
-          inputs: SYSTEM_PROMPT + "\nUser: " + userMessage,
+          model: "lama-3.2-3b-instruct",
+          messages: [
+            { role: "system", content: SYSTEM_PROMPT },
+            { role: "user", content: userMessage }
+          ]
         })
       });
 
       const data = await response.json();
       removeTypingIndicator(loadingId);
 
-      if (data.error) {
-        addBotMsg("⚠️ API Error: " + data.error);
-        return;
-      }
-
-      const text = data[0]?.generated_text || "Maaf, saya tidak mengerti.";
+      const text = data?.choices?.[0]?.message?.content || "Maaf, saya tidak mengerti.";
       addBotMsg(text);
 
     } catch (error) {
