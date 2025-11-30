@@ -4,56 +4,59 @@
 
 @layer base {
   html {
-    @apply scroll-pt-24;
+    @apply scroll-smooth scroll-pt-24;
   }
   body {
-    @apply bg-brand-bg text-brand-text antialiased selection:bg-brand-accent selection:text-white;
-    /* Noise Texture */
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E");
+    @apply bg-brand-bg text-brand-text antialiased selection:bg-brand-accent/30 selection:text-brand-accent overflow-x-hidden;
   }
-
-  h1, h2, h3 {
-    @apply tracking-tight;
+  /* Menambahkan texture noise agar terlihat premium */
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 50;
   }
 }
 
 @layer components {
-  /* Floating Nav Pill */
-  .nav-pill {
-    @apply fixed top-6 left-1/2 -translate-x-1/2 z-50 flex items-center gap-6 px-6 py-3 rounded-full bg-brand-surface/80 backdrop-blur-md border border-brand-border shadow-2xl transition-all duration-300;
-  }
-
-  /* Project Item: HAPUS 'group' dari sini agar tidak error */
-  .project-item {
-    @apply relative flex flex-col md:flex-row md:items-center justify-between py-12 border-t border-brand-border cursor-pointer transition-all duration-500 hover:bg-white/[0.02];
+  /* GLASS CARD PREMIUM (Thin borders, subtle gradient) */
+  .glass-card {
+    @apply bg-brand-surface/40 backdrop-blur-xl border border-white/5 shadow-2xl transition-all duration-300 relative overflow-hidden;
   }
   
-  .project-item:last-child {
-    @apply border-b;
+  /* Efek kilau (Sheen) saat hover */
+  .glass-card::after {
+    content: '';
+    @apply absolute inset-0 bg-gradient-to-tr from-white/5 to-transparent opacity-0 transition-opacity duration-300 pointer-events-none;
+  }
+  
+  .glass-card:hover {
+    @apply border-brand-accent/20 -translate-y-1 shadow-brand-accent/10;
+  }
+  .glass-card:hover::after {
+    @apply opacity-100;
   }
 
-  /* Chatbot Styling */
-  .chat-bubble-bot {
-    @apply bg-brand-surface border border-brand-border text-brand-text p-3 rounded-2xl rounded-tl-sm text-sm max-w-[85%] leading-relaxed shadow-sm;
+  /* Grid Background Utility */
+  .bg-grid {
+    background-size: 40px 40px;
+    mask-image: linear-gradient(to bottom, transparent, 10%, black, 90%, transparent);
   }
-  .chat-bubble-user {
-    @apply bg-brand-text text-brand-bg p-3 rounded-2xl rounded-tr-sm text-sm font-semibold max-w-[85%] ml-auto;
+
+  .btn-primary {
+    @apply px-6 py-3 bg-brand-accent text-brand-bg font-bold font-mono rounded-lg hover:bg-brand-accent/90 hover:shadow-[0_0_20px_rgba(56,189,248,0.4)] active:scale-95 transition-all duration-200;
   }
 }
 
-/* Custom Scrollbar */
+/* Scrollbar Custom */
 ::-webkit-scrollbar { width: 6px; }
-::-webkit-scrollbar-track { background: #050505; }
-::-webkit-scrollbar-thumb { background: #333; border-radius: 10px; }
-::-webkit-scrollbar-thumb:hover { background: #555; }
+::-webkit-scrollbar-track { @apply bg-brand-bg; }
+::-webkit-scrollbar-thumb { @apply bg-brand-surface border border-white/10 rounded-full; }
+::-webkit-scrollbar-thumb:hover { @apply bg-brand-accent; }
 
-/* Utilities Animasi */
-.reveal {
-  opacity: 0;
-  transform: translateY(30px);
-  transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-}
-.reveal.active {
-  opacity: 1;
-  transform: translateY(0);
-}
+.reveal { opacity: 0; transform: translateY(30px); transition: all 1s cubic-bezier(0.16, 1, 0.3, 1); }
+.reveal.active { opacity: 1; transform: translateY(0); }

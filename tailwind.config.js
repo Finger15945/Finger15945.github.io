@@ -3,38 +3,42 @@ export default {
   content: [
     "./index.html",
     "./src/**/*.{js,ts,jsx,tsx}",
-    "./*.js" 
+    "./*.js"
   ],
   theme: {
     extend: {
       fontFamily: {
-        // Inter untuk keterbacaan tinggi di paragraf
-        sans: ['"Inter"', 'sans-serif'],
-        // JetBrains Mono untuk kesan 'Engineering' yang kuat
-        mono: ['"JetBrains Mono"', 'monospace'], 
+        sans: ['Inter', 'system-ui', 'sans-serif'],
+        mono: ['JetBrains Mono', 'monospace'],
       },
       colors: {
         brand: {
-          bg: "#050505",       // Hitam Hampir Pekat (Premium)
-          surface: "#121212",  // Abu-abu gelap untuk kartu/modal
-          border: "#2A2A2A",   // Border tipis elegan
-          text: "#EDEDED",     // Off-white (tidak menyakitkan mata)
-          muted: "#888888",    // Abu-abu teks sekunder
-          accent: "#3B82F6",   // Electric Blue (Fokus & Intelek)
+          bg: '#050A14',        // Lebih gelap dari sebelumnya (Deep Space)
+          surface: '#0F172A',   // Slate-900 untuk kartu
+          accent: '#38BDF8',    // Sky-400 (Lebih neon/hidup dibanding teal lama)
+          secondary: '#6366F1', // Indigo untuk gradasi
+          text: '#F8FAFC',      // Off-white (Slate-50) agar mata tidak sakit
+          muted: '#94A3B8',     // Slate-400
         }
       },
       backgroundImage: {
-        // Efek gradasi halus untuk background
-        'gradient-subtle': 'radial-gradient(circle at top right, #1a1a1a 0%, #050505 40%)',
-      },
-      keyframes: {
-        float: {
-          '0%, 100%': { transform: 'translateY(0)' },
-          '50%': { transform: 'translateY(-5px)' },
-        }
+        'grid-pattern': "linear-gradient(to right, #1e293b 1px, transparent 1px), linear-gradient(to bottom, #1e293b 1px, transparent 1px)",
       },
       animation: {
-        'float': 'float 6s ease-in-out infinite',
+        'blob': 'blob 7s infinite',
+        'fade-in': 'fadeIn 0.5s ease-out forwards',
+      },
+      keyframes: {
+        blob: {
+          '0%': { transform: 'translate(0px, 0px) scale(1)' },
+          '33%': { transform: 'translate(30px, -50px) scale(1.1)' },
+          '66%': { transform: 'translate(-20px, 20px) scale(0.9)' },
+          '100%': { transform: 'translate(0px, 0px) scale(1)' },
+        },
+        fadeIn: {
+          '0%': { opacity: '0', transform: 'translateY(10px)' },
+          '100%': { opacity: '1', transform: 'translateY(0)' },
+        }
       }
     },
   },
