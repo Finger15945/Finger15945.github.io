@@ -1,11 +1,7 @@
-// --- KONFIGURASI OPENROUTER ---
-const API_KEY = "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"; 
-
-// Kita pakai model Llama 3 versi Free
-const MODEL_ID = "meta-llama/llama-3-8b-instruct:free";
-const API_URL = "https://openrouter.ai/api/v1/chat/completions";
-
-const SYSTEM_PROMPT = "Kamu adalah asisten AI untuk Jari Muhammad (AI Engineer). Jawab pertanyaan recruiter dengan singkat, padat, dan profesional dalam Bahasa Indonesia.";
+// --- KONFIGURASI BACKEND ---
+// Ganti URL ini dengan URL Replit kamu yang berakhiran .replit.app
+// PENTING: Jangan lupa tambah '/chat' di belakangnya!
+const BACKEND_URL = "https://chatbot-https://897987ec-99fd-4ec5-b78d-74c22b9646df-00-g1run5hk7eea.pike.replit.dev-jarimuhammad10.replit.app/chat"; 
 
 export function initChatbot() {
   const chatWindow = document.getElementById('chat-window');
@@ -16,56 +12,44 @@ export function initChatbot() {
 
   // Sapaan Awal
   setTimeout(() => {
-    addBotMsg("Halo! Sistem Llama-3 siap. Tanyakan tentang skill atau project Jari.");
+    addBotMsg("Halo! 👋 Saya asisten AI Jari. Silakan tanya tentang pengalaman atau skill saya.");
   }, 1000);
 
-  // --- FUNGSI KIRIM ---
-  async function fetchLlamaReply(userMessage) {
+  // --- FUNGSI KIRIM KE REPLIT ---
+  async function fetchReply(userMessage) {
     const loadingId = showTypingIndicator();
 
     try {
-      const response = await fetch(API_URL, {
+      // Kita panggil server Replit kita sendiri
+      const response = await fetch(BACKEND_URL, {
         method: "POST",
-        headers: {
-          "Authorization": `Bearer ${API_KEY}`,
-          "Content-Type": "application/json",
-          // HEADER WAJIB OPENROUTER (Biar gak kena CORS)
-          "HTTP-Referer": window.location.href, // Link website kamu
-          "X-Title": "Jari Portfolio"
-        },
-        body: JSON.stringify({
-          model: MODEL_ID,
-          messages: [
-            { role: "system", content: SYSTEM_PROMPT },
-            { role: "user", content: userMessage }
-          ]
-        })
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message: userMessage })
       });
 
       const data = await response.json();
       removeTypingIndicator(loadingId);
 
-      // Cek Error Provider
       if (data.error) {
-        console.error("OpenRouter Error:", data);
-        throw new Error(data.error.message || "Provider Error");
+        console.error("Backend Error:", data);
+        addBotMsg("⚠️ Maaf, server sedang sibuk.");
+      } else {
+        addBotMsg(data.reply);
       }
-
-      // Ambil Jawaban (Format OpenAI Standard)
-      const reply = data.choices?.[0]?.message?.content;
-      addBotMsg(reply || "Maaf, tidak ada respon.");
 
     } catch (error) {
       removeTypingIndicator(loadingId);
-      console.error("NETWORK ERROR:", error);
-      addBotMsg("⚠️ Gagal koneksi ke Llama.");
+      console.error("Network Error:", error);
+      // Pesan khusus kalau Replit lagi 'Tidur'
+      addBotMsg("⚠️ Koneksi lambat (Server sedang bangun tidur). Coba kirim pesan lagi dalam 10 detik.");
     }
   }
 
-  // --- UI HELPERS (Tetap Sama) ---
+  // --- UI HELPERS ---
   function addBotMsg(text) {
     const div = document.createElement('div');
     div.className = "flex flex-col items-start mb-3 animate-fade-in";
+    // Render HTML bold/italic dari Gemini
     div.innerHTML = `<div class="bg-brand-surface border border-brand-border text-brand-text px-4 py-2.5 rounded-2xl rounded-tl-none shadow-sm max-w-[85%] text-sm">${formatText(text)}</div>`;
     chatWindow.appendChild(div);
     chatWindow.scrollTop = chatWindow.scrollHeight;
@@ -84,7 +68,7 @@ export function initChatbot() {
     const div = document.createElement('div');
     div.id = id;
     div.className = "text-xs text-brand-muted ml-4 animate-pulse mb-2";
-    div.innerText = "Llama is thinking...";
+    div.innerText = "Thinking...";
     chatWindow.appendChild(div);
     chatWindow.scrollTop = chatWindow.scrollHeight;
     return id;
@@ -95,7 +79,12 @@ export function initChatbot() {
     if(el) el.remove();
   }
 
-  function formatText(t) { return t ? t.replace(/\*\*(.*?)\*\*/g, '<b>$1</b>') : ""; }
+  function formatText(t) { 
+    if(!t) return "";
+    return t
+      .replace(/\*\*(.*?)\*\*/g, '<b>$1</b>') // Bold
+      .replace(/\*(.*?)\*/g, '<i>$1</i>');     // Italic
+  }
 
   if (sendBtn && chatInput) {
     const send = () => {
@@ -103,7 +92,7 @@ export function initChatbot() {
       if(!txt) return;
       addUserMsg(txt);
       chatInput.value = '';
-      fetchLlamaReply(txt);
+      fetchReply(txt);
     };
     sendBtn.onclick = send;
     chatInput.onkeypress = (e) => { if(e.key === 'Enter') send(); };
