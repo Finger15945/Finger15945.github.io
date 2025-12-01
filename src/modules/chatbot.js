@@ -41,7 +41,7 @@ export function initChatbot() {
       removeTypingIndicator(loadingId);
       console.error("Network Error:", error);
       // Pesan khusus kalau Replit lagi 'Tidur'
-      addBotMsg("⚠️ Koneksi lambat (Server sedang bangun tidur). Coba kirim pesan lagi dalam 10 detik.");
+      addBotMsg("⚠️ Koneksi lambat (Server sedang bangun tidur). Coba kirim pesan lagi nanti.");
     }
   }
 
