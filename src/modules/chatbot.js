@@ -1,7 +1,7 @@
 // --- KONFIGURASI BACKEND ---
 // Ganti URL ini dengan URL Replit kamu yang berakhiran .replit.app
 // PENTING: Jangan lupa tambah '/chat' di belakangnya!
-const BACKEND_URL = "https://chatbot-https://897987ec-99fd-4ec5-b78d-74c22b9646df-00-g1run5hk7eea.pike.replit.dev-jarimuhammad10.replit.app/chat"; 
+const BACKEND_URL = "https://897987ec-99fd-4ec5-b78d-74c22b9646df-00-g1run5hk7eea.pike.replit.dev/chat";
 
 export function initChatbot() {
   const chatWindow = document.getElementById('chat-window');
