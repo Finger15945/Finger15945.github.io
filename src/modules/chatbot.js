@@ -1,12 +1,11 @@
-// --- KONFIGURASI ---
-const API_KEY = "AIzaSyBpkH-BQD3pLUcAe4lHLm8rH4i0QnqzY9w"; 
+// --- KONFIGURASI OPENROUTER ---
+const API_KEY = "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"; 
 
-// 🔥 TRIK BYPASS CORS: Kita bungkus URL Google dengan Proxy
-const BASE_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent";
-const PROXY_URL = "https://corsproxy.io/?"; 
-const API_URL = PROXY_URL + encodeURIComponent(`${BASE_URL}?key=${API_KEY}`);
+// Kita pakai model Llama 3 versi Free
+const MODEL_ID = "meta-llama/llama-3-8b-instruct:free";
+const API_URL = "https://openrouter.ai/api/v1/chat/completions";
 
-const SYSTEM_PROMPT = "Kamu adalah asisten AI Jari Muhammad. Jawab singkat, profesional, dan santai. Konteks: Jari adalah AI Engineer (Python/JS/Tailwind).";
+const SYSTEM_PROMPT = "Kamu adalah asisten AI untuk Jari Muhammad (AI Engineer). Jawab pertanyaan recruiter dengan singkat, padat, dan profesional dalam Bahasa Indonesia.";
 
 export function initChatbot() {
   const chatWindow = document.getElementById('chat-window');
@@ -15,50 +14,51 @@ export function initChatbot() {
 
   if (!chatWindow) return;
 
-  // Sapaan
+  // Sapaan Awal
   setTimeout(() => {
-    addBotMsg("Halo! Sistem AI Jari siap. Tanyakan tentang skill atau proyek saya.");
+    addBotMsg("Halo! Sistem Llama-3 siap. Tanyakan tentang skill atau project Jari.");
   }, 1000);
 
   // --- FUNGSI KIRIM ---
-  async function fetchGeminiReply(userMessage) {
+  async function fetchLlamaReply(userMessage) {
     const loadingId = showTypingIndicator();
 
     try {
-      // Kita pakai fetch biasa (tanpa SDK) karena SDK tidak support lewat Proxy
       const response = await fetch(API_URL, {
         method: "POST",
-        headers: { 
-          "Content-Type": "application/json" 
+        headers: {
+          "Authorization": `Bearer ${API_KEY}`,
+          "Content-Type": "application/json",
+          // HEADER WAJIB OPENROUTER (Biar gak kena CORS)
+          "HTTP-Referer": window.location.href, // Link website kamu
+          "X-Title": "Jari Portfolio"
         },
         body: JSON.stringify({
-          contents: [{
-            parts: [{ text: `${SYSTEM_PROMPT}\n\nUser: ${userMessage}\nAI:` }]
-          }]
+          model: MODEL_ID,
+          messages: [
+            { role: "system", content: SYSTEM_PROMPT },
+            { role: "user", content: userMessage }
+          ]
         })
       });
-
-      // Cek Error
-      if (!response.ok) {
-        const errData = await response.json();
-        console.error("PROXY/API ERROR:", errData);
-        throw new Error(errData.error?.message || "Server Error");
-      }
 
       const data = await response.json();
       removeTypingIndicator(loadingId);
 
-      const reply = data.candidates?.[0]?.content?.parts?.[0]?.text;
-      addBotMsg(reply || "Maaf, tidak ada jawaban.");
+      // Cek Error Provider
+      if (data.error) {
+        console.error("OpenRouter Error:", data);
+        throw new Error(data.error.message || "Provider Error");
+      }
+
+      // Ambil Jawaban (Format OpenAI Standard)
+      const reply = data.choices?.[0]?.message?.content;
+      addBotMsg(reply || "Maaf, tidak ada respon.");
 
     } catch (error) {
       removeTypingIndicator(loadingId);
       console.error("NETWORK ERROR:", error);
-      
-      let msg = "Gagal koneksi.";
-      if (error.message.includes("Failed to fetch")) msg = "Terblokir Proxy/CORS.";
-      
-      addBotMsg(`⚠️ ${msg} (Coba refresh atau cek internet)`);
+      addBotMsg("⚠️ Gagal koneksi ke Llama.");
     }
   }
 
@@ -84,7 +84,7 @@ export function initChatbot() {
     const div = document.createElement('div');
     div.id = id;
     div.className = "text-xs text-brand-muted ml-4 animate-pulse mb-2";
-    div.innerText = "Thinking...";
+    div.innerText = "Llama is thinking...";
     chatWindow.appendChild(div);
     chatWindow.scrollTop = chatWindow.scrollHeight;
     return id;
@@ -103,7 +103,7 @@ export function initChatbot() {
       if(!txt) return;
       addUserMsg(txt);
       chatInput.value = '';
-      fetchGeminiReply(txt);
+      fetchLlamaReply(txt);
     };
     sendBtn.onclick = send;
     chatInput.onkeypress = (e) => { if(e.key === 'Enter') send(); };
