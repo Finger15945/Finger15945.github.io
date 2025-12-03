@@ -1,14 +1,13 @@
 export const projectsData = [
   {
-    id: "wa-bot",
-    title: "AI WhatsApp Orchestrator",
-    category: "Automation",
-    // Image placeholder light theme
-    image: "https://placehold.co/800x600/f1f5f9/475569?text=WA+Automation+UI",
-    tags: ["Botpress", "Node.js", "API"],
-    problem: "Customer Service kewalahan menangani 500+ chat repetitif harian.",
-    solution: "Chatbot Hybrid (Botpress) yang memahami konteks bahasa natural.",
-    result: "Response time turun ke <2 detik. Menghemat 60% waktu tim CS."
+  id: "intent-classifier-ml",
+  title: "Intent Classification Chatbot Engine",
+  category: "Machine Learning",
+  image: "https://placehold.co/800x600/f1f5f9/475569?text=ML+Chatbot+Engine",
+  tags: ["Python", "Keras", "NLP"],
+  problem: "Materi budaya Indonesia sering terasa kurang menarik bagi siswa, sehingga saya ingin menyediakan cara belajar yang lebih interaktif dan variatif sebagai bagian dari proyek akhir Studi Independen 2022.",
+  solution: "Membangun Chatbot BUDI (Budaya Indonesia) menggunakan teknik NLP klasik seperti Bag-of-Words dan Lemmatization, serta model Multilayer Perceptron (MLP) untuk memahami intent pertanyaan siswa dan menjawab seputar budaya Indonesia.",
+  result: "Model mencapai akurasi 98.16% pada proses training, mampu mengklasifikasikan intent secara konsisten, dan mengurangi kebutuhan rule-based secara signifikan."
   },
   {
     id: "sentiment-ml",
