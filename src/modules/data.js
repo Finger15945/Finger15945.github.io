@@ -1,6 +1,6 @@
 export const projectsData = [
   {
-  id: "intent-classifier-ml",
+  id: "intent-classifier-ML",
   title: "Intent Classification Chatbot Engine",
   category: "Machine Learning",
   image: "https://placehold.co/800x600/f1f5f9/475569?text=ML+Chatbot+Engine",
