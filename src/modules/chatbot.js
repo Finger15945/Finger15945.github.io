@@ -1,7 +1,7 @@
 // --- KONFIGURASI BACKEND ---
 // Ganti URL ini dengan URL Replit kamu yang berakhiran .replit.app
 // PENTING: Jangan lupa tambah '/chat' di belakangnya!
-const BACKEND_URL = "https://c7a517f9-852c-4bf2-b91e-ee42ada1ddd7-00-3jwfzk0lbrywu.worf.replit.dev/chat";
+const BACKEND_URL = "https://fingr15945-chatbotportofolio.hf.space/chat";
 
 export function initChatbot() {
   const chatWindow = document.getElementById('chat-window');
