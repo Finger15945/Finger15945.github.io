@@ -5,7 +5,7 @@ export const projectsData = [
   category: "Machine Learning",
   image: "https://placehold.co/800x600/f1f5f9/475569?text=ML+Chatbot+Engine",
   tags: ["Python", "Keras", "NLP"],
-  problem: "Materi budaya Indonesia sering terasa kurang menarik bagi siswa, sehingga saya ingin menyediakan cara belajar yang lebih interaktif dan variatif sebagai bagian dari proyek akhir Studi Independen 2022.",
+  problem: "Materi budaya Indonesia sering terasa kurang menarik bagi siswa, sehingga saya ingin menyediakan cara belajar yang lebih interaktif dan variatif sebagai bagian dari proyek akhir di PT Mitra Semeru Indonesia pada tahun 2022.",
   solution: "Membangun Chatbot BUDI (Budaya Indonesia) menggunakan teknik NLP klasik seperti Bag-of-Words dan Lemmatization, serta model Multilayer Perceptron (MLP) untuk memahami intent pertanyaan siswa dan menjawab seputar budaya Indonesia.",
   result: "Model mencapai akurasi 98.16% pada proses training, mampu mengklasifikasikan intent secara konsisten, dan mengurangi kebutuhan rule-based secara signifikan."
   },
